@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 主背景：极淡的暖灰白 -->
+    <color name="bg">#F4F6F9</color>
+    <!-- 卡片/面板：纯白 -->
+    <color name="surface">#FFFFFF</color>
+    <!-- 分割线 -->
+    <color name="border">#E2E8F0</color>
+    <!-- 主文字：深色 -->
+    <color name="text">#0F172A</color>
+    <!-- 次要文字 -->
+    <color name="muted">#64748B</color>
+    <!-- 强调色 -->
+    <color name="blue">#3B82F6</color>
+    <color name="green">#10B981</color>
+    <color name="red">#EF4444</color>
+    <color name="orange">#F97316</color>
+    <color name="white">#FFFFFF</color>
+</resources>

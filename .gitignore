@@ -1,0 +1,110 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+.venv*/
+.env
+*.conda
+
+# Unified data root: keep layout placeholders, ignore real data assets
+/data/signals/**/*.txt
+/data/annotations/*.csv
+/data/splits/*.txt
+/data/splits/*.csv
+/data/metadata/*.csv
+/data/metadata/*.json
+/data/raw/
+/data/raw.csv
+/data/*.xlsx
+/data/public_external/**/*
+!/data/public_external/
+!/data/public_external/**/
+!/data/public_external/**/.gitkeep
+*.xlsx
+
+# Dataset-derived Android demo samples are not distributed publicly
+/android_realtime_app/app/src/main/assets/offline_samples/*.txt
+
+# Model artifacts
+!saved_models/ensemble_config.example.json
+saved_models/*.pth
+saved_models/*.pt
+saved_models/*.pkl
+saved_models/*.npz
+saved_models/*.npy
+saved_models/_cache_*/
+saved_models/_stream_cache_*/
+saved_models/training_artifacts/
+saved_models/archive*/
+saved_models/*.log
+
+# Tracked final inference assets
+!saved_models/combined_model_3s_seed42.pth
+!saved_models/combined_model_5s_seed123.pth
+!saved_models/combined_model_8s_seed123.pth
+!saved_models/combined_model_best.pth
+!saved_models/norm_params.pkl
+!saved_models/norm_params_3s.pkl
+!saved_models/norm_params_5s.pkl
+!saved_models/norm_params_8s.pkl
+!saved_models/ensemble_config.json
+
+# Generated experiment outputs
+experiments/results/*
+!experiments/results/.gitkeep
+experiments/figures/*
+!experiments/figures/.gitkeep
+experiments/public_temporal_record_layer_checks/results/
+Report/
+eval_figures/
+logs/
+tmp/
+
+# Non-public writing material kept outside this public repository
+paper/
+*.tex
+*.bib
+*.pdf
+
+# Build/package artifacts
+build/
+dist/
+*.spec.bak
+
+# Android / Gradle local outputs
+.gradle/
+*/.gradle/
+local.properties
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.iml
+.idea/
+
+# Document build scratch files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.xdv
+
+# Local tooling
+.omx/
+.DS_Store

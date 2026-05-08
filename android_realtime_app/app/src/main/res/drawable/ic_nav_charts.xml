@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 折线图图标 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- 坐标轴 -->
+    <path
+        android:strokeColor="#64748B"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M3,20 L3,4"/>
+    <path
+        android:strokeColor="#64748B"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M3,20 L21,20"/>
+    <!-- 折线 -->
+    <path
+        android:strokeColor="#3B82F6"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M3,16 L7,11 L11,13 L15,7 L19,9"/>
+    <!-- 折线2 -->
+    <path
+        android:strokeColor="#10B981"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M3,18 L7,15 L11,17 L15,12 L19,14"/>
+</vector>

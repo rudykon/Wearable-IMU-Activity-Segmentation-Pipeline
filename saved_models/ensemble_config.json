@@ -1,0 +1,49 @@
+{
+  "models": [
+    "combined_model_3s_seed42",
+    "combined_model_3s_seed123",
+    "combined_model_3s_seed456",
+    "combined_model_5s_seed42",
+    "combined_model_5s_seed123",
+    "combined_model_5s_seed456",
+    "combined_model_8s_seed42",
+    "combined_model_8s_seed123",
+    "combined_model_8s_seed456"
+  ],
+  "selected_models": {
+    "3s": "combined_model_3s_seed42",
+    "5s": "combined_model_5s_seed123",
+    "8s": "combined_model_8s_seed123"
+  },
+  "val_f1": {
+    "combined_model_3s_seed42": 0.8069716617568797,
+    "combined_model_3s_seed123": 0.7973,
+    "combined_model_3s_seed456": 0.8061046891989503,
+    "combined_model_5s_seed42": 0.8080,
+    "combined_model_5s_seed123": 0.8555,
+    "combined_model_5s_seed456": 0.8119,
+    "combined_model_8s_seed42": 0.8475,
+    "combined_model_8s_seed123": 0.8499,
+    "combined_model_8s_seed456": 0.8499
+  },
+  "window_configs": [
+    {
+      "suffix": "3s",
+      "window_size": 300,
+      "window_step": 100,
+      "window_sec": 3
+    },
+    {
+      "suffix": "5s",
+      "window_size": 500,
+      "window_step": 100,
+      "window_sec": 5
+    },
+    {
+      "suffix": "8s",
+      "window_size": 800,
+      "window_step": 100,
+      "window_sec": 8
+    }
+  ]
+}

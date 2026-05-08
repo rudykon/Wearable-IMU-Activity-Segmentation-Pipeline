@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">IMU Realtime</string>
+    <string name="app_title">WT9011DCL-BT50 · Realtime IMU</string>
+    <string name="action_scan">Scan</string>
+    <string name="action_disconnect">Disc</string>
+    <string name="action_record">Rec</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_calibrate_zero">Zero</string>
+    <string name="action_switch_to_english">EN</string>
+    <string name="action_switch_to_chinese">中</string>
+    <string name="language_switch_content_description">Switch language</string>
+
+    <string name="status_disconnected">Disconnected</string>
+    <string name="status_scanning">Scanning...</string>
+    <string name="status_connecting">Connecting...</string>
+    <string name="status_sampling_rate_placeholder">Rate —</string>
+    <string name="status_sampling_rate_fmt">Rate %1$d Hz</string>
+    <string name="permission_bluetooth_required">Bluetooth permission is required to use this app</string>
+    <string name="recording_path">Recording: %1$s</string>
+    <string name="recording_stopped">Recording stopped</string>
+    <string name="scan_no_device">No device found. Check that the sensor is powered on.</string>
+    <string name="scan_found_devices">Found %1$d devices...</string>
+    <string name="dialog_select_device">Select Device</string>
+    <string name="device_unknown">Unknown</string>
+
+    <string name="nav_charts">Charts</string>
+    <string name="nav_attitude">Attitude</string>
+    <string name="nav_hand">Hand</string>
+    <string name="nav_trajectory">Track</string>
+    <string name="nav_dashboard">Gauges</string>
+    <string name="nav_recognition">Activity</string>
+
+    <string name="chart_acc_title">Acceleration (g)</string>
+    <string name="chart_gyro_title">Angular Velocity (°/s)</string>
+    <string name="chart_angle_title">Angle (°)</string>
+    <string name="chart_waiting_connection">Waiting for connection...</string>
+
+    <string name="attitude_horizon">Artificial Horizon</string>
+    <string name="attitude_compass">Compass</string>
+
+    <string name="hand_motion_intensity">Motion</string>
+    <string name="hand_description">Left wrist sensor · gyro + accelerometer fusion · blue ring=still · orange ring=motion</string>
+    <string name="hand_calibrated">Calibrated. Current pose is now the zero point.</string>
+    <string name="hand_no_sensor_data">No sensor data received yet</string>
+
+    <string name="trajectory_info">Top-down XY trajectory · ZUPT integration</string>
+    <string name="trajectory_waiting_data">Waiting for motion data...</string>
+
+    <string name="recognition_current_title">Current Activity</string>
+    <string name="recognition_waiting_data">Waiting for data...</string>
+    <string name="recognition_confidence">Confidence</string>
+    <string name="recognition_class_confidence">Class Confidence</string>
+    <string name="recognition_buffer_data">Data Buffer</string>
+    <string name="recognition_buffer_viterbi">Paper Output</string>
+    <string name="recognition_model_loading">⚙ Loading model...</string>
+    <string name="recognition_summary">3s+5s+8s selected models · zero-phase filtering · offline LBSA+smoothing+Viterbi · top-3/confidence filtering</string>
+    <string name="recognition_history">Activity History</string>
+    <string name="recognition_segments_empty">No records yet. Activity segments will appear here after motion starts.</string>
+    <string name="recognition_warming_up">Warming up...</string>
+    <string name="recognition_session_total_empty">Session  —</string>
+    <string name="recognition_session_active_empty">Active  —</string>
+    <string name="recognition_session_total_fmt">Session  %1$s</string>
+    <string name="recognition_session_active_fmt">Active  %1$s</string>
+    <string name="recognition_model_ready">✅ %1$s · paper-style offline recompute · 40Hz zero-phase filtering · final segment filtering</string>
+    <string name="recognition_model_missing">⚠ Model files missing. Copy ONNX models and norm_params JSON to assets/</string>
+    <string name="offline_title">Offline Sample Recognition</string>
+    <string name="offline_run_builtin">Run Built-in Sample</string>
+    <string name="offline_choose_file">Choose TXT File</string>
+    <string name="offline_status_idle">The open-source release does not bundle demo data; choose an authorized ACC/GYRO TXT file for offline recognition.</string>
+    <string name="offline_builtin_unavailable">The open-source release does not distribute built-in demo data. Choose an authorized TXT file instead.</string>
+    <string name="offline_status_loading">Reading offline data...</string>
+    <string name="offline_status_running">Recognizing %1$s · %2$d rows · %3$s</string>
+    <string name="offline_status_done">Done %1$s · %2$d rows · %3$s · %4$d segments</string>
+    <string name="offline_status_error">Offline recognition failed: %1$s</string>
+    <string name="model_summary_models">%1$s (%2$d models)</string>
+    <string name="model_summary_single_fallback">Single model (fallback)</string>
+    <string name="model_summary_unloaded">Not loaded</string>
+    <string name="unknown_activity">Unknown</string>
+    <string name="recognition_class_no_activity">💤 No Activity</string>
+    <string name="recognition_class_badminton">🏸 Badminton</string>
+    <string name="recognition_class_jump_rope">🪢 Jump Rope</string>
+    <string name="recognition_class_fly">🦅 Fly</string>
+    <string name="recognition_class_running">🏃 Running</string>
+    <string name="recognition_class_table_tennis">🏓 Table Tennis</string>
+
+    <string-array name="activity_names">
+        <item>No Activity</item>
+        <item>Badminton</item>
+        <item>Jump Rope</item>
+        <item>Fly</item>
+        <item>Running</item>
+        <item>Table Tennis</item>
+    </string-array>
+</resources>

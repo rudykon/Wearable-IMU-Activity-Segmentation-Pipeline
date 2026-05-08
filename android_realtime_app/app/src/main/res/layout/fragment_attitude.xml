@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg"
+    android:padding="12dp">
+
+    <!-- 标题行 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="@string/attitude_horizon"
+            android:textColor="@color/muted" android:textSize="10sp" android:textAllCaps="true"
+            android:gravity="center"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="@string/attitude_compass"
+            android:textColor="@color/muted" android:textSize="10sp" android:textAllCaps="true"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <!-- 仪器视图 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <com.imu.realtime.ArtificialHorizonView
+            android:id="@+id/horizon_view"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:layout_marginEnd="6dp"/>
+        <com.imu.realtime.CompassView
+            android:id="@+id/compass_view"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:layout_marginStart="6dp"/>
+    </LinearLayout>
+
+    <!-- 角度数值行 -->
+    <androidx.cardview.widget.CardView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp" app:cardElevation="1dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:padding="10dp">
+            <TextView android:id="@+id/tv_pitch" android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="Pitch: —" android:textColor="@color/red"
+                android:textSize="13sp" android:gravity="center" android:fontFamily="monospace"/>
+            <TextView android:id="@+id/tv_roll" android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="Roll: —" android:textColor="@color/green"
+                android:textSize="13sp" android:gravity="center" android:fontFamily="monospace"/>
+            <TextView android:id="@+id/tv_yaw" android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="Yaw: —" android:textColor="@color/blue"
+                android:textSize="13sp" android:gravity="center" android:fontFamily="monospace"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- 磁场值行 -->
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginTop="6dp">
+        <TextView android:id="@+id/tv_mag_x" android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="MagX: —" android:textColor="@color/muted"
+            android:textSize="11sp" android:gravity="center" android:fontFamily="monospace"/>
+        <TextView android:id="@+id/tv_mag_y" android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="MagY: —" android:textColor="@color/muted"
+            android:textSize="11sp" android:gravity="center" android:fontFamily="monospace"/>
+        <TextView android:id="@+id/tv_mag_z" android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="MagZ: —" android:textColor="@color/muted"
+            android:textSize="11sp" android:gravity="center" android:fontFamily="monospace"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WT9011DCL-BT50 · 实时 IMU</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:      #0f172a;
+  --surface: #1e293b;
+  --border:  #334155;
+  --text:    #e2e8f0;
+  --muted:   #64748b;
+  --accent:  #3b82f6;
+  --green:   #10b981;
+  --red:     #ef4444;
+  --yellow:  #f59e0b;
+  --r: #ef4444; --g: #10b981; --b: #3b82f6;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── 顶栏 ── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: .02em; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.hz-badge {
+  font-size: .8rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 56px;
+  text-align: right;
+}
+.status-pill {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 13px;
+  border-radius: 9999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: .82rem;
+}
+.dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+}
+.dot.on {
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: blink 2.5s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.45} }
+
+/* ── 连接面板 ── */
+.connect-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+select, button {
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: .85rem;
+  outline: none;
+}
+select {
+  flex: 1; min-width: 220px;
+  background: var(--bg); color: var(--text);
+  padding: 0 10px;
+}
+button {
+  padding: 0 16px; cursor: pointer; font-weight: 600;
+  transition: opacity .15s, filter .15s;
+  border: none;
+}
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:not(:disabled):hover { filter: brightness(1.12); }
+.btn-scan    { background: var(--border); color: var(--text); }
+.btn-connect { background: var(--accent); color: #fff; }
+.btn-disc    { background: var(--red);    color: #fff; display: none; }
+.conn-msg    { font-size: .78rem; color: var(--muted); }
+
+/* ── 数值卡片 ── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+@media (max-width: 860px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.card-lbl  { font-size: .72rem; color: var(--muted); margin-bottom: 5px; letter-spacing:.04em; }
+.card-val  {
+  font-size: 1.45rem; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.card-unit { font-size: .68rem; color: var(--muted); margin-top: 4px; }
+.cx .card-val { color: var(--r); }
+.cy .card-val { color: var(--g); }
+.cz .card-val { color: var(--b); }
+
+/* ── 图表区 ── */
+.chart-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px 10px;
+}
+.chart-hdr {
+  font-size: .8rem; font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .04em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.chart-wrap { position: relative; height: 170px; }
+
+/* ── 底部说明 ── */
+footer {
+  font-size: .72rem; color: var(--muted);
+  text-align: center; padding-top: 2px;
+}
+</style>
+</head>
+<body>
+
+<!-- 顶栏 -->
+<header>
+  <h1>WT9011DCL-BT50 &nbsp;·&nbsp; 实时 IMU 数据</h1>
+  <div class="header-right">
+    <span class="hz-badge" id="hz">— Hz</span>
+    <div class="status-pill">
+      <div class="dot" id="dot"></div>
+      <span id="status-txt">未连接</span>
+    </div>
+  </div>
+</header>
+
+<!-- 连接面板 -->
+<div class="connect-panel">
+  <button class="btn-scan"    id="btn-scan"    onclick="doScan()">扫描设备</button>
+  <select id="dev-sel"><option value="">— 请先点击【扫描设备】—</option></select>
+  <button class="btn-connect" id="btn-conn"    onclick="doConnect()">连接</button>
+  <button class="btn-disc"    id="btn-disc"    onclick="doDisconnect()">断开</button>
+  <span class="conn-msg" id="conn-msg"></span>
+</div>
+
+<!-- 数值卡片 -->
+<div class="cards">
+  <div class="card cx"><div class="card-lbl">AccX</div><div class="card-val" id="v-ax">—</div><div class="card-unit">g</div></div>
+  <div class="card cy"><div class="card-lbl">AccY</div><div class="card-val" id="v-ay">—</div><div class="card-unit">g</div></div>
+  <div class="card cz"><div class="card-lbl">AccZ</div><div class="card-val" id="v-az">—</div><div class="card-unit">g</div></div>
+  <div class="card cx"><div class="card-lbl">GyroX</div><div class="card-val" id="v-gx">—</div><div class="card-unit">°/s</div></div>
+  <div class="card cy"><div class="card-lbl">GyroY</div><div class="card-val" id="v-gy">—</div><div class="card-unit">°/s</div></div>
+  <div class="card cz"><div class="card-lbl">GyroZ</div><div class="card-val" id="v-gz">—</div><div class="card-unit">°/s</div></div>
+</div>
+
+<!-- 加速度图 -->
+<div class="chart-block">
+  <div class="chart-hdr">加速度（g）</div>
+  <div class="chart-wrap"><canvas id="acc-canvas"></canvas></div>
+</div>
+
+<!-- 角速度图 -->
+<div class="chart-block">
+  <div class="chart-hdr">角速度（°/s）</div>
+  <div class="chart-wrap"><canvas id="gyro-canvas"></canvas></div>
+</div>
+
+<footer>数据窗口：最近 200 帧 · 图形每帧刷新（requestAnimationFrame）</footer>
+
+<script>
+// ═══════════════════════════════════════════════════
+// Chart.js 初始化
+// ═══════════════════════════════════════════════════
+const N = 200;
+const COLORS = { r: '#ef4444', g: '#10b981', b: '#3b82f6' };
+const GRID_COLOR = 'rgba(255,255,255,0.05)';
+const TICK_COLOR = '#475569';
+
+function makeChart(canvasId, { yMin, yMax, labels }) {
+  const ctx = document.getElementById(canvasId);
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: Array(N).fill(''),
+      datasets: labels.map(({ label, color }) => ({
+        label,
+        data: Array(N).fill(null),
+        borderColor: color,
+        borderWidth: 1.4,
+        pointRadius: 0,
+        tension: 0.25,
+        fill: false,
+      })),
+    },
+    options: {
+      animation: false,
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { display: false },
+        y: {
+          min: yMin, max: yMax,
+          grid:  { color: GRID_COLOR },
+          ticks: { color: TICK_COLOR, font: { size: 10 }, maxTicksLimit: 7 },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: { color: '#94a3b8', boxWidth: 12, font: { size: 11 }, padding: 16 },
+        },
+        tooltip: { enabled: false },
+      },
+      interaction: { mode: 'nearest', intersect: false },
+    },
+  });
+}
+
+const accChart = makeChart('acc-canvas', {
+  yMin: -20, yMax: 20,
+  labels: [
+    { label: 'AccX', color: COLORS.r },
+    { label: 'AccY', color: COLORS.g },
+    { label: 'AccZ', color: COLORS.b },
+  ],
+});
+
+const gyroChart = makeChart('gyro-canvas', {
+  yMin: -2100, yMax: 2100,
+  labels: [
+    { label: 'GyroX', color: COLORS.r },
+    { label: 'GyroY', color: COLORS.g },
+    { label: 'GyroZ', color: COLORS.b },
+  ],
+});
+
+// ═══════════════════════════════════════════════════
+// 数据队列 + rAF 渲染循环
+// ═══════════════════════════════════════════════════
+let queue = [];
+let totalFrames = 0;
+let hzFrames   = 0;
+let hzTs       = Date.now();
+
+function pushToChart(chart, values) {
+  chart.data.datasets.forEach((ds, i) => {
+    ds.data.shift();
+    ds.data.push(values[i]);
+  });
+}
+
+function renderLoop() {
+  if (queue.length > 0) {
+    const latest = queue[queue.length - 1];
+    queue.forEach(d => {
+      pushToChart(accChart,  [d.AccX, d.AccY, d.AccZ]);
+      pushToChart(gyroChart, [d.AsX,  d.AsY,  d.AsZ]);
+    });
+    hzFrames += queue.length;
+    queue = [];
+
+    accChart.update('none');
+    gyroChart.update('none');
+
+    // 更新数值卡片
+    document.getElementById('v-ax').textContent = fmt(latest.AccX, 3);
+    document.getElementById('v-ay').textContent = fmt(latest.AccY, 3);
+    document.getElementById('v-az').textContent = fmt(latest.AccZ, 3);
+    document.getElementById('v-gx').textContent = fmt(latest.AsX,  1);
+    document.getElementById('v-gy').textContent = fmt(latest.AsY,  1);
+    document.getElementById('v-gz').textContent = fmt(latest.AsZ,  1);
+  }
+
+  // Hz 计数（每秒刷新一次）
+  const now = Date.now();
+  if (now - hzTs >= 1000) {
+    document.getElementById('hz').textContent =
+      hzFrames > 0 ? `${hzFrames} Hz` : '— Hz';
+    hzFrames = 0;
+    hzTs = now;
+  }
+
+  requestAnimationFrame(renderLoop);
+}
+requestAnimationFrame(renderLoop);
+
+function fmt(v, dec) {
+  return (v >= 0 ? '+' : '') + v.toFixed(dec);
+}
+
+// ═══════════════════════════════════════════════════
+// WebSocket（自动重连）
+// ═══════════════════════════════════════════════════
+let ws;
+
+function connectWS() {
+  ws = new WebSocket(`ws://${location.host}/ws`);
+
+  ws.onopen = () => {
+    setMsg('WebSocket 已连接');
+  };
+
+  ws.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.t === 'data') {
+      queue.push(msg);
+    } else if (msg.t === 'status') {
+      applyStatus(msg);
+    }
+  };
+
+  ws.onclose = () => {
+    applyStatus({ connected: false, name: '（连接已断开）' });
+    setTimeout(connectWS, 2500);
+  };
+
+  ws.onerror = () => ws.close();
+}
+
+connectWS();
+
+function applyStatus(info) {
+  const dot  = document.getElementById('dot');
+  const txt  = document.getElementById('status-txt');
+  const disc = document.getElementById('btn-disc');
+  if (info.connected) {
+    dot.classList.add('on');
+    txt.textContent = info.name || info.address;
+    disc.style.display = '';
+    setMsg('');
+  } else {
+    dot.classList.remove('on');
+    txt.textContent = '未连接';
+    disc.style.display = 'none';
+    if (info.error) setMsg('⚠ ' + info.error);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// 扫描 / 连接 / 断开
+// ═══════════════════════════════════════════════════
+async function doScan() {
+  const btn = document.getElementById('btn-scan');
+  const sel = document.getElementById('dev-sel');
+  btn.disabled = true;
+  btn.textContent = '扫描中…';
+  setMsg('正在扫描（约 10 秒）……');
+  try {
+    const res  = await fetch('/api/scan');
+    const data = await res.json();
+    sel.innerHTML = '';
+    if (!data.devices.length) {
+      sel.innerHTML = '<option value="">未发现含 "WT" 的设备</option>';
+      setMsg('未发现设备，请确认传感器已开机');
+    } else {
+      data.devices.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.address;
+        opt.textContent = `${d.name}  (${d.address})`;
+        sel.appendChild(opt);
+      });
+      setMsg(`发现 ${data.devices.length} 台设备，请选择后点击【连接】`);
+    }
+  } catch (err) {
+    setMsg('扫描请求失败：' + err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '扫描设备';
+  }
+}
+
+async function doConnect() {
+  const addr = document.getElementById('dev-sel').value;
+  if (!addr) { setMsg('请先扫描并选择设备'); return; }
+  const btn = document.getElementById('btn-conn');
+  btn.disabled = true;
+  btn.textContent = '连接中…';
+  setMsg('正在建立 BLE 连接……');
+  try {
+    const res  = await fetch('/api/connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ addr }),
+    });
+    const data = await res.json();
+    if (!data.ok) {
+      setMsg('连接失败：' + (data.device?.error || '未知错误'));
+    }
+  } catch (err) {
+    setMsg('请求失败：' + err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '连接';
+  }
+}
+
+async function doDisconnect() {
+  document.getElementById('btn-disc').disabled = true;
+  setMsg('断开中……');
+  try {
+    await fetch('/api/disconnect', { method: 'POST' });
+  } catch {}
+  document.getElementById('btn-disc').disabled = false;
+}
+
+function setMsg(text) {
+  document.getElementById('conn-msg').textContent = text;
+}
+</script>
+</body>
+</html>

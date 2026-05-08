@@ -1,0 +1,6 @@
+bleak
+fastapi
+matplotlib
+numpy
+pydantic
+uvicorn

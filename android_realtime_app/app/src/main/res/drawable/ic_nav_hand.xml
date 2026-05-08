@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 手部图标 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- 手掌轮廓 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#64748B"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="
+M8,21
+C8,21 5,20 5,17
+L5,10
+C5,9.4 5.4,9 6,9
+C6.6,9 7,9.4 7,10
+L7,14
+C7,14 7.3,13 8,13
+C8.7,13 9,13.7 9,14
+L9,13
+C9,12.4 9.4,12 10,12
+C10.6,12 11,12.4 11,13
+L11,12.5
+C11,11.9 11.4,11.5 12,11.5
+C12.6,11.5 13,11.9 13,12.5
+L13,8
+C13,7.4 13.4,7 14,7
+C14.6,7 15,7.4 15,8
+L15,17
+C15,17 17,16 17,17
+C17,18 14,21 12,21
+Z"/>
+</vector>

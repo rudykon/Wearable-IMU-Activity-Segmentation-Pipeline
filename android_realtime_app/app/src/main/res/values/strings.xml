@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">IMU 实时数据</string>
+    <string name="app_title">WT9011DCL-BT50 · 实时 IMU</string>
+    <string name="action_scan">扫描</string>
+    <string name="action_disconnect">断开</string>
+    <string name="action_record">录制</string>
+    <string name="action_reset">重置</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_calibrate_zero">归零校准</string>
+    <string name="action_switch_to_english">EN</string>
+    <string name="action_switch_to_chinese">中</string>
+    <string name="language_switch_content_description">切换语言</string>
+
+    <string name="status_disconnected">未连接</string>
+    <string name="status_scanning">扫描中…</string>
+    <string name="status_connecting">连接中…</string>
+    <string name="status_sampling_rate_placeholder">采样率 —</string>
+    <string name="status_sampling_rate_fmt">采样率 %1$d Hz</string>
+    <string name="permission_bluetooth_required">需要蓝牙权限才能使用本应用</string>
+    <string name="recording_path">录制中: %1$s</string>
+    <string name="recording_stopped">录制已停止</string>
+    <string name="scan_no_device">未发现设备，请确认传感器已开机</string>
+    <string name="scan_found_devices">发现 %1$d 台设备…</string>
+    <string name="dialog_select_device">选择设备</string>
+    <string name="device_unknown">Unknown</string>
+
+    <string name="nav_charts">图表</string>
+    <string name="nav_attitude">姿态</string>
+    <string name="nav_hand">手部</string>
+    <string name="nav_trajectory">轨迹</string>
+    <string name="nav_dashboard">仪表盘</string>
+    <string name="nav_recognition">识别</string>
+
+    <string name="chart_acc_title">加速度（g）</string>
+    <string name="chart_gyro_title">角速度（°/s）</string>
+    <string name="chart_angle_title">角度（°）</string>
+    <string name="chart_waiting_connection">等待连接…</string>
+
+    <string name="attitude_horizon">人工地平线</string>
+    <string name="attitude_compass">罗盘</string>
+
+    <string name="hand_motion_intensity">动作强度</string>
+    <string name="hand_description">左手腕传感器 · 陀螺仪+加速度融合 · 蓝环=静止 橙环=运动</string>
+    <string name="hand_calibrated">已校准！当前姿态设为零点</string>
+    <string name="hand_no_sensor_data">尚未收到传感器数据</string>
+
+    <string name="trajectory_info">XY 平面俯视轨迹 · ZUPT 积分</string>
+    <string name="trajectory_waiting_data">等待运动数据…</string>
+
+    <string name="recognition_current_title">当前运动识别</string>
+    <string name="recognition_waiting_data">等待数据…</string>
+    <string name="recognition_confidence">置信度</string>
+    <string name="recognition_class_confidence">各类别置信度</string>
+    <string name="recognition_buffer_data">数据缓冲</string>
+    <string name="recognition_buffer_viterbi">论文输出</string>
+    <string name="recognition_model_loading">⚙ 模型加载中…</string>
+    <string name="recognition_summary">3s+5s+8s 最优模型 · 零相位滤波 · 离线LBSA+平滑+Viterbi · top-3/置信度过滤</string>
+    <string name="recognition_history">活动历史</string>
+    <string name="recognition_segments_empty">暂无记录，开始运动后将在此显示活动片段</string>
+    <string name="recognition_warming_up">预热中…</string>
+    <string name="recognition_session_total_empty">会话时长  —</string>
+    <string name="recognition_session_active_empty">活动时长  —</string>
+    <string name="recognition_session_total_fmt">会话时长  %1$s</string>
+    <string name="recognition_session_active_fmt">活动时长  %1$s</string>
+    <string name="recognition_model_ready">✅ %1$s · 论文离线式重算 · 40Hz零相位滤波 · 最终段过滤</string>
+    <string name="recognition_model_missing">⚠ 模型文件缺失，请将 ONNX 模型和 norm_params JSON 复制到 assets/</string>
+    <string name="offline_title">离线示例数据识别</string>
+    <string name="offline_run_builtin">运行内置示例</string>
+    <string name="offline_choose_file">选择TXT文件</string>
+    <string name="offline_status_idle">开源版不内置数据示例；请选择授权获得的 ACC/GYRO TXT 文件离线识别。</string>
+    <string name="offline_builtin_unavailable">开源版未随仓库分发内置示例数据，请选择授权获得的 TXT 文件。</string>
+    <string name="offline_status_loading">正在读取离线数据…</string>
+    <string name="offline_status_running">正在识别 %1$s · %2$d 行 · %3$s</string>
+    <string name="offline_status_done">已完成 %1$s · %2$d 行 · %3$s · %4$d 段</string>
+    <string name="offline_status_error">离线识别失败：%1$s</string>
+    <string name="model_summary_models">%1$s (%2$d 模型)</string>
+    <string name="model_summary_single_fallback">单模型(fallback)</string>
+    <string name="model_summary_unloaded">未加载</string>
+    <string name="unknown_activity">未知</string>
+    <string name="recognition_class_no_activity">💤 无活动</string>
+    <string name="recognition_class_badminton">🏸 羽毛球</string>
+    <string name="recognition_class_jump_rope">🪢 跳绳</string>
+    <string name="recognition_class_fly">🦅 飞鸟</string>
+    <string name="recognition_class_running">🏃 跑步</string>
+    <string name="recognition_class_table_tennis">🏓 乒乓球</string>
+
+    <string-array name="activity_names">
+        <item>无活动</item>
+        <item>羽毛球</item>
+        <item>跳绳</item>
+        <item>飞鸟</item>
+        <item>跑步</item>
+        <item>乒乓球</item>
+    </string-array>
+</resources>

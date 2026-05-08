@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_charts"
+        android:icon="@drawable/ic_nav_charts"
+        android:title="@string/nav_charts" />
+
+    <item
+        android:id="@+id/nav_attitude"
+        android:icon="@drawable/ic_nav_attitude"
+        android:title="@string/nav_attitude" />
+
+    <item
+        android:id="@+id/nav_hand"
+        android:icon="@drawable/ic_nav_hand"
+        android:title="@string/nav_hand" />
+
+    <item
+        android:id="@+id/nav_trajectory"
+        android:icon="@drawable/ic_nav_trajectory"
+        android:title="@string/nav_trajectory" />
+
+    <item
+        android:id="@+id/nav_dashboard"
+        android:icon="@drawable/ic_nav_dashboard"
+        android:title="@string/nav_dashboard" />
+
+    <item
+        android:id="@+id/nav_recognition"
+        android:icon="@drawable/ic_nav_recognition"
+        android:title="@string/nav_recognition" />
+
+</menu>

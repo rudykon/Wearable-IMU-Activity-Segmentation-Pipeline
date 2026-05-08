@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <!-- 手部 3D 视图（占主要空间） -->
+    <com.imu.realtime.HandView
+        android:id="@+id/hand_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <!-- 底部控制 + 数值区 -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/surface"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- 角度数值行 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Pitch" android:textColor="@color/muted" android:textSize="10sp"/>
+                    <TextView android:id="@+id/tv_hand_pitch"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—°" android:textColor="@color/red"
+                        android:textSize="20sp" android:textStyle="bold" android:fontFamily="monospace"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Roll" android:textColor="@color/muted" android:textSize="10sp"/>
+                    <TextView android:id="@+id/tv_hand_roll"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—°" android:textColor="@color/green"
+                        android:textSize="20sp" android:textStyle="bold" android:fontFamily="monospace"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Yaw" android:textColor="@color/muted" android:textSize="10sp"/>
+                    <TextView android:id="@+id/tv_hand_yaw"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—°" android:textColor="@color/blue"
+                        android:textSize="20sp" android:textStyle="bold" android:fontFamily="monospace"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- 动作强度 + 校准按钮行 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- 动作强度指示 -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/hand_motion_intensity" android:textColor="@color/muted" android:textSize="10sp"
+                    android:layout_marginEnd="6dp"/>
+                <ProgressBar
+                    android:id="@+id/pb_motion"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="8dp"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressTint="@color/blue"
+                    android:layout_marginEnd="10dp"/>
+
+                <!-- 校准按钮：长按记录当前下垂姿态为零点 -->
+                <Button
+                    android:id="@+id/btn_calibrate"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:text="@string/action_calibrate_zero"
+                    android:textSize="12sp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- 说明 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hand_description"
+        android:textColor="@color/muted"
+        android:textSize="10sp"
+        android:gravity="center"
+        android:paddingBottom="6dp"/>
+
+</LinearLayout>

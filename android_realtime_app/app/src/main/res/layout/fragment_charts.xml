@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- ── 数值卡片：AccX / AccY / AccZ ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="6dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginEnd="4dp"
+                app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp"
+                app:cardElevation="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center"
+                    android:paddingTop="10dp" android:paddingBottom="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="AccX" android:textColor="@color/muted" android:textSize="10sp"/>
+                    <TextView android:id="@+id/tv_acc_x" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textColor="@color/red" android:textSize="20sp" android:textStyle="bold"
+                        android:fontFamily="monospace" android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="g" android:textColor="@color/muted" android:textSize="10sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginStart="4dp" android:layout_marginEnd="4dp"
+                app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp" app:cardElevation="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center"
+                    android:paddingTop="10dp" android:paddingBottom="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="AccY" android:textColor="@color/muted" android:textSize="10sp"/>
+                    <TextView android:id="@+id/tv_acc_y" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textColor="@color/green" android:textSize="20sp" android:textStyle="bold"
+                        android:fontFamily="monospace" android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="g" android:textColor="@color/muted" android:textSize="10sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginStart="4dp"
+                app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp" app:cardElevation="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center"
+                    android:paddingTop="10dp" android:paddingBottom="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="AccZ" android:textColor="@color/muted" android:textSize="10sp"/>
+                    <TextView android:id="@+id/tv_acc_z" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textColor="@color/blue" android:textSize="20sp" android:textStyle="bold"
+                        android:fontFamily="monospace" android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="g" android:textColor="@color/muted" android:textSize="10sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- ── 数值卡片：GyroX / GyroY / GyroZ ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginEnd="4dp"
+                app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp" app:cardElevation="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center"
+                    android:paddingTop="10dp" android:paddingBottom="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="GyroX" android:textColor="@color/muted" android:textSize="10sp"/>
+                    <TextView android:id="@+id/tv_gyro_x" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textColor="@color/red" android:textSize="18sp" android:textStyle="bold"
+                        android:fontFamily="monospace" android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="°/s" android:textColor="@color/muted" android:textSize="10sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginStart="4dp" android:layout_marginEnd="4dp"
+                app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp" app:cardElevation="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center"
+                    android:paddingTop="10dp" android:paddingBottom="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="GyroY" android:textColor="@color/muted" android:textSize="10sp"/>
+                    <TextView android:id="@+id/tv_gyro_y" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textColor="@color/green" android:textSize="18sp" android:textStyle="bold"
+                        android:fontFamily="monospace" android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="°/s" android:textColor="@color/muted" android:textSize="10sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginStart="4dp"
+                app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp" app:cardElevation="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center"
+                    android:paddingTop="10dp" android:paddingBottom="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="GyroZ" android:textColor="@color/muted" android:textSize="10sp"/>
+                    <TextView android:id="@+id/tv_gyro_z" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="—" android:textColor="@color/blue" android:textSize="18sp" android:textStyle="bold"
+                        android:fontFamily="monospace" android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="°/s" android:textColor="@color/muted" android:textSize="10sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- ── 加速度折线图 ── -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp" app:cardElevation="1dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="12dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/chart_acc_title" android:textColor="@color/muted" android:textSize="10sp"
+                    android:textAllCaps="true" android:layout_marginBottom="4dp"/>
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_acc"
+                    android:layout_width="match_parent" android:layout_height="170dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ── 角速度折线图 ── -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp" app:cardElevation="1dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="12dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/chart_gyro_title" android:textColor="@color/muted" android:textSize="10sp"
+                    android:textAllCaps="true" android:layout_marginBottom="4dp"/>
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_gyro"
+                    android:layout_width="match_parent" android:layout_height="170dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ── 角度折线图 ── -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="@color/surface" app:cardCornerRadius="14dp" app:cardElevation="1dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="12dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/chart_angle_title" android:textColor="@color/muted" android:textSize="10sp"
+                    android:textAllCaps="true" android:layout_marginBottom="4dp"/>
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_angle"
+                    android:layout_width="match_parent" android:layout_height="170dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

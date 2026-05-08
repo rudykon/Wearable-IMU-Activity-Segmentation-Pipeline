@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 轨迹图标 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- 曲线路径 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#3B82F6"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M3,19 C5,19 6,14 9,12 C12,10 13,15 16,13 C19,11 19,6 21,5"/>
+    <!-- 起点圆 -->
+    <path
+        android:fillColor="#EF4444"
+        android:pathData="M3,19 A2,2 0 1 1 2.99,19 Z"/>
+    <!-- 终点箭头 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#10B981"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M18,3 L21,5 L19,8"/>
+</vector>

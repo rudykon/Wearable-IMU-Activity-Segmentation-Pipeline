@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 人工地平线图标 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- 外圈 -->
+    <path
+        android:strokeColor="#64748B"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M12,2 A10,10 0 1 1 11.99,2 Z"/>
+    <!-- 天空（上半圆填色） -->
+    <path
+        android:fillColor="#BFDBFE"
+        android:pathData="M2,12 A10,10 0 0 1 22,12 Z"/>
+    <!-- 地面（下半圆填色） -->
+    <path
+        android:fillColor="#D4A574"
+        android:pathData="M2,12 A10,10 0 0 0 22,12 Z"/>
+    <!-- 水平线 -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M2,12 L22,12"/>
+    <!-- 飞机符号 -->
+    <path
+        android:strokeColor="#FBBF24"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M7,12 L10,12"/>
+    <path
+        android:strokeColor="#FBBF24"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M14,12 L17,12"/>
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M11,11 A1,1 0 1 1 10.99,11 Z"/>
+</vector>

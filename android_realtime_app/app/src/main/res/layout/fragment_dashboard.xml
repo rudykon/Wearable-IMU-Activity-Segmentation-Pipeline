@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:padding="10dp"
+        android:useDefaultMargins="true">
+
+        <com.imu.realtime.GaugeView android:id="@+id/gauge_acc_x"
+            android:layout_width="0dp" android:layout_height="130dp" android:layout_columnWeight="1"/>
+        <com.imu.realtime.GaugeView android:id="@+id/gauge_acc_y"
+            android:layout_width="0dp" android:layout_height="130dp" android:layout_columnWeight="1"/>
+        <com.imu.realtime.GaugeView android:id="@+id/gauge_acc_z"
+            android:layout_width="0dp" android:layout_height="130dp" android:layout_columnWeight="1"/>
+
+        <com.imu.realtime.GaugeView android:id="@+id/gauge_gyro_x"
+            android:layout_width="0dp" android:layout_height="130dp" android:layout_columnWeight="1"/>
+        <com.imu.realtime.GaugeView android:id="@+id/gauge_gyro_y"
+            android:layout_width="0dp" android:layout_height="130dp" android:layout_columnWeight="1"/>
+        <com.imu.realtime.GaugeView android:id="@+id/gauge_gyro_z"
+            android:layout_width="0dp" android:layout_height="130dp" android:layout_columnWeight="1"/>
+
+        <com.imu.realtime.GaugeView android:id="@+id/gauge_angle_x"
+            android:layout_width="0dp" android:layout_height="130dp" android:layout_columnWeight="1"/>
+        <com.imu.realtime.GaugeView android:id="@+id/gauge_angle_y"
+            android:layout_width="0dp" android:layout_height="130dp" android:layout_columnWeight="1"/>
+        <com.imu.realtime.GaugeView android:id="@+id/gauge_angle_z"
+            android:layout_width="0dp" android:layout_height="130dp" android:layout_columnWeight="1"/>
+
+    </GridLayout>
+</ScrollView>

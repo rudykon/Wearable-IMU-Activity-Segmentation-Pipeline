@@ -1,0 +1,32 @@
+# Android / Gradle
+.gradle/
+build/
+*/build/
+local.properties
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Kotlin / Java
+*.class
+
+# Python desktop tools
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary outputs
+*.log
+*.tmp
+app-debug.png
