@@ -62,6 +62,7 @@ experiments/results/*
 !experiments/results/.gitkeep
 experiments/figures/*
 !experiments/figures/.gitkeep
+!experiments/figures/*.png
 experiments/public_temporal_record_layer_checks/results/
 Report/
 eval_figures/
