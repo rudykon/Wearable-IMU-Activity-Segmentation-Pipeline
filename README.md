@@ -111,7 +111,7 @@ cd android_realtime_app
 
 The dataset is not distributed directly in this GitHub repository. Dataset access instructions are maintained on the project GitHub page.
 
-Before the PhysioNet repository is formally released, research-use access requests should be submitted through the access request form linked from the GitHub page. Requests are reviewed by the Hainan University organizer responsible for data management. After approval, readers can download the dataset and place it under `data/` following [data/README.md](data/README.md).
+Before the PhysioNet repository is formally released, research-use access requests should be submitted through the access request form linked( https://wj.qq.com/s2/26600660/1b91 ) from the GitHub page. Requests are reviewed by the Hainan University organizer responsible for data management. After approval, readers can download the dataset and place it under `data/` following [data/README.md](data/README.md).
 
 After the PhysioNet repository is released, the request form will be closed and readers should obtain the dataset directly from PhysioNet. The GitHub page will keep the current PhysioNet link and citation information.
 
