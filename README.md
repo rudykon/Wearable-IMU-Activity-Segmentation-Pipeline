@@ -17,7 +17,7 @@ The repository also includes an Android on-device demo in `android_realtime_app/
 
 ![Overall activity-segmentation framework](experiments/figures/fig02_overall_framework.png)
 
-![Physical deployment chain](experiments/figures/fig03_physical_deployment_chain.png)
+
 
 ## Highlights
 
@@ -97,6 +97,8 @@ For training, evaluation, Python interfaces, packaged executable usage, and expe
 ## Android App
 
 The Android demo is located in [android_realtime_app/](android_realtime_app/). It supports WT9011DCL-BT50 BLE acquisition, visualization, CSV recording, and on-device ONNX inference.The project also provides an Android demo app for download.
+
+![Physical deployment chain](experiments/figures/fig03_physical_deployment_chain.png)
 
 Use Android Studio, or build from a JDK 17 + Android SDK environment:
 
