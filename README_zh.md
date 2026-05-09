@@ -131,9 +131,9 @@ cd android_realtime_app
 
 本 GitHub 仓库不直接分发数据集。数据集访问说明维护在本项目 GitHub 页面。
 
-在 PhysioNet 仓库正式发布前，研究用途数据申请通过 GitHub 页面链接的 `access request form` 提交。申请由负责数据管理的海南大学组织方审核；审核通过后，读者按反馈说明下载数据，并根据 [data/README_zh.md](data/README_zh.md) 放入 `data/` 目录。
+在 PhysioNet 仓库正式发布前，研究用途数据申请通过本页面的问卷链接提交。申请由负责数据管理的海南大学生物学与工程学院负责审核；审核通过后，读者按反馈说明下载数据，并根据 [data/README_zh.md](data/README_zh.md) 放入 `data/` 目录。
 
-在 PhysioNet 仓库正式发布后，GitHub 申请表关闭，读者改为直接通过 PhysioNet 获取数据。本项目 GitHub 页面会维护最新的 PhysioNet 数据链接和引用信息。
+待 PhysioNet 仓库正式发布后，GitHub 页面问卷链接会失效，读者改为直接通过 PhysioNet 获取数据。本项目 GitHub 页面会维护最新的 PhysioNet 数据链接和引用信息。
 
 ## 数据和模型资产
 
