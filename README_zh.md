@@ -10,7 +10,7 @@ English version: [README.md](README.md)
 
 ![活动分割整体框架](experiments/figures/fig02_overall_framework.png)
 
-![物理部署链路](experiments/figures/fig03_physical_deployment_chain.png)
+
 
 ## 主要特点
 
@@ -117,6 +117,8 @@ python tests/smoke_test.py
 ## Android App
 
 移动端演示程序位于 [android_realtime_app/](android_realtime_app/)，支持 WT9011DCL-BT50 BLE 采集、可视化、CSV 录制和端侧 ONNX 推理。本项目还提供了安卓版本的演示app供下载。
+
+![物理部署链路](experiments/figures/fig03_physical_deployment_chain.png)
 
 可用 Android Studio 打开该目录，或在 JDK 17 + Android SDK 环境下构建：
 
