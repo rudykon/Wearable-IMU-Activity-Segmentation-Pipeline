@@ -16,7 +16,8 @@ multi-scale 3s/5s/8s motion classifier on the phone.
 - Dashboard, artificial horizon, compass, trajectory, and hand-motion views.
 - CSV recording to the Android Downloads directory.
 - On-device ONNX inference with selected 3s, 5s, and 8s models.
-- Offline recognition for bundled sample data or user-selected paper-format
+- Offline recognition for bundled sample data, real sliced TXT examples under
+  `android_realtime_app/motion_segments/`, or user-selected paper-format
   ACC/GYRO `.txt` files.
 - Offline-style post-processing: zero-phase filtering, LBSA fusion, smoothing,
   Viterbi decoding, boundary refinement, and segment filtering.
@@ -76,7 +77,9 @@ opened. Do not commit that file.
    trajectory, dashboard, and recognition views.
 6. On the recognition view, run the built-in offline sample or choose a
    paper-format ACC/GYRO `.txt` file to classify offline data with the same
-   pipeline.
+   pipeline. If you do not have a similar physical sensor, copy one of the
+   real slice files from `android_realtime_app/motion_segments/` to the Android
+   device and select it from the app to experience offline activity recognition.
 
 Recorded CSV files are saved under the device Downloads directory with names
 like `imu_yyyyMMdd_HHmmss.csv`.
@@ -99,9 +102,11 @@ The Android app loads these selected assets:
 The legacy fallback model `hand_motion.onnx` and `norm_params.json` are also
 included so the app can still run if the selected ensemble assets are replaced.
 
-The open-source release does not bundle offline sensor samples. Use the file
-picker with an authorized paper-format ACC/GYRO TXT file to exercise the
-app-side offline inference path.
+The repository includes real sliced TXT examples under
+`android_realtime_app/motion_segments/` (relative to this app directory:
+`motion_segments/`). If you do not have a similar physical sensor, copy one of
+these files to the Android device and select it from the recognition page to
+experience the app-side offline activity-recognition path.
 
 For model details, checksums, intended use, and limitations, see
 `MODEL_CARD.md`. The bundled model weights and normalization files are covered
