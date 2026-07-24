@@ -1,176 +1,222 @@
-# 可穿戴 IMU 活动分割流程
+<p align="center">
+  <a href="README.md">English</a> · <strong>中文</strong>
+</p>
 
-English version: [README.md](README.md)
+<h1 align="center">可穿戴 IMU 活动分割流程</h1>
 
-本仓库提供一套面向可穿戴 IMU 信号的活动分割与识别流程，覆盖数据读取、滑窗特征构建、模型训练、片段级后处理、评估和实验复现。代码已整理为 `src/` 包结构，便于在本地开发、复现实验或作为研究基线扩展。
+<p align="center">
+  <strong>面向长时程可穿戴加速度计与陀螺仪信号的活动片段识别</strong><br>
+  一套可复现 Python 研究流程，包含多尺度时序后处理和 Android 端侧 ONNX 演示。
+</p>
 
-仓库同时包含移动端演示程序 `android_realtime_app/`，用于 WT9011DCL-BT50 蓝牙 IMU 的实时采集、可视化和端侧 ONNX 推理。
+<p align="center">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-%E2%89%A53.12-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.12 或更高版本"></a>
+  <a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-2.5.1-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch 2.5.1"></a>
+  <a href="android_realtime_app/"><img src="https://img.shields.io/badge/Android-ONNX%20Runtime-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android ONNX Runtime 演示"></a>
+  <a href="#quick-start"><img src="https://img.shields.io/badge/Smoke%20test-no%20raw%20data-2CA02C?style=flat-square" alt="轻量测试不需要原始数据"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-4C78A8?style=flat-square" alt="Apache License 2.0"></a>
+</p>
 
-## 流程图
+<p align="center">
+  <a href="#overview">项目概览</a> ·
+  <a href="#pipeline">流程</a> ·
+  <a href="#quick-start">快速开始</a> ·
+  <a href="#data">数据</a> ·
+  <a href="#model-assets">模型资产</a> ·
+  <a href="#android-app">Android</a> ·
+  <a href="#reproduction">复现</a> ·
+  <a href="#license">许可证</a>
+</p>
 
-![活动分割整体框架](experiments/figures/fig02_overall_framework.png)
+> [!IMPORTANT]
+> 本 GitHub 仓库不分发参与者传感器记录。仓库作者编写的源码以及随仓库分发的 Python/Android 模型资产采用 Apache-2.0；数据集和第三方依赖仍遵循各自条款。
 
+<a id="overview"></a>
+## 项目概览
 
-
-## 主要特点
-
-- 统一的数据入口：获得数据授权后，默认从 `data/` 下读取数据清单、标注表和 IMU 信号文件。
-- 模块化流水线：核心逻辑位于 `src/imu_activity_pipeline/`，根目录脚本仅作为兼容入口。
-- 可复现实验：`experiments/` 中保留分析与绘图脚本，结果默认输出到 `experiments/results/` 和 `experiments/figures/`。
-- 移动端演示：`android_realtime_app/` 提供 Android BLE 采集、CSV 录制和端侧识别流程。
-- 开源友好：大型数据和额外模型文件不直接纳入版本管理；仓库仅跟踪复现所需的小体量模型资产，并保留数据获取与本地资产放置约定。
-
-## 目录结构
-
-```text
-.
-├── src/imu_activity_pipeline/   # 核心 Python 包
-│   ├── config.py                # 路径、标签、特征和训练配置
-│   ├── sensor_data_processing.py            # 信号读取、过滤、滑窗、标签和增强
-│   ├── neural_network_models.py             # 神经网络结构与辅助损失
-│   ├── inference.py             # 推理与片段后处理
-│   ├── train*.py                # 训练实现
-│   └── input.py / output.py     # 轻量输入输出接口
-├── run_inference.py                      # 端到端流水线兼容入口
-├── train.py                     # 单进程训练入口
-├── train_parallel.py            # 并行训练入口
-├── train_single_model.py                 # 单个目标/配置训练入口
-├── evaluate.py                  # 评估入口
-├── experiments/                 # 实验、分析和绘图脚本
-├── scripts/                     # 辅助工具脚本
-├── tests/                       # 轻量健康检查
-├── android_realtime_app/        # Android 实时采集与端侧 ONNX 推理 App
-├── data/                        # 数据目录，实际大文件由数据发布渠道提供
-├── saved_models/                # 模型输出目录，权重不纳入版本管理
-└── docs/                        # 使用说明与资产说明
-```
-
-当前数据目录约定如下：
+本项目将长时程可穿戴 IMU 会话分割为活动片段记录：
 
 ```text
-data/
-├── annotations/                 # 训练/评估标注表
-├── metadata/                    # 数据划分与信号清单
-├── splits/                      # 划分配置或派生清单
-├── public_external/             # 公共外部数据适配材料
-├── signals/
-│   ├── train/
-│   ├── internal_eval/
-│   └── external_test/
-└── README.md / README_zh.md
+user_id, category, start, end
 ```
 
-## 环境要求与安装
+Python 流程读取加速度计与陀螺仪信号，训练多尺度神经网络分类器，对齐 3 秒、5 秒和 8 秒窗口预测，执行时序解码与边界细化，并写出片段级预测表。仓库还包含面向 WT9011DCL-BT50 蓝牙 IMU 的 Android App，用于实时采集、可视化、CSV 录制和端侧 ONNX 推理。
 
-推荐使用 Python 3.12 和仓库提供的 Conda 环境文件。训练建议使用支持 CUDA 的 GPU；推理也可以在 CPU 上运行。
+| 目标 | 已实现方法 | 公开边界 |
+| --- | --- | --- |
+| 分割长时程可穿戴运动信号 | 多核 1D-CNN + BiLSTM 滑窗分类器 | 完整推理/训练需要授权本地传感器文件 |
+| 提升时序一致性 | 多尺度概率对齐、LBSA 融合、平滑、Viterbi 解码、边界细化、重叠消解、置信度过滤和 Top-K 裁剪 | 轻量测试只使用临时文件 |
+| 支持可部署演示 | Android BLE 采集与 ONNX Runtime 推理 | 随仓库模型资产与私有数据集分开说明 |
+| 保持实验可复现 | 评估、鲁棒性、可视化和公开数据集可迁移性脚本 | 生成产物保留在被忽略的本地目录 |
+
+支持的前景活动包括 `羽毛球`、`跳绳`、`飞鸟`、`跑步` 和 `乒乓球`。背景/无活动在必要时作为内部类别建模，但提交的片段记录只包含前景活动。
+
+<a id="pipeline"></a>
+## 流程
+
+<p align="center">
+  <a href="experiments/figures/fig02_overall_framework.png">
+    <img src="experiments/figures/fig02_overall_framework.png" alt="可穿戴 IMU 活动分割整体框架" width="92%">
+  </a>
+</p>
+<p align="center"><em>图 1｜从原始 IMU 信号到活动片段记录的整体活动分割框架。</em></p>
+
+核心组成：
+
+- `data/` 下统一管理信号、标注、划分、元数据和可选公开外部数据集。
+- 核心源码位于 `src/imu_activity_pipeline/`，根目录脚本作为兼容入口保留。
+- 提供顺序训练、并行训练和单模型训练入口。
+- 片段级评估采用同类别一对一 IoU 匹配。
+- 实验脚本覆盖内部评估、后处理策略检查、公开数据集可迁移性检查和图件生成。
+- Android 演示包含 BLE 采集、实时视图、离线识别和端侧多尺度推理。
+
+<a id="quick-start"></a>
+## 快速开始
 
 ```bash
+git clone https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline.git
+cd Wearable-IMU-Activity-Segmentation-Pipeline
+
 conda env create -f environment.yml
 conda activate imu-activity-pipeline
 python -m pip install -e .
-```
-
-安装完成后运行：
-
-```bash
 python tests/smoke_test.py
 ```
 
-如果只想临时运行，也可以在仓库根目录直接执行这些入口脚本；它们会优先使用本地源码包。
+轻量测试会检查导入、规范路径、临时小信号读取、标注读取和工作簿写出，不需要私有原始数据或训练检查点。
 
-## 快速开始
+若使用纯 pip 环境，请先安装固定版本依赖：
 
-请先按 [数据获取](#数据获取) 说明申请或下载数据，并将授权数据放入 `data/` 对应目录。
+```bash
+python -m pip install -r requirements.txt
+python -m pip install -e .
+```
 
-运行端到端流程：
+将授权数据放入 `data/`、模型资产放入 `saved_models/` 后，运行推理：
 
 ```bash
 python run_inference.py
 ```
 
-默认针对 `external_test` 划分生成 `predictions_external_test.xlsx`。
+默认划分为 `external_test`，默认输出为：
 
-训练模型：
+```text
+predictions_external_test.xlsx
+```
+
+常用根目录命令：
 
 ```bash
 python train.py
-```
-
-并行训练：
-
-```bash
 python train_parallel.py
+python evaluate.py --split external_test
+python -m imu_activity_pipeline.inference \
+  --data_dir data/signals/internal_eval \
+  --output predictions_internal_eval.xlsx
 ```
 
-评估预测结果：
+训练、评估、Python 接口、打包可执行文件布局和实验脚本见 [docs/USAGE.md](docs/USAGE.md)。
 
-```bash
-python evaluate.py --help
+<a id="data"></a>
+## 数据
+
+本 GitHub 仓库不直接分发数据集。仓库保留预期本地目录结构和数据使用说明，便于获授权用户一致放置文件。
+
+| 组成 | 默认本地路径 | 说明 |
+| --- | --- | --- |
+| 信号流 | `data/signals/{train,internal_eval,external_test}/` | UTF-8 制表符分隔 `.txt` 文件 |
+| 标注 | `data/annotations/*_annotations.csv` | `split,user_id,category,start,end` |
+| 划分与元数据 | `data/splits/`, `data/metadata/` | 用户列表、清单、标签汇总和数据集元数据 |
+| 可选公开数据集 | `data/public_external/` | 用户自行下载；各数据集遵循自身许可 |
+
+在 PhysioNet 仓库正式发布前，研究用途访问通过 [data/README_zh.md](data/README_zh.md) 中维护的腾讯问卷链接申请。PhysioNet 发布后，请遵循仓库文档中维护的 PhysioNet 链接和引用信息。
+
+<a id="model-assets"></a>
+## 模型资产
+
+Python 研究流程以代码为主。`saved_models/` 下跟踪部分复现检查点、归一化参数和集成配置；额外本地训练输出由 Git 忽略。
+
+默认多尺度推理需要：
+
+```text
+saved_models/ensemble_config.json
+saved_models/combined_model_3s_seed42.pth
+saved_models/combined_model_5s_seed123.pth
+saved_models/combined_model_8s_seed123.pth
+saved_models/norm_params_3s.pkl
+saved_models/norm_params_5s.pkl
+saved_models/norm_params_8s.pkl
 ```
 
-运行轻量健康检查：
+资产说明：
 
-```bash
-python tests/smoke_test.py
-```
+- [docs/ASSETS.md](docs/ASSETS.md) 描述本地数据、检查点和生成产物边界。
+- [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE) 适用于随仓库分发的 Python 模型资产。
+- [android_realtime_app/MODEL_CARD.md](android_realtime_app/MODEL_CARD.md) 说明 Android ONNX 资产、校验和、预期用途和限制。
+- [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE) 适用于随仓库分发的 Android 模型资产。
 
+<a id="android-app"></a>
 ## Android App
 
-移动端演示程序位于 [android_realtime_app/](android_realtime_app/)，支持 WT9011DCL-BT50 BLE 采集、可视化、CSV 录制和端侧 ONNX 推理。本项目还提供了安卓版本的演示app供下载。
+[android_realtime_app/](android_realtime_app/) 中的 Android 演示支持 WT9011DCL-BT50 BLE 扫描/连接、实时加速度和角速度图、姿态/指南针/轨迹视图、CSV 录制、离线文件识别和端侧 3 秒/5 秒/8 秒 ONNX 推理。
 
-![物理部署链路](experiments/figures/fig03_physical_deployment_chain.png)
+<p align="center">
+  <a href="experiments/figures/fig03_physical_deployment_chain.png">
+    <img src="experiments/figures/fig03_physical_deployment_chain.png" alt="可穿戴 IMU 采集与 Android 推理物理部署链路" width="92%">
+  </a>
+</p>
+<p align="center"><em>图 2｜从可穿戴 IMU 采集到 Android 端识别的物理部署链路。</em></p>
 
-可用 Android Studio 打开该目录，或在 JDK 17 + Android SDK 环境下构建：
+可使用 Android Studio 构建，或在 JDK 17 + Android SDK 环境下运行：
 
 ```bash
 cd android_realtime_app
 ./gradlew assembleDebug
 ```
 
-## 数据获取
+BLE 集成说明和桌面调试工具见 [android_realtime_app/docs/README.md](android_realtime_app/docs/README.md) 与 [android_realtime_app/tools/desktop/README.md](android_realtime_app/tools/desktop/README.md)。
 
-本 GitHub 仓库不直接分发数据集。数据集访问说明维护在本项目 GitHub 页面。
+<a id="reproduction"></a>
+## 复现
 
-在 PhysioNet 仓库正式发布前，研究用途数据申请通过本页面的问卷链接（https://wj.qq.com/s2/26600660/1b91）提交。申请由负责数据管理的海南大学生物学与工程学院负责审核；审核通过后，读者按反馈说明下载数据，并根据 [data/README_zh.md](data/README_zh.md) 放入 `data/` 目录。
-
-待 PhysioNet 仓库正式发布后，GitHub 页面问卷链接会失效，读者改为直接通过 PhysioNet 获取数据。本项目 GitHub 页面会维护最新的 PhysioNet 数据链接和引用信息。
-
-## 数据和模型资产
-
-Python 研究流程以代码为主。`data/` 目录仅保留结构占位和数据获取说明，获授权的数据文件由 `.gitignore` 保持为本地文件。`saved_models/` 中随仓库分发的复现检查点及归一化、配置资产采用 [Apache License 2.0](saved_models/WEIGHTS_LICENSE)；其他私有或用户提供的资产说明见 [docs/ASSETS.md](docs/ASSETS.md)。Android App 随仓库发布的小体量 ONNX 演示资产采用 [Apache License 2.0](android_realtime_app/WEIGHTS_LICENSE)，模型说明见 [android_realtime_app/MODEL_CARD.md](android_realtime_app/MODEL_CARD.md)。
-
-更多资产说明见 [docs/ASSETS.md](docs/ASSETS.md)，使用说明见 [docs/USAGE.md](docs/USAGE.md)。
-
-## 实验复现
-
-一键运行主要实验与绘图流程：
+顶层实验封装脚本为：
 
 ```bash
 bash run_reproducibility_experiments.sh
 ```
 
-默认输出：
+该脚本会运行已保存模型评估、内部鲁棒性检查、策略选择检查、PPG 信号质量分析、代表性时间线图、外部无标注队列压力测试和汇总图生成。它需要 [docs/ASSETS.md](docs/ASSETS.md) 中说明的本地数据和检查点资产。
 
-- 表格和中间结果：`experiments/results/`
-- 图像：`experiments/figures/`
-- 日志：`experiments/logs/`
+输出目录：
 
-如需使用指定解释器，可设置 `PYTHON_BIN`：
+```text
+experiments/results/
+experiments/figures/
+experiments/logs/
+```
+
+指定解释器：
 
 ```bash
 PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 ```
 
-## Shell 脚本保留原则
+<a id="repository-map"></a>
+## 项目结构
 
-当前保留的根目录 `.sh` 只作为公开、通用入口：
+| 路径 | 作用 |
+| --- | --- |
+| `src/imu_activity_pipeline/` | 核心 Python 包，覆盖配置、加载、训练、推理、后处理和评估 |
+| `run_inference.py`, `train.py`, `train_parallel.py`, `evaluate.py` | 源码检出环境下的兼容入口 |
+| `saved_models/` | 已跟踪复现资产及被忽略的本地训练输出 |
+| `data/` | 本地数据目录占位与访问说明 |
+| `experiments/` | 评估、鲁棒性、可视化和公开数据集可迁移性脚本 |
+| `scripts/` | 辅助分析、调参和图件工具 |
+| `android_realtime_app/` | Android BLE 采集、可视化、录制和 ONNX 推理 App |
+| `docs/` | 使用说明与资产边界文档 |
+| `tests/` | 轻量公开健康检查 |
 
-- `run_reproducibility_experiments.sh`：复现实验和图表生成。
-- `run_training.sh`：训练启动入口，会在可用时使用 tmux。
-- `run_training_in_tmux.sh`：`run_training.sh` 的 tmux 执行后端。
-
-一次性、本地化或只服务个人排队运行的脚本不再作为公开入口保留，避免根目录变成运行记录集合。
-
+<a id="license"></a>
 ## 许可证
 
-仓库作者编写的源代码以及随仓库分发的 Python、Android 模型资产均采用 [Apache License 2.0](LICENSE)。模型资产另有明确适用范围的许可证副本：[saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE) 和 [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE)。数据集和第三方依赖仍分别适用其自身条款。
+仓库作者编写的源码以及随仓库分发的 Python、Android 模型资产均采用 [Apache License 2.0](LICENSE)。适用范围副本位于 [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE)、[android_realtime_app/LICENSE](android_realtime_app/LICENSE) 和 [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE)。数据集和第三方依赖仍分别遵循各自条款。
