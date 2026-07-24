@@ -135,5 +135,6 @@ hardware-development materials are available in `docs/`:
 
 ## License
 
-Code is provided under the MIT License. Bundled model weights and normalization
-files are provided under `WEIGHTS_LICENSE`.
+Application source code and bundled model weights and normalization files are
+licensed under the Apache License 2.0; see `LICENSE` and `WEIGHTS_LICENSE`,
+respectively. Third-party dependencies retain their own licenses.

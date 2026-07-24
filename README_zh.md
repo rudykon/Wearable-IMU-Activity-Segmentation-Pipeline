@@ -18,7 +18,7 @@ English version: [README.md](README.md)
 - 模块化流水线：核心逻辑位于 `src/imu_activity_pipeline/`，根目录脚本仅作为兼容入口。
 - 可复现实验：`experiments/` 中保留分析与绘图脚本，结果默认输出到 `experiments/results/` 和 `experiments/figures/`。
 - 移动端演示：`android_realtime_app/` 提供 Android BLE 采集、CSV 录制和端侧识别流程。
-- 开源友好：大型数据和模型文件不直接纳入版本管理，仓库中保留目录说明和下载/放置约定。
+- 开源友好：大型数据和额外模型文件不直接纳入版本管理；仓库仅跟踪复现所需的小体量模型资产，并保留数据获取与本地资产放置约定。
 
 ## 目录结构
 
@@ -137,7 +137,7 @@ cd android_realtime_app
 
 ## 数据和模型资产
 
-Python 研究流程的大体量数据和模型权重不直接提交到 GitHub。当前 `data/` 目录只保留目录结构和数据获取说明；获得授权的数据文件由 `.gitignore` 保持为本地文件。模型权重可放置到 `saved_models/` 或在运行时通过参数指定。Android App 随仓库发布小体量 ONNX 演示权重，说明见 [android_realtime_app/MODEL_CARD.md](android_realtime_app/MODEL_CARD.md)，权重许可证见 [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE)。
+Python 研究流程以代码为主。`data/` 目录仅保留结构占位和数据获取说明，获授权的数据文件由 `.gitignore` 保持为本地文件。`saved_models/` 中随仓库分发的复现检查点及归一化、配置资产采用 [Apache License 2.0](saved_models/WEIGHTS_LICENSE)；其他私有或用户提供的资产说明见 [docs/ASSETS.md](docs/ASSETS.md)。Android App 随仓库发布的小体量 ONNX 演示资产采用 [Apache License 2.0](android_realtime_app/WEIGHTS_LICENSE)，模型说明见 [android_realtime_app/MODEL_CARD.md](android_realtime_app/MODEL_CARD.md)。
 
 更多资产说明见 [docs/ASSETS.md](docs/ASSETS.md)，使用说明见 [docs/USAGE.md](docs/USAGE.md)。
 
@@ -173,4 +173,4 @@ PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 
 ## 许可证
 
-请根据数据、模型权重和依赖库的授权情况补充仓库许可证与引用方式。
+仓库作者编写的源代码以及随仓库分发的 Python、Android 模型资产均采用 [Apache License 2.0](LICENSE)。模型资产另有明确适用范围的许可证副本：[saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE) 和 [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE)。数据集和第三方依赖仍分别适用其自身条款。

@@ -121,4 +121,4 @@ tools/desktop/README.md
 
 ## 开源说明
 
-代码使用 MIT License。随仓库分发的模型权重和归一化参数使用 `WEIGHTS_LICENSE`。
+Android 应用源代码以及随应用分发的模型权重和归一化参数均采用 Apache License 2.0，分别见 `LICENSE` 与 `WEIGHTS_LICENSE`；第三方依赖保留其各自许可证。

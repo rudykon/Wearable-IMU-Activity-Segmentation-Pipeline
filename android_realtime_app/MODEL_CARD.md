@@ -86,5 +86,6 @@ multi-scale assets are replaced or unavailable.
 
 ## License
 
-The bundled model weights and normalization files are distributed under
-`WEIGHTS_LICENSE`. The application source code is distributed under `LICENSE`.
+The bundled model weights and normalization files are licensed under the Apache
+License 2.0 in `WEIGHTS_LICENSE`. The application source code is licensed under
+the Apache License 2.0 in `LICENSE`.

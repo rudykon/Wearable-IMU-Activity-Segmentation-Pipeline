@@ -9,7 +9,7 @@ This repository contains a research-code implementation for long-session wearabl
 user_id, category, start, end
 ```
 
-The release keeps the algorithm, training scripts, inference pipeline, post-processing logic, experiment scripts, and reusable public-dataset checks. Private recordings, held-out evaluation files, trained checkpoints, non-public writing files, local environments, build artifacts, logs, and third-party PDFs are not included.
+The release keeps the algorithm, training scripts, inference pipeline, post-processing logic, experiment scripts, reusable public-dataset checks, and selected reproducibility checkpoints. Private recordings, held-out evaluation files, additional local checkpoints, non-public writing files, local environments, build artifacts, logs, and third-party PDFs are not included.
 
 The repository also includes an Android on-device demo in `android_realtime_app/`, with bundled ONNX inference assets and documentation for the WT9011DCL-BT50 BLE IMU workflow.
 
@@ -117,7 +117,7 @@ After the PhysioNet repository is released, the request form will be closed and 
 
 ## Data and Model Assets
 
-The Python research pipeline is code-first. The `data/` directory contains only layout placeholders and data-access instructions; authorized local data files are ignored by Git. Required private or user-provided assets are documented in [docs/ASSETS.md](docs/ASSETS.md), including expected sensor columns, label format, checkpoint names, and ignored local-output locations. The Android app ships small ONNX demo assets documented in [android_realtime_app/MODEL_CARD.md](android_realtime_app/MODEL_CARD.md) and licensed by [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE).
+The Python research pipeline is code-first. The `data/` directory contains only layout placeholders and data-access instructions; authorized local data files are ignored by Git. Selected reproducibility checkpoints and normalization/configuration assets in `saved_models/` are licensed under [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE); additional private or user-provided assets are documented in [docs/ASSETS.md](docs/ASSETS.md). The Android app ships small ONNX demo assets documented in [android_realtime_app/MODEL_CARD.md](android_realtime_app/MODEL_CARD.md) and licensed under [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE).
 
 ## Experiment Reproduction
 
@@ -131,4 +131,4 @@ This requires the local data and checkpoint assets described in [docs/ASSETS.md]
 
 ## License
 
-MIT License. See [LICENSE](LICENSE).
+Repository-authored source code and the distributed Python and Android model assets are licensed under the [Apache License 2.0](LICENSE). The model assets also carry scope-specific copies at [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE) and [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE). Datasets and third-party dependencies retain their own terms.
