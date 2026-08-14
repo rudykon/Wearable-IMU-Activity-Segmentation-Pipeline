@@ -2,6 +2,10 @@
   <a href="README.md">English</a> · <strong>中文</strong>
 </p>
 
+<p align="center">
+  <img src="docs/brand-mark.svg" width="520" alt="Wearable IMU 品牌标识">
+</p>
+
 <h1 align="center">可穿戴 IMU 活动分割流程</h1>
 
 <p align="center">
@@ -220,3 +224,4 @@ PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 ## 许可证
 
 仓库作者编写的源码以及随仓库分发的 Python、Android 模型资产均采用 [Apache License 2.0](LICENSE)。适用范围副本位于 [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE)、[android_realtime_app/LICENSE](android_realtime_app/LICENSE) 和 [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE)。数据集和第三方依赖仍分别遵循各自条款。
+

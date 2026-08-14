@@ -2,6 +2,10 @@
   <strong>English</strong> · <a href="README_zh.md">中文</a>
 </p>
 
+<p align="center">
+  <img src="docs/brand-mark.svg" width="520" alt="Wearable IMU brand mark">
+</p>
+
 <h1 align="center">Wearable IMU Activity Segmentation Pipeline</h1>
 
 <p align="center">
@@ -220,3 +224,4 @@ PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 ## License
 
 Repository-authored source code and the distributed Python and Android model assets are licensed under the [Apache License 2.0](LICENSE). Scope-specific copies are kept at [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE), [android_realtime_app/LICENSE](android_realtime_app/LICENSE), and [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE). Datasets and third-party dependencies retain their own terms.
+
