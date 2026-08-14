@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="190" viewBox="0 0 760 190" role="img" aria-labelledby="title desc">
+  <title id="title">Wearable IMU brand mark</title>
+  <desc id="desc">A wearable motion trace is divided into clean activity segments.</desc>
+  <rect x="18" y="18" width="154" height="154" rx="38" fill="#103D44"/>
+  <path d="M72 29h46l8 30H64zM64 131h62l-8 30H72z" fill="#86D6CF"/>
+  <rect x="54" y="52" width="82" height="86" rx="25" fill="#F6FBFA" stroke="#2F8F83" stroke-width="7"/>
+  <path d="M67 97h12l7-22 12 46 11-31 9 14h7" fill="none" stroke="#E76F51" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(68 119)">
+    <rect width="18" height="7" rx="3.5" fill="#4C78A8"/><rect x="22" width="18" height="7" rx="3.5" fill="#FEBD08"/><rect x="44" width="18" height="7" rx="3.5" fill="#2F8F83"/>
+  </g>
+  <text x="208" y="91" fill="#103D44" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="44" font-weight="760">Wearable IMU</text>
+  <text x="211" y="124" fill="#56767A" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" font-weight="650" letter-spacing="1.4">ACTIVITY SEGMENTATION PIPELINE</text>
+  <path d="M210 140h472" stroke="#D7E7E5" stroke-width="3" stroke-linecap="round"/>
+</svg>
