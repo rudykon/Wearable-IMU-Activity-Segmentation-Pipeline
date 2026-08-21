@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
-  <title id="title">Wearable IMU Activity Segmentation Pipeline social preview</title>
-  <desc id="desc">The selected pixel-segmentation repository avatar centered on a clean social-preview canvas.</desc>
-  <rect width="1280" height="640" fill="#F7FAFC"/>
-  <rect x="24" y="24" width="1232" height="592" rx="44" fill="none" stroke="#DDE8F0" stroke-width="3"/>
-  <image x="370" y="50" width="540" height="540" preserveAspectRatio="xMidYMid meet" xlink:href="github-avatar.png"/>
-  <circle cx="346" cy="320" r="8" fill="#18D7F0"/>
-  <circle cx="934" cy="320" r="8" fill="#FF8A00"/>
-</svg>
