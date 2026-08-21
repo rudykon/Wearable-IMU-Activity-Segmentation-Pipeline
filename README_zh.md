@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/brand-mark.svg" width="520" alt="Wearable IMU 品牌标识">
+  <img src="docs/assets/github-avatar.png" width="260" alt="可穿戴 IMU 活动分割流程 Logo">
 </p>
 
 <h1 align="center">可穿戴 IMU 活动分割流程</h1>
