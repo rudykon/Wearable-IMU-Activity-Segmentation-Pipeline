@@ -3,9 +3,12 @@
 本项目解决的是**时序活动分割**，而不是孤立片段分类。输入是每位用户的一条长时
 传感器流，输出是一组带时间戳的前景活动记录。
 
-<div class="pipeline-frame">
-  <img src="../../../assets/pipeline-overview.svg" alt="可穿戴 IMU 活动分割架构">
-</div>
+<figure class="pipeline-frame">
+  <a class="pipeline-image-link" href="../../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的总体框架图">
+    <img src="../../../assets/fig02_overall_framework.png" alt="仓库现有可穿戴 IMU 活动分割总体框架图" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">仓库现有框架图，覆盖信号输入、分尺度模型、LBSA 融合、确定性时序解码与最终片段记录。</figcaption>
+</figure>
 
 ## 系统契约
 
