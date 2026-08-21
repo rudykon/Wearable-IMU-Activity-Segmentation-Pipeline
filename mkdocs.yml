@@ -97,6 +97,7 @@ plugins:
             Research: 研究
             Paper highlights: 论文要点
             Deployment: 部署
+            Web demo: 在线演示
             Android app: Android 应用
             Reference: 参考
             Python API: Python API
@@ -152,6 +153,7 @@ nav:
   - Research:
       - Paper highlights: research/paper.md
   - Deployment:
+      - Web demo: deployment/hugging-face.md
       - Android app: deployment/android.md
   - Reference:
       - Python API: reference/api.md

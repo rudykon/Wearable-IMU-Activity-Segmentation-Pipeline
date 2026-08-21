@@ -1,3 +1,17 @@
+---
+title: Wearable IMU Activity Segmentation
+emoji: 🏃
+colorFrom: indigo
+colorTo: purple
+sdk: gradio
+sdk_version: 6.25.0
+python_version: "3.12"
+app_file: demo/app.py
+pinned: false
+license: apache-2.0
+suggested_hardware: cpu-basic
+---
+
 <p align="center">
   <strong>English</strong> · <a href="README_zh.md">中文</a>
 </p>
@@ -19,11 +33,13 @@
   <a href="android_realtime_app/"><img src="https://img.shields.io/badge/Android-ONNX%20Runtime-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android ONNX Runtime demo"></a>
   <a href="#quick-start"><img src="https://img.shields.io/badge/Smoke%20test-no%20raw%20data-2CA02C?style=flat-square" alt="Smoke test does not require raw data"></a>
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"><img src="https://img.shields.io/badge/Docs-Project%20Website-0F8F8C?style=flat-square&logo=materialformkdocs&logoColor=white" alt="Project website"></a>
+  <a href="https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Live%20Demo-Hugging%20Face%20Spaces-FFD21E?style=flat-square" alt="Live demo on Hugging Face Spaces"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-4C78A8?style=flat-square" alt="Apache License 2.0"></a>
 </p>
 
 <p align="center">
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/">Website</a> ·
+  <a href="https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline">Live Demo</a> ·
   <a href="#overview">Overview</a> ·
   <a href="#pipeline">Pipeline</a> ·
   <a href="#quick-start">Quick Start</a> ·
@@ -53,6 +69,7 @@ The Python pipeline reads accelerometer and gyroscope streams, trains multi-scal
 | Segment long-session wearable motion streams | Multi-kernel 1D-CNN + BiLSTM window classifiers | Requires authorized local sensor files for full inference/training |
 | Improve temporal consistency | Multi-scale probability alignment, LBSA fusion, smoothing, Viterbi decoding, boundary refinement, overlap resolution, confidence filtering, and Top-K pruning | Smoke test uses temporary files only |
 | Support deployable demonstration | Android BLE acquisition and ONNX Runtime inference | Bundled demo assets are documented separately from private datasets |
+| Explore the tracked model in a browser | CPU-safe Gradio Space with upload, plots, temporal decoding, segment table, and CSV export | Includes a synthetic example; public uploads must not contain sensitive participant data |
 | Keep experiments reproducible | Evaluation, robustness, visualization, and public-dataset portability scripts | Generated outputs remain local under ignored directories |
 
 Supported foreground activities are `羽毛球`, `跳绳`, `飞鸟`, `跑步`, and `乒乓球`. Background/no-activity is modeled internally where needed, but submitted segment records contain foreground activities.
@@ -90,6 +107,23 @@ python tests/smoke_test.py
 ```
 
 The smoke test checks imports, canonical paths, tiny temporary signal loading, annotation loading, and workbook writing. It does not require private raw data or trained checkpoints.
+
+### Browser demo
+
+The [`demo/`](demo/) module runs the tracked 3 s / 5 s / 8 s checkpoints through
+a bilingual Gradio interface. Upload a canonical 100 Hz TXT/TSV recording or use
+the bundled synthetic example, then inspect the six signals, class probabilities,
+decoded timeline, final segment table, and downloadable CSV.
+
+[**Open the Hugging Face Space →**](https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline)
+
+Run the same interface locally:
+
+```bash
+python -m pip install -r requirements.txt
+python -m pip install -e .
+python demo/app.py
+```
 
 For a pip-only environment, install the pinned Python dependencies first:
 
@@ -226,4 +260,3 @@ PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 ## License
 
 Repository-authored source code and the distributed Python and Android model assets are licensed under the [Apache License 2.0](LICENSE). Scope-specific copies are kept at [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE), [android_realtime_app/LICENSE](android_realtime_app/LICENSE), and [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE). Datasets and third-party dependencies retain their own terms.
-

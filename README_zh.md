@@ -19,11 +19,13 @@
   <a href="android_realtime_app/"><img src="https://img.shields.io/badge/Android-ONNX%20Runtime-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android ONNX Runtime 演示"></a>
   <a href="#quick-start"><img src="https://img.shields.io/badge/Smoke%20test-no%20raw%20data-2CA02C?style=flat-square" alt="轻量测试不需要原始数据"></a>
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"><img src="https://img.shields.io/badge/Docs-项目网站-0F8F8C?style=flat-square&logo=materialformkdocs&logoColor=white" alt="项目网站"></a>
+  <a href="https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Live%20Demo-Hugging%20Face%20Spaces-FFD21E?style=flat-square" alt="Hugging Face Spaces 在线演示"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-4C78A8?style=flat-square" alt="Apache License 2.0"></a>
 </p>
 
 <p align="center">
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/">项目网站</a> ·
+  <a href="https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline">在线演示</a> ·
   <a href="#overview">项目概览</a> ·
   <a href="#pipeline">流程</a> ·
   <a href="#quick-start">快速开始</a> ·
@@ -53,6 +55,7 @@ Python 流程读取加速度计与陀螺仪信号，训练多尺度神经网络�
 | 分割长时程可穿戴运动信号 | 多核 1D-CNN + BiLSTM 滑窗分类器 | 完整推理/训练需要授权本地传感器文件 |
 | 提升时序一致性 | 多尺度概率对齐、LBSA 融合、平滑、Viterbi 解码、边界细化、重叠消解、置信度过滤和 Top-K 裁剪 | 轻量测试只使用临时文件 |
 | 支持可部署演示 | Android BLE 采集与 ONNX Runtime 推理 | 随仓库模型资产与私有数据集分开说明 |
+| 在浏览器中体验真实模型 | CPU 安全的 Gradio Space，支持上传、曲线、时序解码、片段表与 CSV 导出 | 内置合成示例；公开上传不得包含敏感受试者数据 |
 | 保持实验可复现 | 评估、鲁棒性、可视化和公开数据集可迁移性脚本 | 生成产物保留在被忽略的本地目录 |
 
 支持的前景活动包括 `羽毛球`、`跳绳`、`飞鸟`、`跑步` 和 `乒乓球`。背景/无活动在必要时作为内部类别建模，但提交的片段记录只包含前景活动。
@@ -90,6 +93,22 @@ python tests/smoke_test.py
 ```
 
 轻量测试会检查导入、规范路径、临时小信号读取、标注读取和工作簿写出，不需要私有原始数据或训练检查点。
+
+### 浏览器演示
+
+[`demo/`](demo/) 模块通过双语 Gradio 界面运行仓库跟踪的 3 秒、5 秒和 8 秒
+检查点。你可以上传规范的 100 Hz TXT/TSV 记录，或直接使用内置合成示例，
+查看六路信号、类别概率、解码时间线、最终片段表，并下载 CSV。
+
+[**打开 Hugging Face Space →**](https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline)
+
+也可在本地运行同一界面：
+
+```bash
+python -m pip install -r requirements.txt
+python -m pip install -e .
+python demo/app.py
+```
 
 若使用纯 pip 环境，请先安装固定版本依赖：
 
@@ -226,4 +245,3 @@ PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 ## 许可证
 
 仓库作者编写的源码以及随仓库分发的 Python、Android 模型资产均采用 [Apache License 2.0](LICENSE)。适用范围副本位于 [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE)、[android_realtime_app/LICENSE](android_realtime_app/LICENSE) 和 [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE)。数据集和第三方依赖仍分别遵循各自条款。
-

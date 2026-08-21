@@ -14,7 +14,11 @@ hide:
       覆盖模型训练、时序解码、片段评估与端侧推理。
     </p>
     <div class="hero-actions">
-      <a class="hero-button primary" href="getting-started/quickstart/">
+      <a class="hero-button primary" href="https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">
+        体验在线演示
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="hero-button" href="getting-started/quickstart/">
         运行流水线
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
