@@ -1,9 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
   <title id="title">Wearable IMU Activity Segmentation Pipeline logo</title>
   <desc id="desc">A rounded sensor tile containing a segmented motion waveform.</desc>
-  <rect width="64" height="64" rx="16" fill="#0b3558"/>
-  <path d="M11 34h7l4-12 7 25 7-31 7 24 4-10h6" fill="none" stroke="#6ee7e4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M19 52h26" stroke="#f6b94b" stroke-width="4" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="brand" x1="8" y1="7" x2="57" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4f46e5"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#brand)"/>
+  <path d="M11 34h7l4-12 7 25 7-31 7 24 4-10h6" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19 52h26" stroke="#a7f3d0" stroke-width="4" stroke-linecap="round"/>
   <circle cx="19" cy="52" r="3" fill="#fff"/>
   <circle cx="32" cy="52" r="3" fill="#fff"/>
   <circle cx="45" cy="52" r="3" fill="#fff"/>
