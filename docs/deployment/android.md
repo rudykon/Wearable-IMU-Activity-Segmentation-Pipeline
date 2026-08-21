@@ -19,21 +19,12 @@ inference.
 
 ## Runtime chain
 
-~~~text
-WT9011DCL-BT50
-       │ BLE · 100 Hz
-       ▼
-Android sensor buffer
-       │ six physical IMU channels
-       ▼
-3 s / 5 s / 8 s ONNX Runtime models
-       │ aligned probabilities
-       ▼
-Multi-scale temporal post-processing
-       │
-       ▼
-Live activity timeline + confidence
-~~~
+<figure class="pipeline-frame">
+  <a class="pipeline-image-link" href="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" target="_blank" rel="noopener" aria-label="Open the full-resolution physical deployment chain figure">
+    <img src="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" alt="Physical deployment chain from the WT9011DCL-BT50 wearable IMU through BLE acquisition and Android on-device inference to activity recognition" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">Physical deployment chain from wearable IMU acquisition to Android-side recognition. Select the image to view it at full resolution.</figcaption>
+</figure>
 
 ## Requirements
 
