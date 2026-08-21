@@ -50,6 +50,56 @@ theme:
 plugins:
   - search:
       lang: en
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: zh
+          name: 简体中文
+          build: true
+          site_name: 可穿戴 IMU 活动分割流水线
+          site_description: >-
+            面向长时可穿戴加速度计与陀螺仪数据的可复现多尺度活动分割流水线，
+            包含 Python 研究代码与端侧 Android 演示应用。
+          theme:
+            palette:
+              - media: "(prefers-color-scheme: light)"
+                scheme: default
+                primary: custom
+                accent: custom
+                toggle:
+                  icon: material/weather-night
+                  name: 切换至深色模式
+              - media: "(prefers-color-scheme: dark)"
+                scheme: slate
+                primary: custom
+                accent: custom
+                toggle:
+                  icon: material/weather-sunny
+                  name: 切换至浅色模式
+          nav_translations:
+            Home: 首页
+            Getting started: 快速上手
+            Installation: 安装
+            Quick start: 快速开始
+            Pipeline: 流水线
+            Architecture: 架构
+            Data: 数据
+            Training: 训练
+            Inference: 推理
+            Evaluation: 评估
+            Deployment: 部署
+            Android app: Android 应用
+            Reference: 参考
+            Python API: Python API
+            Data & model assets: 数据与模型资产
+            Citation & license: 引用与许可
 
 markdown_extensions:
   - abbr
@@ -74,7 +124,7 @@ markdown_extensions:
       alternate_style: true
 
 extra_css:
-  - "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+  - "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
   - stylesheets/extra.css
 
 extra:

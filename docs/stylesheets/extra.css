@@ -71,6 +71,19 @@ input {
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
+html[lang^="zh"] body,
+html[lang^="zh"] input {
+  font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", ui-sans-serif,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html[lang^="zh"] .md-typeset h1,
+html[lang^="zh"] .md-typeset h2,
+html[lang^="zh"] .md-typeset h3,
+html[lang^="zh"] .md-typeset h4 {
+  letter-spacing: -0.015em;
+}
+
 code,
 kbd,
 pre {
