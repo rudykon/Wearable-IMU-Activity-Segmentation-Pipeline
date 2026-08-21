@@ -18,10 +18,12 @@
   <a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-2.5.1-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch 2.5.1"></a>
   <a href="android_realtime_app/"><img src="https://img.shields.io/badge/Android-ONNX%20Runtime-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android ONNX Runtime 演示"></a>
   <a href="#quick-start"><img src="https://img.shields.io/badge/Smoke%20test-no%20raw%20data-2CA02C?style=flat-square" alt="轻量测试不需要原始数据"></a>
+  <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"><img src="https://img.shields.io/badge/Docs-项目网站-0F8F8C?style=flat-square&logo=materialformkdocs&logoColor=white" alt="项目网站"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-4C78A8?style=flat-square" alt="Apache License 2.0"></a>
 </p>
 
 <p align="center">
+  <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/">项目网站</a> ·
   <a href="#overview">项目概览</a> ·
   <a href="#pipeline">流程</a> ·
   <a href="#quick-start">快速开始</a> ·
