@@ -130,6 +130,15 @@ hide:
 | 输出 | 片段写入器与评估器 | XLSX 记录与 F1 指标 |
 | 部署 | Android BLE + ONNX Runtime | 实时或离线识别 |
 
+### 物理部署链路
+
+<figure class="pipeline-frame">
+  <a class="pipeline-image-link" href="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的物理部署链路图">
+    <img src="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" alt="仓库现有物理部署链路图，展示从可穿戴 IMU 传感器经 BLE 与 Android 端侧推理到活动识别的完整路径" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">仓库现有部署图：可穿戴 IMU → BLE 采集 → Android 信号处理 → 端侧多尺度推理 → 活动识别。点击图片可查看完整分辨率。</figcaption>
+</figure>
+
 <span class="section-eyebrow">快速验证</span>
 
 ## 从公开冒烟测试开始 {: .section-title}

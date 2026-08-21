@@ -131,6 +131,15 @@ hide:
 | Output | Segment writer and evaluator | XLSX records and F1 metrics |
 | Deployment | Android BLE + ONNX Runtime | Real-time or offline recognition |
 
+### Physical deployment path
+
+<figure class="pipeline-frame">
+  <a class="pipeline-image-link" href="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" target="_blank" rel="noopener" aria-label="Open the full-resolution physical deployment chain figure">
+    <img src="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" alt="Existing project figure showing the physical deployment chain from the wearable IMU sensor through BLE and Android on-device inference to activity recognition" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">Repository figure: wearable IMU → BLE acquisition → Android signal processing → on-device multi-scale inference → activity recognition. Select the image to view it at full resolution.</figcaption>
+</figure>
+
 <span class="section-eyebrow">Fast validation</span>
 
 ## Start with a public smoke test {: .section-title}
