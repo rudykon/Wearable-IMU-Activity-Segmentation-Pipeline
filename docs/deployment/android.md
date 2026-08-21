@@ -26,6 +26,18 @@ inference.
   <figcaption class="pipeline-caption">Physical deployment chain from wearable IMU acquisition to Android-side recognition. Select the image to view it at full resolution.</figcaption>
 </figure>
 
+## Field-test examples
+
+<figure class="paper-figure compact">
+  <a class="pipeline-image-link" href="../../assets/manuscript-figures/fig08_app_field_test.png" target="_blank" rel="noopener" aria-label="Open the full-resolution app field-test figure">
+    <img src="../../assets/manuscript-figures/fig08_app_field_test.png" alt="Privacy-preserving action renderings paired with Android recognition screenshots for background and five target activities" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">Paper field-test examples for background motion, badminton, rope skipping, dumbbell fly, running, and table tennis.</figcaption>
+</figure>
+
+These examples document end-to-end app behavior across every target class.
+They are implementation evidence, not an additional quantitative benchmark.
+
 ## Requirements
 
 - Android Studio, or JDK 17 with an Android SDK;

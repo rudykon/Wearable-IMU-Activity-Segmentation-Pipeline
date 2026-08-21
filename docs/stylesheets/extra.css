@@ -871,6 +871,120 @@ pre {
   line-height: 1.78;
 }
 
+.research-lead {
+  max-width: 60rem;
+  margin: 0 0 1.6rem;
+  color: var(--ct-muted);
+  font-size: 0.94rem;
+  line-height: 1.82;
+}
+
+.paper-metrics {
+  margin-bottom: 2.2rem;
+}
+
+.paper-figure {
+  overflow: hidden;
+  margin: 1.5rem 0 2rem;
+  padding: 0.8rem;
+  border: 1px solid rgba(99, 102, 241, 0.16);
+  border-radius: var(--ct-radius-lg);
+  background: var(--ct-gradient-soft);
+  box-shadow: var(--ct-shadow-md);
+}
+
+.paper-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 0.82rem;
+  background: #ffffff;
+}
+
+.paper-figure.compact img {
+  max-width: 64rem;
+}
+
+.paper-figure.portrait img {
+  max-width: 38rem;
+}
+
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.4rem 0 2.2rem;
+}
+
+.research-card {
+  padding: 1.35rem;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-lg);
+  background: var(--ct-surface);
+  box-shadow: var(--ct-shadow-sm);
+}
+
+.research-card-kicker {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--ct-primary);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.research-card h3 {
+  margin: 0 0 0.55rem;
+  font-size: 0.98rem;
+}
+
+.research-card p {
+  margin: 0;
+  color: var(--ct-muted);
+  font-size: 0.76rem;
+  line-height: 1.72;
+}
+
+.result-callout {
+  margin: 1.2rem 0 2rem;
+  padding: 1rem 1.15rem;
+  border-left: 0.24rem solid var(--ct-primary);
+  border-radius: 0 var(--ct-radius-md) var(--ct-radius-md) 0;
+  color: var(--ct-muted);
+  background: var(--ct-surface-soft);
+  line-height: 1.72;
+}
+
+.result-callout strong {
+  color: var(--ct-text);
+}
+
+.paper-home-cta {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: -0.5rem 0 4rem;
+  padding: 1.2rem 1.35rem;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-lg);
+  background: var(--ct-surface);
+  box-shadow: var(--ct-shadow-sm);
+}
+
+.paper-home-cta p {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--ct-muted);
+}
+
+.paper-home-cta .md-button {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
 .cta-panel {
   position: relative;
   display: flex;
@@ -984,6 +1098,15 @@ pre {
   .metric-strip,
   .feature-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .research-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .paper-home-cta {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .cta-panel {

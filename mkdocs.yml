@@ -94,6 +94,8 @@ plugins:
             Training: 训练
             Inference: 推理
             Evaluation: 评估
+            Research: 研究
+            Paper highlights: 论文要点
             Deployment: 部署
             Android app: Android 应用
             Reference: 参考
@@ -147,6 +149,8 @@ nav:
       - Training: guide/training.md
       - Inference: guide/inference.md
       - Evaluation: guide/evaluation.md
+  - Research:
+      - Paper highlights: research/paper.md
   - Deployment:
       - Android app: deployment/android.md
   - Reference:

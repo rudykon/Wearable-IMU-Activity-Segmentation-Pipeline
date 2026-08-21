@@ -72,6 +72,31 @@ hide:
   <div class="metric"><strong>5 + bg</strong><span>output classes</span></div>
 </div>
 
+<span class="section-eyebrow">Paper insight</span>
+
+## Why window accuracy is not enough {: .section-title}
+
+<p class="section-lead">A long-session recognizer can produce locally convincing probabilities and still report the wrong number, duration, or boundary of workout records. The paper makes this window-to-record gap the central measurement problem.</p>
+
+<figure class="paper-figure">
+  <a class="pipeline-image-link" href="assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="Open the full-resolution window-to-record gap figure">
+    <img src="assets/manuscript-figures/fig01_window_to_record_gap.png" alt="Posterior trajectories, naive fragmented records, and the stabilized activity records produced by the Temporal Record Layer" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">Paper Fig. 1. TRL converts locally plausible but unstable window evidence into fewer, more stable segment records.</figcaption>
+</figure>
+
+<div class="metric-strip paper-metrics">
+  <div class="metric"><strong>137</strong><span>long recordings</span></div>
+  <div class="metric"><strong>259.6 h</strong><span>continuous sensing</span></div>
+  <div class="metric"><strong>0.89</strong><span>mean-user F1</span></div>
+  <div class="metric"><strong>0.90</strong><span>micro-F1</span></div>
+</div>
+
+<div class="paper-home-cta">
+  <p>See the fixed external-test comparison, multi-scale diagnostics, representative timelines, field tests, and stated limitations.</p>
+  <a class="md-button md-button--primary" href="research/paper/">Explore the paper evidence</a>
+</div>
+
 <span class="section-eyebrow">Research to deployment</span>
 
 ## One repository, the complete research-to-device path {: .section-title}

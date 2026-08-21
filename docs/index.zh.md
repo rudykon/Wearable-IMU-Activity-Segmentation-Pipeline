@@ -71,6 +71,31 @@ hide:
   <div class="metric"><strong>5 + 背景</strong><span>输出类别</span></div>
 </div>
 
+<span class="section-eyebrow">论文洞见</span>
+
+## 为什么窗口准确率还不够 {: .section-title}
+
+<p class="section-lead">长时识别器即使产生局部可信的概率，也可能报告错误的活动次数、持续时间或边界。论文将这一“窗口到记录的落差”作为核心测量问题。</p>
+
+<figure class="paper-figure">
+  <a class="pipeline-image-link" href="../assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的窗口到记录落差图">
+    <img src="../assets/manuscript-figures/fig01_window_to_record_gap.png" alt="后验概率轨迹、朴素提取得到的碎片记录以及时间记录层稳定后的活动记录" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">论文图 1。TRL 将局部看似合理但不稳定的窗口证据转换为更少、更稳定的活动片段记录。</figcaption>
+</figure>
+
+<div class="metric-strip paper-metrics">
+  <div class="metric"><strong>137</strong><span>条长时记录</span></div>
+  <div class="metric"><strong>259.6 h</strong><span>连续感知数据</span></div>
+  <div class="metric"><strong>0.89</strong><span>平均用户 F1</span></div>
+  <div class="metric"><strong>0.90</strong><span>Micro-F1</span></div>
+</div>
+
+<div class="paper-home-cta">
+  <p>查看固定外部测试对比、多尺度诊断、代表性时间线、现场测试与论文明确说明的局限。</p>
+  <a class="md-button md-button--primary" href="research/paper/">查看论文证据</a>
+</div>
+
 <span class="section-eyebrow">从研究到部署</span>
 
 ## 一个仓库，贯通研究到设备的完整路径 {: .section-title}
