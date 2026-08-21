@@ -113,9 +113,12 @@ hide:
 
 ## Pipeline at a glance {: .section-title}
 
-<div class="pipeline-frame">
-  <img src="assets/pipeline-overview.svg" alt="Six-stage wearable IMU activity segmentation workflow">
-</div>
+<figure class="pipeline-frame">
+  <a class="pipeline-image-link" href="assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution overall framework figure">
+    <img src="assets/fig02_overall_framework.png" alt="Existing project framework figure showing the IMU stream, scale-specific CNN–BiLSTM models, LBSA fusion, temporal record layer, and segment records" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">Repository figure: IMU stream → scale-specific CNN–BiLSTM models → LBSA → temporal record layer → segment records. Select the image to view it at full resolution.</figcaption>
+</figure>
 
 <p class="pipeline-summary">The Python research path and Android demonstration share the same observable contract: six physical-unit IMU channels enter the system; time-aligned activity segments leave it. The repository keeps each intermediate choice inspectable through configuration files, fixed model assets, experiment scripts, and segment-level evaluation.</p>
 

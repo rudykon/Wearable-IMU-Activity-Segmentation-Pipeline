@@ -4,9 +4,12 @@ The project solves **temporal activity segmentation**, not isolated clip
 classification. Its input is a long per-user sensor stream; its output is a
 collection of timestamped foreground activity records.
 
-<div class="pipeline-frame">
-  <img src="../../assets/pipeline-overview.svg" alt="Wearable IMU activity segmentation architecture">
-</div>
+<figure class="pipeline-frame">
+  <a class="pipeline-image-link" href="../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution overall framework figure">
+    <img src="../../assets/fig02_overall_framework.png" alt="Existing project framework figure showing the wearable IMU activity segmentation architecture" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">Existing project figure covering signal input, scale-specific models, LBSA fusion, deterministic temporal decoding, and final segment records.</figcaption>
+</figure>
 
 ## System contract
 

@@ -112,9 +112,12 @@ hide:
 
 ## 流水线概览 {: .section-title}
 
-<div class="pipeline-frame">
-  <img src="../assets/pipeline-overview.svg" alt="六阶段可穿戴 IMU 活动分割工作流">
-</div>
+<figure class="pipeline-frame">
+  <a class="pipeline-image-link" href="../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的总体框架图">
+    <img src="../assets/fig02_overall_framework.png" alt="仓库现有总体框架图，展示 IMU 数据流、分尺度 CNN–BiLSTM 模型、LBSA 融合、时序记录层与活动片段记录" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">仓库现有框架图：IMU 数据流 → 分尺度 CNN–BiLSTM → LBSA → 时序记录层 → 活动片段记录。点击图片可查看完整分辨率。</figcaption>
+</figure>
 
 <p class="pipeline-summary">Python 研究流程与 Android 演示遵循同一项可观察契约：六个物理单位 IMU 通道进入系统，时间对齐的活动片段离开系统。仓库通过配置文件、固定模型资产、实验脚本与片段级评估，让每项中间决策都可检查。</p>
 

@@ -818,6 +818,24 @@ pre {
   border-radius: 0.82rem;
 }
 
+.pipeline-image-link {
+  display: block;
+  border-radius: 0.82rem;
+}
+
+.pipeline-image-link:focus-visible {
+  outline: 3px solid rgba(79, 70, 229, 0.48);
+  outline-offset: 4px;
+}
+
+.pipeline-caption {
+  margin: 0.72rem 0.35rem 0.1rem;
+  color: var(--ct-muted);
+  font-size: 0.7rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
 .pipeline-summary {
   max-width: 54rem;
   margin: 1.2rem 0 1.8rem;
