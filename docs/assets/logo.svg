@@ -1,20 +1,214 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1254 1254" role="img" aria-labelledby="title desc">
   <title id="title">Wearable IMU Activity Segmentation Pipeline logo</title>
-  <desc id="desc">Three inertial-sensor streams divided into aligned temporal activity segments.</desc>
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="42">
-    <path d="M55 145C96 113 128 187 171 159" stroke="#165DFF"/>
-    <path d="M211 154C245 137 252 93 294 88C337 84 344 140 374 151" stroke="#165DFF"/>
-    <path d="M414 155C436 158 447 173 458 180" stroke="#165DFF"/>
+  <desc id="desc">A pixel-built wearable sensor surrounding three segmented inertial-signal timelines.</desc>
 
-    <path d="M55 252C97 222 130 283 171 270" stroke="#12B8B0"/>
-    <path d="M211 265C246 252 255 199 294 205C334 212 342 265 374 266" stroke="#12B8B0"/>
-    <path d="M414 266C435 266 447 275 458 282" stroke="#12B8B0"/>
+  <style>
+    .navy { fill: #05213f; }
+    .cyan { fill: #00c8fc; }
+    .lime { fill: #97fa02; }
+    .orange { fill: #fd8401; }
+  </style>
 
-    <path d="M55 359C96 328 131 394 171 365" stroke="#FFB800"/>
-    <path d="M211 360C249 341 255 294 295 300C335 307 342 355 374 368" stroke="#FFB800"/>
-    <path d="M414 371C436 374 448 385 458 392" stroke="#FFB800"/>
+  <!-- Pixel-built watch strap: upper section. -->
+  <g class="navy">
+    <rect x="461" y="132" width="31" height="33" rx="13"/>
+    <rect x="499" y="130" width="55" height="43" rx="14"/>
+    <rect x="563" y="130" width="54" height="43" rx="14"/>
+    <rect x="626" y="130" width="54" height="43" rx="14"/>
+    <rect x="688" y="130" width="38" height="43" rx="14"/>
+    <rect x="730" y="131" width="31" height="33" rx="13"/>
+
+    <rect x="443" y="171" width="44" height="45" rx="14"/>
+    <rect x="496" y="182" width="57" height="49" rx="15"/>
+    <rect x="561" y="181" width="56" height="50" rx="15"/>
+    <rect x="625" y="182" width="55" height="49" rx="15"/>
+    <rect x="688" y="182" width="43" height="49" rx="15"/>
+    <rect x="736" y="171" width="44" height="45" rx="14"/>
+
+    <rect x="433" y="223" width="54" height="57" rx="16"/>
+    <rect x="496" y="240" width="57" height="50" rx="15"/>
+    <rect x="561" y="240" width="56" height="50" rx="15"/>
+    <rect x="625" y="240" width="55" height="50" rx="15"/>
+    <rect x="688" y="240" width="43" height="50" rx="15"/>
+    <rect x="737" y="223" width="53" height="57" rx="16"/>
+    <rect x="405" y="278" width="30" height="30" rx="12"/>
+    <rect x="788" y="278" width="31" height="30" rx="12"/>
   </g>
-  <circle cx="485" cy="184" r="21" fill="#FF5A5F"/>
-  <circle cx="485" cy="286" r="21" fill="#12B8B0"/>
-  <circle cx="485" cy="396" r="21" fill="#FFB800"/>
+
+  <!-- Pixel-built watch case. -->
+  <g class="navy">
+    <rect x="371" y="314" width="40" height="40" rx="13"/>
+    <rect x="419" y="310" width="42" height="43" rx="13"/>
+    <rect x="467" y="310" width="42" height="43" rx="13"/>
+    <rect x="515" y="310" width="44" height="43" rx="13"/>
+    <rect x="566" y="310" width="49" height="43" rx="13"/>
+    <rect x="621" y="310" width="48" height="43" rx="13"/>
+    <rect x="675" y="310" width="41" height="43" rx="13"/>
+    <rect x="722" y="310" width="41" height="43" rx="13"/>
+    <rect x="768" y="310" width="39" height="43" rx="13"/>
+    <rect x="815" y="314" width="38" height="39" rx="13"/>
+    <rect x="338" y="346" width="36" height="36" rx="13"/>
+    <rect x="849" y="346" width="36" height="36" rx="13"/>
+
+    <rect x="309" y="384" width="42" height="41" rx="13"/>
+    <rect x="309" y="430" width="42" height="43" rx="13"/>
+    <rect x="309" y="478" width="42" height="43" rx="13"/>
+    <rect x="309" y="526" width="42" height="43" rx="13"/>
+    <rect x="309" y="575" width="42" height="43" rx="13"/>
+    <rect x="309" y="624" width="42" height="43" rx="13"/>
+    <rect x="309" y="673" width="42" height="44" rx="13"/>
+    <rect x="309" y="722" width="42" height="44" rx="13"/>
+    <rect x="310" y="772" width="41" height="54" rx="14"/>
+
+    <rect x="872" y="383" width="42" height="41" rx="13"/>
+    <rect x="872" y="429" width="42" height="43" rx="13"/>
+    <rect x="872" y="477" width="42" height="44" rx="13"/>
+    <rect x="872" y="526" width="42" height="43" rx="13"/>
+    <rect x="873" y="574" width="41" height="44" rx="13"/>
+    <rect x="872" y="623" width="42" height="44" rx="13"/>
+    <rect x="872" y="672" width="42" height="44" rx="13"/>
+    <rect x="872" y="722" width="42" height="43" rx="13"/>
+    <rect x="872" y="772" width="42" height="53" rx="14"/>
+    <rect x="919" y="524" width="30" height="170" rx="15"/>
+
+    <rect x="338" y="830" width="38" height="38" rx="13"/>
+    <rect x="850" y="830" width="37" height="38" rx="13"/>
+    <rect x="372" y="864" width="39" height="40" rx="13"/>
+    <rect x="420" y="865" width="42" height="42" rx="13"/>
+    <rect x="468" y="865" width="42" height="42" rx="13"/>
+    <rect x="516" y="866" width="45" height="41" rx="13"/>
+    <rect x="567" y="866" width="49" height="41" rx="13"/>
+    <rect x="622" y="865" width="47" height="42" rx="13"/>
+    <rect x="675" y="865" width="42" height="42" rx="13"/>
+    <rect x="722" y="865" width="41" height="42" rx="13"/>
+    <rect x="768" y="865" width="39" height="42" rx="13"/>
+    <rect x="816" y="864" width="39" height="40" rx="13"/>
+    <rect x="404" y="909" width="31" height="30" rx="12"/>
+    <rect x="788" y="909" width="31" height="30" rx="12"/>
+  </g>
+
+  <!-- Pixel-built watch strap: lower section. -->
+  <g class="navy">
+    <rect x="433" y="935" width="54" height="56" rx="16"/>
+    <rect x="496" y="927" width="57" height="50" rx="15"/>
+    <rect x="561" y="927" width="56" height="50" rx="15"/>
+    <rect x="625" y="927" width="55" height="50" rx="15"/>
+    <rect x="688" y="927" width="43" height="50" rx="15"/>
+    <rect x="736" y="935" width="53" height="56" rx="16"/>
+
+    <rect x="443" y="996" width="44" height="47" rx="14"/>
+    <rect x="497" y="986" width="56" height="49" rx="15"/>
+    <rect x="561" y="986" width="56" height="49" rx="15"/>
+    <rect x="625" y="985" width="55" height="50" rx="15"/>
+    <rect x="688" y="986" width="43" height="49" rx="15"/>
+    <rect x="735" y="996" width="44" height="47" rx="14"/>
+
+    <rect x="460" y="1049" width="32" height="35" rx="13"/>
+    <rect x="498" y="1045" width="55" height="40" rx="14"/>
+    <rect x="562" y="1044" width="54" height="41" rx="14"/>
+    <rect x="625" y="1044" width="54" height="41" rx="14"/>
+    <rect x="688" y="1045" width="39" height="40" rx="14"/>
+    <rect x="730" y="1049" width="31" height="35" rx="13"/>
+  </g>
+
+  <!-- Aligned temporal boundaries inside the watch face. -->
+  <g fill="none" stroke="#05213f" stroke-width="14" stroke-linecap="round" stroke-dasharray="7 22">
+    <path d="M506 372V842"/>
+    <path d="M690 372V842"/>
+  </g>
+
+  <!-- Cyan IMU channel and its pixel fragments. -->
+  <g class="cyan">
+    <g id="cyan-fragments-left">
+      <rect x="96" y="510" width="18" height="19" rx="8"/>
+      <rect x="134" y="507" width="24" height="24" rx="9"/>
+      <rect x="138" y="464" width="19" height="18" rx="8"/>
+      <rect x="175" y="462" width="41" height="44" rx="12"/>
+      <rect x="191" y="421" width="24" height="26" rx="9"/>
+      <rect x="234" y="410" width="48" height="49" rx="13"/>
+      <rect x="234" y="473" width="48" height="51" rx="13"/>
+    </g>
+    <use href="#cyan-fragments-left" transform="translate(1252 0) scale(-1 1)"/>
+
+    <rect x="361" y="469" width="21" height="25" rx="9"/>
+    <rect x="388" y="469" width="21" height="25" rx="9"/>
+    <rect x="415" y="469" width="20" height="25" rx="9"/>
+    <rect x="441" y="465" width="22" height="29" rx="9"/>
+    <rect x="469" y="464" width="24" height="31" rx="10"/>
+    <rect x="509" y="462" width="23" height="33" rx="10"/>
+    <rect x="537" y="428" width="24" height="76" rx="11"/>
+    <rect x="566" y="377" width="24" height="152" rx="12"/>
+    <rect x="595" y="417" width="24" height="90" rx="11"/>
+    <rect x="624" y="447" width="24" height="48" rx="10"/>
+    <rect x="654" y="464" width="23" height="31" rx="10"/>
+    <rect x="704" y="465" width="25" height="30" rx="10"/>
+    <rect x="735" y="469" width="21" height="25" rx="9"/>
+    <rect x="762" y="468" width="22" height="26" rx="9"/>
+    <rect x="790" y="469" width="21" height="25" rx="9"/>
+    <rect x="817" y="469" width="20" height="24" rx="9"/>
+    <rect x="844" y="469" width="20" height="24" rx="9"/>
+  </g>
+
+  <!-- Lime IMU channel and its pixel fragments. -->
+  <g class="lime">
+    <g id="lime-fragments-left">
+      <rect x="85" y="613" width="19" height="19" rx="8"/>
+      <rect x="123" y="597" width="26" height="38" rx="10"/>
+      <rect x="164" y="596" width="46" height="54" rx="13"/>
+      <rect x="179" y="550" width="31" height="31" rx="11"/>
+      <rect x="229" y="548" width="53" height="55" rx="14"/>
+      <rect x="229" y="619" width="53" height="57" rx="14"/>
+    </g>
+    <use href="#lime-fragments-left" transform="translate(1252 0) scale(-1 1)"/>
+
+    <rect x="361" y="616" width="21" height="25" rx="9"/>
+    <rect x="388" y="616" width="21" height="25" rx="9"/>
+    <rect x="415" y="616" width="20" height="25" rx="9"/>
+    <rect x="441" y="614" width="22" height="27" rx="9"/>
+    <rect x="469" y="612" width="24" height="30" rx="10"/>
+    <rect x="510" y="613" width="21" height="28" rx="9"/>
+    <rect x="537" y="609" width="23" height="33" rx="10"/>
+    <rect x="565" y="586" width="24" height="67" rx="11"/>
+    <rect x="594" y="540" width="24" height="151" rx="12"/>
+    <rect x="624" y="568" width="24" height="98" rx="11"/>
+    <rect x="653" y="604" width="24" height="43" rx="10"/>
+    <rect x="704" y="612" width="25" height="30" rx="10"/>
+    <rect x="735" y="616" width="21" height="25" rx="9"/>
+    <rect x="762" y="615" width="22" height="25" rx="9"/>
+    <rect x="790" y="616" width="21" height="24" rx="9"/>
+    <rect x="817" y="616" width="20" height="24" rx="9"/>
+    <rect x="843" y="616" width="21" height="24" rx="9"/>
+  </g>
+
+  <!-- Orange IMU channel and its pixel fragments. -->
+  <g class="orange">
+    <g id="orange-fragments-left">
+      <rect x="85" y="702" width="19" height="19" rx="8"/>
+      <rect x="125" y="701" width="24" height="25" rx="9"/>
+      <rect x="141" y="747" width="19" height="19" rx="8"/>
+      <rect x="168" y="679" width="44" height="47" rx="13"/>
+      <rect x="182" y="740" width="35" height="36" rx="11"/>
+      <rect x="231" y="701" width="51" height="54" rx="14"/>
+      <rect x="234" y="769" width="48" height="49" rx="13"/>
+    </g>
+    <use href="#orange-fragments-left" transform="translate(1252 0) scale(-1 1)"/>
+
+    <rect x="362" y="762" width="21" height="24" rx="9"/>
+    <rect x="389" y="762" width="21" height="24" rx="9"/>
+    <rect x="416" y="761" width="21" height="25" rx="9"/>
+    <rect x="443" y="761" width="21" height="25" rx="9"/>
+    <rect x="470" y="758" width="24" height="29" rx="10"/>
+    <rect x="511" y="760" width="22" height="26" rx="9"/>
+    <rect x="538" y="757" width="23" height="30" rx="10"/>
+    <rect x="567" y="733" width="24" height="63" rx="11"/>
+    <rect x="596" y="750" width="24" height="37" rx="10"/>
+    <rect x="626" y="761" width="22" height="25" rx="9"/>
+    <rect x="654" y="761" width="22" height="25" rx="9"/>
+    <rect x="705" y="746" width="24" height="51" rx="10"/>
+    <rect x="734" y="710" width="24" height="111" rx="11"/>
+    <rect x="763" y="665" width="25" height="178" rx="12"/>
+    <rect x="793" y="700" width="24" height="114" rx="11"/>
+    <rect x="822" y="746" width="23" height="51" rx="10"/>
+    <rect x="849" y="762" width="18" height="25" rx="8"/>
+  </g>
 </svg>
