@@ -24,6 +24,18 @@ WT9011DCL-BT50 BLE 采集、实时可视化、CSV 记录、离线文件识别与
   <figcaption class="pipeline-caption">从可穿戴 IMU 采集到 Android 端识别的物理部署链路。点击图片可查看完整分辨率。</figcaption>
 </figure>
 
+## 现场测试示例
+
+<figure class="paper-figure compact">
+  <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig08_app_field_test.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的 App 现场测试图">
+    <img src="../../../assets/manuscript-figures/fig08_app_field_test.png" alt="隐私保护动作模型与 Android 识别截图，覆盖背景和五种目标活动" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">论文现场测试示例，覆盖背景运动、羽毛球、跳绳、哑铃飞鸟、跑步与乒乓球。</figcaption>
+</figure>
+
+这些示例记录了所有目标类别的端到端 App 行为，属于实现证据，而不是额外的
+定量基准结果。
+
 ## 环境要求
 
 - Android Studio，或 JDK 17 与 Android SDK；

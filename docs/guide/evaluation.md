@@ -3,6 +3,12 @@
 The evaluator measures the quality of **segments**, not just per-window class
 accuracy.
 
+!!! info "Paper evidence"
+
+    The [paper highlights](../research/paper.md) page separates the fixed
+    37-recording external-test result from internal TRL diagnostics and shows
+    the corresponding comparison, boundary, and timeline figures.
+
 ## Run evaluation
 
 For the default external split:
