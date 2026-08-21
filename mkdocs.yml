@@ -13,8 +13,8 @@ edit_uri: edit/main/docs/
 theme:
   name: material
   language: en
-  logo: assets/github-avatar.png
-  favicon: assets/github-avatar.png
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
   font: false
   icon:
     repo: fontawesome/brands/github
