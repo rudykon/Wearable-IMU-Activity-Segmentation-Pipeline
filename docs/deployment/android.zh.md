@@ -17,21 +17,12 @@ WT9011DCL-BT50 BLE 采集、实时可视化、CSV 记录、离线文件识别与
 
 ## 运行链路
 
-~~~text
-WT9011DCL-BT50
-       │ BLE · 100 Hz
-       ▼
-Android 传感器缓冲区
-       │ 六个物理 IMU 通道
-       ▼
-3 秒 / 5 秒 / 8 秒 ONNX Runtime 模型
-       │ 对齐后的概率
-       ▼
-多尺度时序后处理
-       │
-       ▼
-实时活动时间线 + 置信度
-~~~
+<figure class="pipeline-frame">
+  <a class="pipeline-image-link" href="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的物理部署链路图">
+    <img src="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" alt="从 WT9011DCL-BT50 可穿戴 IMU 经 BLE 采集与 Android 端侧推理到活动识别的物理部署链路" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">从可穿戴 IMU 采集到 Android 端识别的物理部署链路。点击图片可查看完整分辨率。</figcaption>
+</figure>
 
 ## 环境要求
 
