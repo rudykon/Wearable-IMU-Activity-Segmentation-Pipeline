@@ -3,31 +3,31 @@
   <desc id="desc">A six-stage workflow from raw accelerometer and gyroscope signals to activity segment records.</desc>
   <defs>
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
-      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0b3558" flood-opacity=".09"/>
+      <feDropShadow dx="0" dy="7" stdDeviation="9" flood-color="#4f46e5" flood-opacity=".11"/>
     </filter>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-      <path d="M0 0L10 5 0 10z" fill="#41667f"/>
+      <path d="M0 0L10 5 0 10z" fill="#6366f1"/>
     </marker>
     <style>
-      .title{font:700 25px Inter,Arial,sans-serif;fill:#12324a}
-      .subtitle{font:500 14px Inter,Arial,sans-serif;fill:#61788a}
-      .stage{font:700 13px Inter,Arial,sans-serif;fill:#fff;letter-spacing:.035em}
-      .head{font:700 18px Inter,Arial,sans-serif;fill:#15344b}
-      .body{font:500 13px Inter,Arial,sans-serif;fill:#4d6679}
-      .mini{font:700 12px Inter,Arial,sans-serif;fill:#1d536b}
-      .arrow{stroke:#41667f;stroke-width:2.4;fill:none;marker-end:url(#arrow)}
+      .title{font:700 25px "Plus Jakarta Sans",Arial,sans-serif;fill:#0f172a}
+      .subtitle{font:500 14px "Plus Jakarta Sans",Arial,sans-serif;fill:#64748b}
+      .stage{font:700 13px "Plus Jakarta Sans",Arial,sans-serif;fill:#fff;letter-spacing:.035em}
+      .head{font:700 18px "Plus Jakarta Sans",Arial,sans-serif;fill:#0f172a}
+      .body{font:500 13px "Plus Jakarta Sans",Arial,sans-serif;fill:#64748b}
+      .mini{font:700 12px "Plus Jakarta Sans",Arial,sans-serif;fill:#4338ca}
+      .arrow{stroke:#6366f1;stroke-width:2.4;fill:none;marker-end:url(#arrow)}
     </style>
   </defs>
-  <rect width="1440" height="520" rx="24" fill="#f8fbfd"/>
+  <rect width="1440" height="520" rx="24" fill="#f8fafc"/>
   <text x="42" y="47" class="title">From continuous 100 Hz IMU streams to auditable activity segments</text>
   <text x="42" y="72" class="subtitle">The same multi-scale temporal logic supports offline Python experiments and on-device Android inference.</text>
 
   <g filter="url(#shadow)">
-    <rect x="32" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#c9d9e4"/>
-    <path d="M32 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H32z" fill="#246da0"/>
+    <rect x="32" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#e2e8f0"/>
+    <path d="M32 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H32z" fill="#4f46e5"/>
     <text x="52" y="148" class="stage">01 · SENSOR INPUT</text>
-    <rect x="54" y="197" width="158" height="76" rx="11" fill="#e9f4fb"/>
-    <path d="M65 238h16l9-24 12 45 14-61 12 44 9-19 10 15h52" fill="none" stroke="#2f80c3" stroke-width="3.2" stroke-linejoin="round"/>
+    <rect x="54" y="197" width="158" height="76" rx="11" fill="#eef2ff"/>
+    <path d="M65 238h16l9-24 12 45 14-61 12 44 9-19 10 15h52" fill="none" stroke="#4f46e5" stroke-width="3.2" stroke-linejoin="round"/>
     <text x="54" y="308" class="head">Six IMU channels</text>
     <text x="54" y="337" class="body">ACC X / Y / Z</text>
     <text x="54" y="360" class="body">GYRO X / Y / Z</text>
@@ -35,12 +35,12 @@
   </g>
 
   <g filter="url(#shadow)">
-    <rect x="266" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#c9d9e4"/>
-    <path d="M266 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H266z" fill="#2d8a88"/>
+    <rect x="266" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#e2e8f0"/>
+    <path d="M266 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H266z" fill="#6366f1"/>
     <text x="286" y="148" class="stage">02 · PREPROCESS</text>
-    <circle cx="367" cy="234" r="40" fill="#e1f5f2"/>
-    <path d="M337 239c12-30 22 30 34 0s22 30 30 0" fill="none" stroke="#0faaa5" stroke-width="4" stroke-linecap="round"/>
-    <path d="M342 219h50M342 254h50" stroke="#93cbc7" stroke-width="2" stroke-dasharray="4 5"/>
+    <circle cx="367" cy="234" r="40" fill="#eef2ff"/>
+    <path d="M337 239c12-30 22 30 34 0s22 30 30 0" fill="none" stroke="#4f46e5" stroke-width="4" stroke-linecap="round"/>
+    <path d="M342 219h50M342 254h50" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="4 5"/>
     <text x="288" y="308" class="head">Clean &amp; standardize</text>
     <text x="288" y="337" class="body">Butterworth filtering</text>
     <text x="288" y="360" class="body">Per-channel normalization</text>
@@ -48,12 +48,12 @@
   </g>
 
   <g filter="url(#shadow)">
-    <rect x="500" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#c9d9e4"/>
-    <path d="M500 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H500z" fill="#c98225"/>
+    <rect x="500" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#e2e8f0"/>
+    <path d="M500 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H500z" fill="#7c3aed"/>
     <text x="520" y="148" class="stage">03 · MULTI-SCALE</text>
-    <rect x="524" y="199" width="70" height="38" rx="7" fill="#fff0d7" stroke="#f0bd70"/>
-    <rect x="540" y="217" width="100" height="38" rx="7" fill="#ffebc8" stroke="#e9ab4f"/>
-    <rect x="558" y="236" width="120" height="38" rx="7" fill="#ffe2ad" stroke="#d98b25"/>
+    <rect x="524" y="199" width="70" height="38" rx="7" fill="#f5f3ff" stroke="#c4b5fd"/>
+    <rect x="540" y="217" width="100" height="38" rx="7" fill="#ede9fe" stroke="#a78bfa"/>
+    <rect x="558" y="236" width="120" height="38" rx="7" fill="#ddd6fe" stroke="#8b5cf6"/>
     <text x="545" y="224" class="mini">3 s</text>
     <text x="599" y="243" class="mini">5 s</text>
     <text x="635" y="262" class="mini">8 s</text>
@@ -64,16 +64,16 @@
   </g>
 
   <g filter="url(#shadow)">
-    <rect x="734" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#c9d9e4"/>
-    <path d="M734 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H734z" fill="#665aa8"/>
+    <rect x="734" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#e2e8f0"/>
+    <path d="M734 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H734z" fill="#6d28d9"/>
     <text x="754" y="148" class="stage">04 · WINDOW MODEL</text>
-    <rect x="758" y="198" width="44" height="70" rx="8" fill="#eeeafd"/>
-    <rect x="814" y="198" width="44" height="70" rx="8" fill="#e5e0fa"/>
-    <rect x="870" y="198" width="44" height="70" rx="8" fill="#dcd5f6"/>
+    <rect x="758" y="198" width="44" height="70" rx="8" fill="#eef2ff"/>
+    <rect x="814" y="198" width="44" height="70" rx="8" fill="#e0e7ff"/>
+    <rect x="870" y="198" width="44" height="70" rx="8" fill="#ddd6fe"/>
     <text x="770" y="224" class="mini">k3</text>
     <text x="826" y="224" class="mini">k7</text>
     <text x="879" y="224" class="mini">k15</text>
-    <path d="M780 250h112M836 268v18" stroke="#665aa8" stroke-width="2.5"/>
+    <path d="M780 250h112M836 268v18" stroke="#6d28d9" stroke-width="2.5"/>
     <text x="756" y="308" class="head">CNN + BiLSTM</text>
     <text x="756" y="337" class="body">Multi-kernel 1D features</text>
     <text x="756" y="360" class="body">Temporal representation</text>
@@ -81,11 +81,11 @@
   </g>
 
   <g filter="url(#shadow)">
-    <rect x="968" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#c9d9e4"/>
-    <path d="M968 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H968z" fill="#3d7687"/>
+    <rect x="968" y="112" width="202" height="300" rx="18" fill="#fff" stroke="#e2e8f0"/>
+    <path d="M968 130a18 18 0 0 1 18-18h166a18 18 0 0 1 18 18v40H968z" fill="#4f46e5"/>
     <text x="988" y="148" class="stage">05 · TEMPORAL LOGIC</text>
-    <path d="M992 254v-25l26-18 25 31 28-44 26 27 49-13v42z" fill="#dff1f4"/>
-    <path d="M992 229l26-18 25 31 28-44 26 27 49-13" fill="none" stroke="#3d7687" stroke-width="3"/>
+    <path d="M992 254v-25l26-18 25 31 28-44 26 27 49-13v42z" fill="#eef2ff"/>
+    <path d="M992 229l26-18 25 31 28-44 26 27 49-13" fill="none" stroke="#4f46e5" stroke-width="3"/>
     <text x="990" y="308" class="head">Decode &amp; refine</text>
     <text x="990" y="337" class="body">LBSA scale arbitration</text>
     <text x="990" y="360" class="body">Smoothing + Viterbi</text>
@@ -93,14 +93,14 @@
   </g>
 
   <g filter="url(#shadow)">
-    <rect x="1202" y="112" width="206" height="300" rx="18" fill="#fff" stroke="#c9d9e4"/>
-    <path d="M1202 130a18 18 0 0 1 18-18h170a18 18 0 0 1 18 18v40h-206z" fill="#377d54"/>
+    <rect x="1202" y="112" width="206" height="300" rx="18" fill="#fff" stroke="#e2e8f0"/>
+    <path d="M1202 130a18 18 0 0 1 18-18h170a18 18 0 0 1 18 18v40h-206z" fill="#10b981"/>
     <text x="1222" y="148" class="stage">06 · SEGMENT OUTPUT</text>
-    <rect x="1226" y="198" width="158" height="70" rx="10" fill="#e6f5ec"/>
-    <rect x="1238" y="215" width="25" height="36" rx="4" fill="#58a973"/>
-    <rect x="1267" y="215" width="43" height="36" rx="4" fill="#f0b44b"/>
-    <rect x="1314" y="215" width="18" height="36" rx="4" fill="#5f87bf"/>
-    <rect x="1336" y="215" width="36" height="36" rx="4" fill="#9a72bb"/>
+    <rect x="1226" y="198" width="158" height="70" rx="10" fill="#ecfdf5"/>
+    <rect x="1238" y="215" width="25" height="36" rx="4" fill="#10b981"/>
+    <rect x="1267" y="215" width="43" height="36" rx="4" fill="#f59e0b"/>
+    <rect x="1314" y="215" width="18" height="36" rx="4" fill="#6366f1"/>
+    <rect x="1336" y="215" width="36" height="36" rx="4" fill="#8b5cf6"/>
     <text x="1224" y="308" class="head">Activity records</text>
     <text x="1224" y="337" class="body">user_id · category</text>
     <text x="1224" y="360" class="body">start · end</text>
@@ -113,7 +113,7 @@
   <path d="M940 262h22" class="arrow"/>
   <path d="M1174 262h22" class="arrow"/>
 
-  <rect x="32" y="446" width="1376" height="46" rx="12" fill="#eaf2f7"/>
-  <circle cx="58" cy="469" r="7" fill="#0faaa5"/>
+  <rect x="32" y="446" width="1376" height="46" rx="12" fill="#eef2ff"/>
+  <circle cx="58" cy="469" r="7" fill="#10b981"/>
   <text x="78" y="475" class="body">Auditable artifacts: fixed checkpoints + normalization parameters + ensemble configuration + segment-level IoU evaluation</text>
 </svg>
