@@ -1,16 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
   <title id="title">Wearable IMU Activity Segmentation Pipeline logo</title>
-  <desc id="desc">A rounded sensor tile containing a segmented motion waveform.</desc>
-  <defs>
-    <linearGradient id="brand" x1="8" y1="7" x2="57" y2="58" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#4f46e5"/>
-      <stop offset="1" stop-color="#7c3aed"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="16" fill="url(#brand)"/>
-  <path d="M11 34h7l4-12 7 25 7-31 7 24 4-10h6" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M19 52h26" stroke="#a7f3d0" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="19" cy="52" r="3" fill="#fff"/>
-  <circle cx="32" cy="52" r="3" fill="#fff"/>
-  <circle cx="45" cy="52" r="3" fill="#fff"/>
+  <desc id="desc">Three inertial-sensor streams divided into aligned temporal activity segments.</desc>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="42">
+    <path d="M55 145C96 113 128 187 171 159" stroke="#165DFF"/>
+    <path d="M211 154C245 137 252 93 294 88C337 84 344 140 374 151" stroke="#165DFF"/>
+    <path d="M414 155C436 158 447 173 458 180" stroke="#165DFF"/>
+
+    <path d="M55 252C97 222 130 283 171 270" stroke="#12B8B0"/>
+    <path d="M211 265C246 252 255 199 294 205C334 212 342 265 374 266" stroke="#12B8B0"/>
+    <path d="M414 266C435 266 447 275 458 282" stroke="#12B8B0"/>
+
+    <path d="M55 359C96 328 131 394 171 365" stroke="#FFB800"/>
+    <path d="M211 360C249 341 255 294 295 300C335 307 342 355 374 368" stroke="#FFB800"/>
+    <path d="M414 371C436 374 448 385 458 392" stroke="#FFB800"/>
+  </g>
+  <circle cx="485" cy="184" r="21" fill="#FF5A5F"/>
+  <circle cx="485" cy="286" r="21" fill="#12B8B0"/>
+  <circle cx="485" cy="396" r="21" fill="#FFB800"/>
 </svg>
