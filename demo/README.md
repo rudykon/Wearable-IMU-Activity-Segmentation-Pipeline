@@ -54,7 +54,7 @@ then push or mirror this repository to it; no dataset or secret is required.
 Suggested public Space ID:
 
 ```text
-rudykon/Wearable-IMU-Activity-Segmentation-Pipeline
+config-h/Wearable-IMU-Activity-Segmentation-Pipeline
 ```
 
 ## Input contract
