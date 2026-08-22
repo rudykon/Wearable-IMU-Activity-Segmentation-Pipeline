@@ -33,13 +33,13 @@ suggested_hardware: cpu-basic
   <a href="android_realtime_app/"><img src="https://img.shields.io/badge/Android-ONNX%20Runtime-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android ONNX Runtime demo"></a>
   <a href="#quick-start"><img src="https://img.shields.io/badge/Smoke%20test-no%20raw%20data-2CA02C?style=flat-square" alt="Smoke test does not require raw data"></a>
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"><img src="https://img.shields.io/badge/Docs-Project%20Website-0F8F8C?style=flat-square&logo=materialformkdocs&logoColor=white" alt="Project website"></a>
-  <a href="https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Live%20Demo-Hugging%20Face%20Spaces-FFD21E?style=flat-square" alt="Live demo on Hugging Face Spaces"></a>
+  <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Live%20Demo-Hugging%20Face%20Spaces-FFD21E?style=flat-square" alt="Live demo on Hugging Face Spaces"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-4C78A8?style=flat-square" alt="Apache License 2.0"></a>
 </p>
 
 <p align="center">
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/">Website</a> ·
-  <a href="https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline">Live Demo</a> ·
+  <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">Live Demo</a> ·
   <a href="#overview">Overview</a> ·
   <a href="#pipeline">Pipeline</a> ·
   <a href="#quick-start">Quick Start</a> ·
@@ -115,7 +115,7 @@ a bilingual Gradio interface. Upload a canonical 100 Hz TXT/TSV recording or use
 the bundled synthetic example, then inspect the six signals, class probabilities,
 decoded timeline, final segment table, and downloadable CSV.
 
-[**Open the Hugging Face Space →**](https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline)
+[**Open the Hugging Face Space →**](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
 
 Run the same interface locally:
 

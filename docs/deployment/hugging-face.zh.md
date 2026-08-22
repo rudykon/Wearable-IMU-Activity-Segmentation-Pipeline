@@ -3,7 +3,7 @@
 浏览器演示在 CPU 上运行仓库中已跟踪的 3 秒、5 秒和 8 秒 CNN–BiLSTM
 检查点，随后执行与研究流水线一致的多尺度融合与时序记录层。
 
-[打开 Hugging Face Space](https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button .md-button--primary target="_blank" rel="noopener" }
+[打开 Hugging Face Space](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button .md-button--primary target="_blank" rel="noopener" }
 [查看 Demo 源码](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/tree/main/demo){ .md-button target="_blank" rel="noopener" }
 
 <figure class="pipeline-frame">

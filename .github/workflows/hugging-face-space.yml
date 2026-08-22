@@ -1,0 +1,33 @@
+name: Sync Hugging Face Space
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hugging-face-space-production
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: Create and synchronize public Gradio Space
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the complete repository
+        uses: actions/checkout@v4
+
+      - name: Mirror GitHub main to Hugging Face
+        uses: huggingface/hub-sync@v0.1.0
+        with:
+          github_repo_id: ${{ github.repository }}
+          huggingface_repo_id: config-h/Wearable-IMU-Activity-Segmentation-Pipeline
+          hf_token: ${{ secrets.HF_TOKEN }}
+          repo_type: space
+          space_sdk: gradio
+          private: "false"
+          subdirectory: .

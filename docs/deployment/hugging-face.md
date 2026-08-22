@@ -4,7 +4,7 @@ The browser demo runs the repository's tracked 3 s, 5 s, and 8 s
 CNN–BiLSTM checkpoints on CPU, then applies the same multi-scale fusion and
 temporal record layer used by the research pipeline.
 
-[Open the Hugging Face Space](https://huggingface.co/spaces/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button .md-button--primary target="_blank" rel="noopener" }
+[Open the Hugging Face Space](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button .md-button--primary target="_blank" rel="noopener" }
 [Inspect the demo source](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/tree/main/demo){ .md-button target="_blank" rel="noopener" }
 
 <figure class="pipeline-frame">
