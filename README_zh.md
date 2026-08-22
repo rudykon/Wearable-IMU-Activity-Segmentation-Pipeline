@@ -55,7 +55,7 @@ Python 流程读取加速度计与陀螺仪信号，训练多尺度神经网络�
 | 分割长时程可穿戴运动信号 | 多核 1D-CNN + BiLSTM 滑窗分类器 | 完整推理/训练需要授权本地传感器文件 |
 | 提升时序一致性 | 多尺度概率对齐、LBSA 融合、平滑、Viterbi 解码、边界细化、重叠消解、置信度过滤和 Top-K 裁剪 | 轻量测试只使用临时文件 |
 | 支持可部署演示 | Android BLE 采集与 ONNX Runtime 推理 | 随仓库模型资产与私有数据集分开说明 |
-| 在浏览器中体验真实模型 | CPU 安全的 Gradio Space，支持上传、曲线、时序解码、片段表与 CSV 导出 | 内置合成示例；公开上传不得包含敏感受试者数据 |
+| 在浏览器中体验真实模型 | 免费 ZeroGPU Gradio Space，支持上传、曲线、时序解码、片段表与 CSV 导出 | 内置合成示例；公开上传不得包含敏感受试者数据 |
 | 保持实验可复现 | 评估、鲁棒性、可视化和公开数据集可迁移性脚本 | 生成产物保留在被忽略的本地目录 |
 
 支持的前景活动包括 `羽毛球`、`跳绳`、`飞鸟`、`跑步` 和 `乒乓球`。背景/无活动在必要时作为内部类别建模，但提交的片段记录只包含前景活动。
@@ -106,6 +106,7 @@ python tests/smoke_test.py
 
 ```bash
 python -m pip install -r requirements.txt
+python -m pip install spaces
 python -m pip install -e .
 python demo/app.py
 ```

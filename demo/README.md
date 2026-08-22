@@ -1,6 +1,6 @@
 # Hugging Face Space demo
 
-This directory contains a CPU-safe Gradio interface for the repository's real
+This directory contains a ZeroGPU-compatible Gradio interface for the repository's real
 tracked 3 s / 5 s / 8 s CNN–BiLSTM checkpoints and temporal record layer.
 
 ## What the demo does
@@ -13,8 +13,9 @@ tracked 3 s / 5 s / 8 s CNN–BiLSTM checkpoints and temporal record layer.
 - includes a deterministic synthetic example with no participant data.
 
 The public interface limits uploads to 20 MB, 60,000 samples, and one serialized
-inference request at a time. Models are loaded lazily on the first request and
-cached for subsequent runs.
+inference request at a time. On ZeroGPU, models are registered at Space startup
+and the complete model pass uses one bounded GPU allocation. Local CPU runs keep
+lazy loading for a fast application import.
 
 ## Run locally
 
@@ -22,6 +23,7 @@ From the repository root:
 
 ```bash
 python -m pip install -r requirements.txt
+python -m pip install spaces
 python -m pip install -e .
 python demo/app.py
 ```
@@ -48,8 +50,9 @@ core package from `src/` and loads the tracked assets under `saved_models/`.
 
 The YAML metadata at the top of the root `README.md` configures a Gradio Space
 with Python 3.12 and `demo/app.py` as the entry point. The root
-`requirements.txt` contains the runtime dependencies. Create a Gradio Space,
-then push or mirror this repository to it; no dataset or secret is required.
+`requirements.txt` pins a ZeroGPU-supported PyTorch release. The GitHub Actions
+deployment creates the public Space with `zero-a10g`, then mirrors the complete
+repository. The workflow only needs a write-scoped `HF_TOKEN` repository secret.
 
 Suggested public Space ID:
 

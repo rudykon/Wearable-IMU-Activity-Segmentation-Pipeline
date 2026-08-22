@@ -1,7 +1,7 @@
 # Hugging Face Space demo
 
 The browser demo runs the repository's tracked 3 s, 5 s, and 8 s
-CNN–BiLSTM checkpoints on CPU, then applies the same multi-scale fusion and
+CNN–BiLSTM checkpoints in a free ZeroGPU allocation, then applies the same multi-scale fusion and
 temporal record layer used by the research pipeline.
 
 [Open the Hugging Face Space](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button .md-button--primary target="_blank" rel="noopener" }
@@ -24,10 +24,11 @@ One request produces:
 - a bilingual segment table with relative boundaries, duration, and confidence;
 - a downloadable UTF-8 CSV with absolute millisecond timestamps.
 
-Models load lazily on the first request and remain cached. Inference is
-serialized to keep memory and CPU use predictable on the default Space
-hardware. The public interface accepts no more than 60,000 samples, equivalent
-to ten minutes at 100 Hz.
+Models are registered when the ZeroGPU Space starts, and each complete model
+pass uses one 30-second GPU allocation. Inference is serialized to keep memory
+use predictable and avoid competing requests. The public interface accepts no
+more than 60,000 samples, equivalent to ten minutes at 100 Hz. Visitors use
+their own Hugging Face ZeroGPU quota.
 
 ## Try the bundled example
 
@@ -70,6 +71,7 @@ and preprocessing match the documented dataset contract.
 git clone https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline.git
 cd Wearable-IMU-Activity-Segmentation-Pipeline
 python -m pip install -r requirements.txt
+python -m pip install spaces
 python -m pip install -e .
 python demo/app.py
 ```

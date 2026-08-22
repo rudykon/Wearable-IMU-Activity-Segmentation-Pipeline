@@ -54,7 +54,8 @@ python -m pip install -e .
 
 如需针对特定 CUDA 版本安装 PyTorch，请使用
 [PyTorch 官方安装器](https://pytorch.org/get-started/locally/)选择适配主机驱动的
-wheel，然后安装项目的其余依赖。
+wheel，然后安装项目的其余依赖。pip 依赖使用与 Hugging Face ZeroGPU 兼容的
+PyTorch 2.8.0；复现用 Conda 环境仍保留原始 PyTorch 2.5.1 研究软件栈。
 
 ## 验证检出内容
 

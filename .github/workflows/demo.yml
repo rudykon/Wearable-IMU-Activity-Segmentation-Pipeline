@@ -9,6 +9,7 @@ on:
       - "README.md"
       - "src/imu_activity_pipeline/**"
       - ".github/workflows/demo.yml"
+      - ".github/workflows/hugging-face-space.yml"
   push:
     branches:
       - main
@@ -19,6 +20,7 @@ on:
       - "README.md"
       - "src/imu_activity_pipeline/**"
       - ".github/workflows/demo.yml"
+      - ".github/workflows/hugging-face-space.yml"
   workflow_dispatch:
 
 permissions:
@@ -50,7 +52,8 @@ jobs:
           scipy==1.15.3
           matplotlib==3.9.2
           gradio==6.25.0
-          torch==2.5.1+cpu
+          spaces
+          torch==2.8.0+cpu
 
       - name: Validate demo data and visual outputs
         env:

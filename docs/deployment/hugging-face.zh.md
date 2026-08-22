@@ -1,6 +1,6 @@
 # Hugging Face Space 在线演示
 
-浏览器演示在 CPU 上运行仓库中已跟踪的 3 秒、5 秒和 8 秒 CNN–BiLSTM
+浏览器演示通过免费的 ZeroGPU 配额运行仓库中已跟踪的 3 秒、5 秒和 8 秒 CNN–BiLSTM
 检查点，随后执行与研究流水线一致的多尺度融合与时序记录层。
 
 [打开 Hugging Face Space](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button .md-button--primary target="_blank" rel="noopener" }
@@ -23,9 +23,10 @@
 - 包含相对边界、持续时间和置信度的中英文片段表；
 - 包含绝对毫秒时间戳的 UTF-8 CSV 下载文件。
 
-模型在第一次请求时惰性加载，随后保留缓存。推理采用单任务串行方式，以便在默认
-Space 硬件上保持可预测的内存与 CPU 占用。公开界面最多接收 60,000 个样本，
-相当于 100 Hz 下的十分钟记录。
+ZeroGPU Space 启动时会注册模型，每次完整模型推理使用一次最长 30 秒的 GPU 配额。
+推理采用单任务串行方式，以保持内存占用可预测并避免请求竞争。公开界面最多接收
+60,000 个样本，相当于 100 Hz 下的十分钟记录；访客消耗自己的 Hugging Face
+ZeroGPU 配额。
 
 ## 使用内置示例
 
@@ -62,6 +63,7 @@ ACC_TIME	ACC_X	ACC_Y	ACC_Z	GYRO_X	GYRO_Y	GYRO_Z
 git clone https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline.git
 cd Wearable-IMU-Activity-Segmentation-Pipeline
 python -m pip install -r requirements.txt
+python -m pip install spaces
 python -m pip install -e .
 python demo/app.py
 ```
