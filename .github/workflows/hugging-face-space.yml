@@ -19,7 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HF_SPACE_ID: config-h/Wearable-IMU-Activity-Segmentation-Pipeline
-      HF_SPACE_STAGE: ${{ runner.temp }}/hugging-face-space
       HF_TOKEN: ${{ secrets.HF_TOKEN }}
     steps:
       - name: Check out the complete repository
@@ -39,7 +38,8 @@ jobs:
 
       - name: Prepare the Hugging Face repository
         run: |
-          mkdir -p "${HF_SPACE_STAGE}"
+          HF_SPACE_STAGE="$(mktemp -d "${RUNNER_TEMP}/hugging-face-space.XXXXXX")"
+          printf 'HF_SPACE_STAGE=%s\n' "${HF_SPACE_STAGE}" >> "${GITHUB_ENV}"
           rsync -a \
             --exclude ".git/" \
             --exclude ".github/" \

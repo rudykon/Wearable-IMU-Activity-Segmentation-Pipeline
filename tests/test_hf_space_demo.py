@@ -94,6 +94,8 @@ class DemoRuntimeTests(unittest.TestCase):
         )
         self.assertIn('--flavor zero-a10g', workflow)
         self.assertIn("demo/space-readme-frontmatter.md", workflow)
+        self.assertIn('mktemp -d "${RUNNER_TEMP}/hugging-face-space.XXXXXX"', workflow)
+        self.assertNotIn("${{ runner.temp }}", workflow)
         self.assertIn('uvx hf upload "${HF_SPACE_ID}" "${HF_SPACE_STAGE}" .', workflow)
 
         app_source = (ROOT / "demo" / "app.py").read_text(encoding="utf-8")
