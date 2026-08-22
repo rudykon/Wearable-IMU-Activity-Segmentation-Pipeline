@@ -48,11 +48,13 @@ python demo/model_smoke_test.py
 Deploy the **whole repository**, not only this directory. The app imports the
 core package from `src/` and loads the tracked assets under `saved_models/`.
 
-The YAML metadata at the top of the root `README.md` configures a Gradio Space
-with Python 3.12 and `demo/app.py` as the entry point. The root
-`requirements.txt` pins a ZeroGPU-supported PyTorch release. The GitHub Actions
-deployment creates the public Space with `zero-a10g`, then mirrors the complete
-repository. The workflow only needs a write-scoped `HF_TOKEN` repository secret.
+Space-only YAML metadata is stored in `demo/space-readme-frontmatter.md` so the
+GitHub project README can begin directly with the branded overview. During
+deployment, GitHub Actions prepends that metadata to the staged Space README;
+it configures Python 3.12 and `demo/app.py` as the entry point. The root
+`requirements.txt` pins a ZeroGPU-supported PyTorch release. The workflow
+creates the public Space with `zero-a10g`, then mirrors the staged repository.
+It only needs a write-scoped `HF_TOKEN` repository secret.
 
 Suggested public Space ID:
 

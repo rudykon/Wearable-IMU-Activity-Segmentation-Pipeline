@@ -75,19 +75,28 @@ class DemoRuntimeTests(unittest.TestCase):
         plt.close(signal_figure)
         plt.close(timeline_figure)
 
-    def test_root_readme_contains_space_metadata(self) -> None:
+    def test_space_metadata_is_kept_out_of_github_readme(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertTrue(readme.startswith("---\n"))
-        self.assertIn("sdk: gradio", readme.split("---", 2)[1])
-        self.assertIn("app_file: demo/app.py", readme.split("---", 2)[1])
-        self.assertIn("suggested_hardware: zero-a10g", readme.split("---", 2)[1])
+        metadata = (ROOT / "demo" / "space-readme-frontmatter.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertFalse(readme.startswith("---\n"))
+        self.assertTrue(readme.startswith('<p align="center">'))
+        self.assertTrue(metadata.startswith("---\n"))
+        self.assertTrue(metadata.endswith("---\n"))
+        self.assertIn("sdk: gradio", metadata)
+        self.assertIn("app_file: demo/app.py", metadata)
+        self.assertIn("suggested_hardware: zero-a10g", metadata)
 
     def test_deployment_requests_free_zerogpu_hardware(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "hugging-face-space.yml").read_text(
             encoding="utf-8"
         )
         self.assertIn('--flavor zero-a10g', workflow)
-        self.assertIn('uvx hf upload "${HF_SPACE_ID}" . .', workflow)
+        self.assertIn("demo/space-readme-frontmatter.md", workflow)
+        self.assertIn('mktemp -d "${RUNNER_TEMP}/hugging-face-space.XXXXXX"', workflow)
+        self.assertNotIn("${{ runner.temp }}", workflow)
+        self.assertIn('uvx hf upload "${HF_SPACE_ID}" "${HF_SPACE_STAGE}" .', workflow)
 
         app_source = (ROOT / "demo" / "app.py").read_text(encoding="utf-8")
         self.assertIn("@spaces.GPU(duration=30)", app_source)
