@@ -199,6 +199,13 @@ def _load_model_bundle():
     return load_ensemble_models()
 
 
+# ZeroGPU captures module-scope CUDA model placement during Space startup. Keep
+# local and ordinary CPU imports lazy, but eagerly register the tracked models
+# when the platform explicitly enables its ZeroGPU runtime.
+if os.getenv("SPACES_ZERO_GPU", "").lower() in {"1", "true", "yes"}:
+    _load_model_bundle()
+
+
 def clear_model_cache() -> None:
     """Clear the lazy model cache; useful for tests and controlled restarts."""
 

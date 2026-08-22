@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+import spaces
 import gradio as gr
 
 from demo.runtime import (
@@ -66,16 +67,29 @@ CSS = """
 THEME = gr.themes.Soft(primary_hue="indigo", secondary_hue="violet")
 
 
+@spaces.GPU(duration=30)
+def _run_zero_gpu_pipeline(upload, fusion_mode, min_duration_sec, confidence_min, top_k):
+    """Run one complete model pass inside a single ZeroGPU allocation."""
+
+    return run_pipeline(
+        upload,
+        fusion_mode=str(fusion_mode),
+        min_duration_sec=float(min_duration_sec),
+        confidence_min=float(confidence_min),
+        top_k=int(top_k),
+    )
+
+
 def segment_recording(upload, fusion_mode, min_duration_sec, confidence_min, top_k):
     """Gradio callback that turns one upload into plots, segments, and CSV."""
 
     try:
-        result = run_pipeline(
+        result = _run_zero_gpu_pipeline(
             upload,
-            fusion_mode=str(fusion_mode),
-            min_duration_sec=float(min_duration_sec),
-            confidence_min=float(confidence_min),
-            top_k=int(top_k),
+            fusion_mode,
+            min_duration_sec,
+            confidence_min,
+            top_k,
         )
         return (
             status_markdown(result, str(fusion_mode)),
@@ -95,13 +109,13 @@ def segment_recording(upload, fusion_mode, min_duration_sec, confidence_min, top
 
 
 def build_app() -> gr.Blocks:
-    """Build the bilingual, CPU-safe Gradio application."""
+    """Build the bilingual, ZeroGPU-compatible Gradio application."""
 
     with gr.Blocks(title="Wearable IMU Activity Segmentation") as app:
         gr.HTML(
             """
             <section class="imu-hero">
-              <span class="imu-pill">Real tracked models · 真实模型</span>
+              <span class="imu-pill">ZeroGPU · Real tracked models · 真实模型</span>
               <h1>Wearable IMU Activity Segmentation</h1>
               <p>Upload a 100 Hz accelerometer + gyroscope recording and inspect
               multi-scale CNN–BiLSTM probabilities, temporal decoding, and final

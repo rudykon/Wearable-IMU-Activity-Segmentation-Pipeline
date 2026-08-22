@@ -80,6 +80,17 @@ class DemoRuntimeTests(unittest.TestCase):
         self.assertTrue(readme.startswith("---\n"))
         self.assertIn("sdk: gradio", readme.split("---", 2)[1])
         self.assertIn("app_file: demo/app.py", readme.split("---", 2)[1])
+        self.assertIn("suggested_hardware: zero-a10g", readme.split("---", 2)[1])
+
+    def test_deployment_requests_free_zerogpu_hardware(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "hugging-face-space.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('--flavor zero-a10g', workflow)
+        self.assertIn('uvx hf upload "${HF_SPACE_ID}" . .', workflow)
+
+        app_source = (ROOT / "demo" / "app.py").read_text(encoding="utf-8")
+        self.assertIn("@spaces.GPU(duration=30)", app_source)
 
 
 if __name__ == "__main__":

@@ -57,7 +57,9 @@ repository, including PyTorch 2.5.1.
 
 For a CUDA-specific PyTorch build, choose the wheel appropriate for the host
 driver using the [official PyTorch installer](https://pytorch.org/get-started/locally/),
-then install the remaining project dependencies.
+then install the remaining project dependencies. The pip requirements use
+PyTorch 2.8.0 for Hugging Face ZeroGPU compatibility; the reproducibility Conda
+environment retains the original PyTorch 2.5.1 research stack.
 
 ## Verify the checkout
 

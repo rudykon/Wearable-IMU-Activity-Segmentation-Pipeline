@@ -9,7 +9,7 @@ python_version: "3.12"
 app_file: demo/app.py
 pinned: false
 license: apache-2.0
-suggested_hardware: cpu-basic
+suggested_hardware: zero-a10g
 ---
 
 <p align="center">
@@ -69,7 +69,7 @@ The Python pipeline reads accelerometer and gyroscope streams, trains multi-scal
 | Segment long-session wearable motion streams | Multi-kernel 1D-CNN + BiLSTM window classifiers | Requires authorized local sensor files for full inference/training |
 | Improve temporal consistency | Multi-scale probability alignment, LBSA fusion, smoothing, Viterbi decoding, boundary refinement, overlap resolution, confidence filtering, and Top-K pruning | Smoke test uses temporary files only |
 | Support deployable demonstration | Android BLE acquisition and ONNX Runtime inference | Bundled demo assets are documented separately from private datasets |
-| Explore the tracked model in a browser | CPU-safe Gradio Space with upload, plots, temporal decoding, segment table, and CSV export | Includes a synthetic example; public uploads must not contain sensitive participant data |
+| Explore the tracked model in a browser | Free ZeroGPU Gradio Space with upload, plots, temporal decoding, segment table, and CSV export | Includes a synthetic example; public uploads must not contain sensitive participant data |
 | Keep experiments reproducible | Evaluation, robustness, visualization, and public-dataset portability scripts | Generated outputs remain local under ignored directories |
 
 Supported foreground activities are `羽毛球`, `跳绳`, `飞鸟`, `跑步`, and `乒乓球`. Background/no-activity is modeled internally where needed, but submitted segment records contain foreground activities.
@@ -121,6 +121,7 @@ Run the same interface locally:
 
 ```bash
 python -m pip install -r requirements.txt
+python -m pip install spaces
 python -m pip install -e .
 python demo/app.py
 ```
