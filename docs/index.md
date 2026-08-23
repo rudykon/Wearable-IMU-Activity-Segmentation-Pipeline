@@ -7,33 +7,33 @@ hide:
   <span class="hero-blob one" aria-hidden="true"></span>
   <span class="hero-blob two" aria-hidden="true"></span>
   <div class="hero-copy">
-    <span class="hero-kicker">Open-source · Research to edge</span>
-    <h1>Turn long IMU streams into <span class="gradient-text">auditable activity timelines.</span></h1>
+    <span class="hero-kicker">Open source · From movement to meaning</span>
+    <h1>Turn raw wrist motion into <span class="gradient-text">activity records people can inspect.</span></h1>
     <p class="hero-lead">
-      A reproducible Python and Android pipeline for multi-scale segmentation of
-      wrist-worn accelerometer and gyroscope data—from model training and
-      temporal decoding to segment evaluation and on-device inference.
+      A wrist IMU streams six channels at 100 Hz. This project turns that
+      continuous signal into timestamped records of what happened and when—then
+      exposes how every record was produced, evaluated, and deployed.
     </p>
     <div class="hero-actions">
-      <a class="hero-button primary" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">
+      <a class="hero-button primary" href="context/use-cases/">
+        See where it fits
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="hero-button" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">
         Try the live demo
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a class="hero-button" href="getting-started/quickstart/">
-        Run the pipeline
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a class="hero-button" href="guide/pipeline/">Explore the architecture</a>
+      <a class="hero-button" href="research/paper/">Inspect the evidence</a>
     </div>
-    <div class="hero-proof" aria-label="Project capabilities">
-      <span>Reproducible Python</span>
-      <span>Multi-scale models</span>
-      <span>Android ONNX</span>
+    <div class="hero-proof" aria-label="Project focus">
+      <span>Long-session first</span>
+      <span>Segment-level evidence</span>
+      <span>Web + Android</span>
     </div>
   </div>
   <div class="hero-visual">
-    <div class="floating-badge badge-model">3-scale ensemble</div>
-    <div class="floating-badge badge-edge">Edge-ready ONNX</div>
+    <div class="floating-badge badge-model">3-scale context</div>
+    <div class="floating-badge badge-edge">Auditable decoding</div>
     <div class="signal-card">
       <div class="signal-toolbar">
         <span class="signal-live"><span class="signal-dot"></span>LIVE SENSOR STREAM</span>
@@ -62,25 +62,89 @@ hide:
       </div>
       <div class="signal-meta">
         <div><strong>3 / 5 / 8 s</strong><span>temporal scales</span></div>
-        <div><strong>CNN–BiLSTM</strong><span>window model</span></div>
-        <div><strong>Viterbi</strong><span>sequence decode</span></div>
+        <div><strong>CNN–BiLSTM</strong><span>window evidence</span></div>
+        <div><strong>TRL</strong><span>record construction</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="metric-strip">
-  <div class="metric"><strong>100 Hz</strong><span>sampling rate</span></div>
-  <div class="metric"><strong>6</strong><span>physical IMU channels</span></div>
-  <div class="metric"><strong>3</strong><span>temporal scales</span></div>
-  <div class="metric"><strong>5 + bg</strong><span>output classes</span></div>
+<span class="section-eyebrow">Start with the real problem</span>
+
+## A sensor captures movement. People need an account of the session. {: .section-title}
+
+<p class="section-lead">An hour of six-axis sensing produces 360,000 timestamps and 2.16 million channel readings. None of those rows says “badminton started at 09:02 and ended at 09:17.” The useful artifact is not another waveform—it is a small, reviewable set of activity records.</p>
+
+<div class="story-grid">
+  <article class="story-card story-card-input">
+    <span class="story-card-kicker">What the device sees</span>
+    <strong>Continuous motion, without meaning</strong>
+    <div class="signal-token-list" aria-label="Six input channels">
+      <span>ACC_X</span><span>ACC_Y</span><span>ACC_Z</span>
+      <span>GYRO_X</span><span>GYRO_Y</span><span>GYRO_Z</span>
+    </div>
+    <p>Background movement, transitions, repeated actions, pauses, and sensor noise all arrive in the same stream.</p>
+  </article>
+  <article class="story-card story-card-output">
+    <span class="story-card-kicker">What a person needs</span>
+    <strong>A concise, timestamped session story</strong>
+    <div class="record-list" aria-label="Illustrative activity records">
+      <div><time>09:02–09:17</time><span>Badminton</span></div>
+      <div><time>09:25–09:34</time><span>Jump rope</span></div>
+      <div><time>09:41–09:53</time><span>Running</span></div>
+    </div>
+    <p>Each record answers three practical questions: what happened, when did it happen, and how long did it last?</p>
+  </article>
 </div>
 
-<span class="section-eyebrow">Paper insight</span>
+<p class="story-caption">The times above are illustrative—not participant data. They show the translation this repository is designed to make.</p>
 
-## Why window accuracy is not enough {: .section-title}
+<div class="metric-strip context-metrics">
+  <div class="metric"><strong>100 Hz</strong><span>continuous sampling</span></div>
+  <div class="metric"><strong>6</strong><span>physical channels</span></div>
+  <div class="metric"><strong>5</strong><span>foreground activities</span></div>
+  <div class="metric"><strong>4 fields</strong><span>record output</span></div>
+</div>
 
-<p class="section-lead">A long-session recognizer can produce locally convincing probabilities and still report the wrong number, duration, or boundary of workout records. The paper makes this window-to-record gap the central measurement problem.</p>
+<span class="section-eyebrow">Use scenarios</span>
+
+## Where would this pipeline be useful? {: .section-title}
+
+<p class="section-lead">The same motion-to-record chain supports several concrete workflows, but the strength of the evidence differs by scenario. The cards below separate demonstrated research use from applications that still require task-specific validation.</p>
+
+<div class="scenario-grid">
+  <article class="scenario-card">
+    <span class="scenario-tag established">Direct research fit</span>
+    <h3>Evaluate long-session activity recognition</h3>
+    <p>Compare systems using segment F1, boundary overlap, false positives per hour, event counts, and durations—not only isolated-window accuracy.</p>
+  </article>
+  <article class="scenario-card">
+    <span class="scenario-tag scoped">Scoped prototype</span>
+    <h3>Build an automatic workout diary</h3>
+    <p>Turn controlled sessions containing the five supported activities into candidate records that a participant, coach, or researcher can review.</p>
+  </article>
+  <article class="scenario-card">
+    <span class="scenario-tag established">Implemented path</span>
+    <h3>Test research-to-phone deployment</h3>
+    <p>Follow the same six-channel contract from a WT9011DCL-BT50 sensor over BLE to Android-side ONNX inference and a visible timeline.</p>
+  </article>
+  <article class="scenario-card">
+    <span class="scenario-tag exploratory">Human-in-the-loop</span>
+    <h3>Accelerate annotation and quality review</h3>
+    <p>Use proposed segments to focus a reviewer on likely activity intervals and boundary errors; the predictions are not a substitute for ground truth.</p>
+  </article>
+</div>
+
+<div class="paper-home-cta story-cta">
+  <p>See an illustrative session, the intended users, the exact output contract, and the validation required before adapting the system to a new device or population.</p>
+  <a class="md-button md-button--primary" href="context/use-cases/">Read background & use cases</a>
+</div>
+
+<span class="section-eyebrow">The hidden difficulty</span>
+
+## A correct window label can still become a wrong record. {: .section-title}
+
+<p class="section-lead">Short-window probabilities may look convincing while brief confidence dips split one activity into several events, motion-like background creates false positives, or boundaries drift. Those mistakes directly change the session count, duration, and timeline.</p>
 
 <figure class="paper-figure">
   <a class="pipeline-image-link" href="assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="Open the full-resolution window-to-record gap figure">
@@ -97,50 +161,38 @@ hide:
 </div>
 
 <div class="paper-home-cta">
-  <p>See the fixed external-test comparison, multi-scale diagnostics, representative timelines, field tests, and stated limitations.</p>
-  <a class="md-button md-button--primary" href="research/paper/">Explore the paper evidence</a>
+  <p>The headline values are segment-record metrics from the fixed external test—not window accuracy. Internal diagnostics, external results, success cases, failure cases, and limitations are labeled separately.</p>
+  <a class="md-button md-button--primary" href="research/paper/">Inspect the paper evidence</a>
 </div>
 
-<span class="section-eyebrow">Research to deployment</span>
+<span class="section-eyebrow">How the system closes the gap</span>
 
-## One repository, the complete research-to-device path {: .section-title}
+## Four steps from a wrist sensor to a reviewable timeline {: .section-title}
 
-<p class="section-lead">A coherent workflow keeps every stage inspectable—from physical-unit sensor input to deployable activity segments—without hiding decisions behind a black box.</p>
+<p class="section-lead">The technical components are easier to understand once their job in the story is clear: preserve the raw session, gather evidence at several time scales, stabilize the records, and make the result inspectable.</p>
 
-<div class="feature-grid">
-  <article class="feature-card">
-    <span class="feature-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M3 12h3l2-6 4 13 3-10 2 6h4"/></svg>
-    </span>
-    <h3>Long-session segmentation</h3>
-    <p>Convert continuous per-user sensor recordings into explicit <code>user_id, category, start, end</code> activity records.</p>
+<div class="feature-grid process-grid">
+  <article class="feature-card process-card">
+    <span class="process-step">01</span>
+    <h3>Capture the whole session</h3>
+    <p>Keep the six physical-unit ACC/GYRO channels and timestamps so the final boundaries remain anchored to the source recording.</p>
   </article>
-  <article class="feature-card">
-    <span class="feature-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="9" height="5" rx="1"/><rect x="6" y="10" width="12" height="5" rx="1"/><rect x="9" y="15" width="12" height="5" rx="1"/></svg>
-    </span>
-    <h3>Multi-scale modeling</h3>
-    <p>Align 3-, 5-, and 8-second CNN–BiLSTM predictions so short motion signatures and longer context inform one timeline.</p>
+  <article class="feature-card process-card">
+    <span class="process-step">02</span>
+    <h3>See short and long context</h3>
+    <p>Align 3-, 5-, and 8-second CNN–BiLSTM evidence so local transitions and steadier action context can inform one decision.</p>
   </article>
-  <article class="feature-card">
-    <span class="feature-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M3 16l5-5 4 3 5-7 4 3"/><path d="M17 7h4v4"/></svg>
-    </span>
-    <h3>Temporal decoding</h3>
-    <p>Apply LBSA fusion, probability smoothing, Viterbi decoding, boundary refinement, overlap handling, and segment filtering.</p>
+  <article class="feature-card process-card">
+    <span class="process-step">03</span>
+    <h3>Construct stable records</h3>
+    <p>LBSA and the deterministic Temporal Record Layer smooth, decode, merge, refine, filter, and expose every temporal policy.</p>
   </article>
-  <article class="feature-card">
-    <span class="feature-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 5h4M10 18h4"/><circle cx="12" cy="12" r="3"/></svg>
-    </span>
-    <h3>Android deployment</h3>
-    <p>Acquire WT9011DCL-BT50 BLE data, visualize signals, record CSV, and execute the selected ONNX ensemble on device.</p>
+  <article class="feature-card process-card">
+    <span class="process-step">04</span>
+    <h3>Review or deploy</h3>
+    <p>Export <code>user_id, category, start, end</code>, inspect the browser plots, or run the corresponding ONNX path on Android.</p>
   </article>
 </div>
-
-<span class="section-eyebrow">Auditable by design</span>
-
-## Pipeline at a glance {: .section-title}
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution overall framework figure">
@@ -149,83 +201,66 @@ hide:
   <figcaption class="pipeline-caption">Repository figure: IMU stream → scale-specific CNN–BiLSTM models → LBSA → temporal record layer → segment records. Select the image to view it at full resolution.</figcaption>
 </figure>
 
-<p class="pipeline-summary">The Python research path and Android demonstration share the same observable contract: six physical-unit IMU channels enter the system; time-aligned activity segments leave it. The repository keeps each intermediate choice inspectable through configuration files, fixed model assets, experiment scripts, and segment-level evaluation.</p>
+<p class="pipeline-summary">The Python research path, public Gradio demonstration, and Android implementation share one observable contract: six physical IMU channels enter; time-aligned foreground records leave. Configuration files, fixed model assets, experiment scripts, intermediate probabilities, and segment-level evaluation keep the path auditable.</p>
 
-| Layer | Repository implementation | Main artifact |
-| --- | --- | --- |
-| Input | UTF-8 tab-separated ACC/GYRO recordings | Per-user signal files |
-| Representation | Multi-kernel 1D CNN + BiLSTM | Window probabilities |
-| Fusion | 3 s / 5 s / 8 s probability alignment | Multi-scale sequence |
-| Temporal logic | LBSA, smoothing, Viterbi, refinement | Activity timeline |
-| Output | Segment writer and evaluator | XLSX records and F1 metrics |
-| Deployment | Android BLE + ONNX Runtime | Real-time or offline recognition |
+<span class="section-eyebrow">Evidence before expansion</span>
 
-### Physical deployment path
+## What is demonstrated—and what is not yet established {: .section-title}
 
-<figure class="pipeline-frame">
-  <a class="pipeline-image-link" href="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" target="_blank" rel="noopener" aria-label="Open the full-resolution physical deployment chain figure">
-    <img src="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" alt="Existing project figure showing the physical deployment chain from the wearable IMU sensor through BLE and Android on-device inference to activity recognition" loading="lazy" decoding="async">
+<div class="evidence-grid">
+  <article class="evidence-card">
+    <span class="evidence-kicker">Supported by this repository</span>
+    <h3>A complete, inspectable research prototype</h3>
+    <ul>
+      <li>Five foreground activities in the evaluated long-session protocol.</li>
+      <li>Fixed segment-level external testing on 37 recordings.</li>
+      <li>Python reproduction, public synthetic demo, and Android field-test path.</li>
+      <li>Success and failure timelines reported together.</li>
+    </ul>
+  </article>
+  <article class="evidence-card caution">
+    <span class="evidence-kicker">Requires new validation</span>
+    <h3>Claims beyond the evaluated envelope</h3>
+    <ul>
+      <li>New devices, sensor placements, populations, or activity protocols.</li>
+      <li>Clinical benefit, coaching quality, safety decisions, or production reliability.</li>
+      <li>Highly interleaved sessions and separate counting of adjacent same-class events.</li>
+      <li>Automatic labels without human review in consequential workflows.</li>
+    </ul>
+  </article>
+</div>
+
+<span class="section-eyebrow">Choose your depth</span>
+
+## Start with the question you have now {: .section-title}
+
+<div class="route-grid">
+  <a class="route-card" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">
+    <span>2 minutes</span>
+    <h3>Try a synthetic session</h3>
+    <p>Run the tracked models and inspect signals, probabilities, records, and CSV output without installing anything.</p>
   </a>
-  <figcaption class="pipeline-caption">Repository figure: wearable IMU → BLE acquisition → Android signal processing → on-device multi-scale inference → activity recognition. Select the image to view it at full resolution.</figcaption>
-</figure>
-
-<span class="section-eyebrow">Fast validation</span>
-
-## Start with a public smoke test {: .section-title}
-
-The lightweight smoke test validates imports, canonical paths, temporary signal
-loading, annotation loading, and workbook writing. It does **not** require
-participant recordings or a GPU.
-
-=== "Conda"
-
-    ~~~bash
-    git clone https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline.git
-    cd Wearable-IMU-Activity-Segmentation-Pipeline
-    conda env create -f environment.yml
-    conda activate imu-activity-pipeline
-    python -m pip install -e .
-    python tests/smoke_test.py
-    ~~~
-
-=== "pip"
-
-    ~~~bash
-    git clone https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline.git
-    cd Wearable-IMU-Activity-Segmentation-Pipeline
-    python -m venv .venv
-    source .venv/bin/activate
-    python -m pip install -r requirements.txt
-    python -m pip install -e .
-    python tests/smoke_test.py
-    ~~~
-
-!!! important "Data access boundary"
-
-    Participant sensor streams are not distributed in the GitHub repository.
-    Authorized data remain local under the ignored `data/` layout. Selected
-    Python checkpoints, normalization assets, and Android ONNX files are
-    versioned separately from those recordings.
-
-<span class="section-eyebrow">Output vocabulary</span>
-
-## Supported foreground activities {: .section-title}
-
-| Chinese label | English label | Output behavior |
-| --- | --- | --- |
-| 羽毛球 | Badminton | Foreground segment |
-| 跳绳 | Jump rope | Foreground segment |
-| 飞鸟 | Fly | Foreground segment |
-| 跑步 | Running | Foreground segment |
-| 乒乓球 | Table tennis | Foreground segment |
-
-Background / no-activity is modeled internally where required, while submitted
-segment records contain foreground activities.
+  <a class="route-card" href="context/use-cases/">
+    <span>Understand the setting</span>
+    <h3>Read background & scenarios</h3>
+    <p>See who would use this workflow, what decision it supports, and where human review or new validation is required.</p>
+  </a>
+  <a class="route-card" href="guide/pipeline/">
+    <span>Technical path</span>
+    <h3>Follow the architecture</h3>
+    <p>Trace channel order, temporal scales, model structure, fusion, record construction, and output.</p>
+  </a>
+  <a class="route-card" href="deployment/android/">
+    <span>Physical path</span>
+    <h3>Build the Android demo</h3>
+    <p>Connect the documented BLE sensor, inspect live signals, record CSV, and run on-device ONNX inference.</p>
+  </a>
+</div>
 
 <div class="cta-panel">
   <div>
-    <h3>Ready to run an authorized dataset?</h3>
-    <p>Prepare the canonical folder layout, then follow the inference walkthrough.</p>
+    <h3>Want the shortest path from story to evidence?</h3>
+    <p>Start with the live synthetic example, then compare its timeline with the paper’s fixed evaluation protocol.</p>
   </div>
-  <a class="md-button md-button--primary" href="getting-started/quickstart/">Open quick start</a>
+  <a class="md-button md-button--primary" href="deployment/hugging-face/">Open the demo guide</a>
 </div>
