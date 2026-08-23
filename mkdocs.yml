@@ -1,9 +1,9 @@
 site_name: Wearable IMU Activity Segmentation Pipeline
 site_url: https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/
 site_description: >-
-  Reproducible multi-scale activity segmentation for long-session wearable
-  accelerometer and gyroscope streams, with Python research code and an
-  on-device Android demo.
+  From continuous wearable IMU streams to auditable activity records: real-world
+  background, scoped use cases, reproducible multi-scale research, and web and
+  Android demonstrations.
 site_author: Kong Minghao
 
 repo_name: rudykon/Wearable-IMU-Activity-Segmentation-Pipeline
@@ -65,8 +65,8 @@ plugins:
           build: true
           site_name: 可穿戴 IMU 活动分割流水线
           site_description: >-
-            面向长时可穿戴加速度计与陀螺仪数据的可复现多尺度活动分割流水线，
-            包含 Python 研究代码与端侧 Android 演示应用。
+            从连续可穿戴 IMU 信号到可审计活动记录：涵盖现实背景、限定应用场景、
+            可复现多尺度研究流程，以及网页和 Android 演示。
           theme:
             palette:
               - media: "(prefers-color-scheme: light)"
@@ -85,6 +85,7 @@ plugins:
                   name: 切换至浅色模式
           nav_translations:
             Home: 首页
+            Background & scenarios: 背景与应用场景
             Getting started: 快速上手
             Installation: 安装
             Quick start: 快速开始
@@ -141,6 +142,7 @@ copyright: Copyright &copy; 2026 Kong Minghao · Apache-2.0
 
 nav:
   - Home: index.md
+  - Background & scenarios: context/use-cases.md
   - Getting started:
       - Installation: getting-started/installation.md
       - Quick start: getting-started/quickstart.md
