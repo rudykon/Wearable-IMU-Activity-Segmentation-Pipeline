@@ -63,7 +63,7 @@ hide:
       <div class="signal-meta">
         <div><strong>3 / 5 / 8 s</strong><span>temporal scales</span></div>
         <div><strong>CNN–BiLSTM</strong><span>window evidence</span></div>
-        <div><strong>TRL</strong><span>record construction</span></div>
+        <div><strong>TRL</strong><span>record layer</span></div>
       </div>
     </div>
   </div>
