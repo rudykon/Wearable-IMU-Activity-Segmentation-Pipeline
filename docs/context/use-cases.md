@@ -1,6 +1,6 @@
 # Background & use cases
 
-<p class="research-lead">This project begins with a practical mismatch: a wearable records dense motion signals, while people make decisions from sparse events. A useful system must bridge those two views without hiding where one activity record begins, ends, or fails.</p>
+<p class="research-lead">A wearable records a continuous stream of motion, but people usually want a short activity log. This project connects the two: it identifies what happened, marks when each activity began and ended, and keeps enough intermediate information to investigate mistakes.</p>
 
 !!! info "Intended scope"
 
@@ -10,7 +10,7 @@
     population, sport protocol, coaching workflow, or clinical setting needs
     its own validation.
 
-## An illustrative session
+## One example session
 
 Imagine a participant wearing a six-axis IMU for one mixed workout. The device
 does not receive a “start badminton” command. It only receives acceleration,
@@ -40,17 +40,18 @@ changes activity, and walks away.
   </article>
 </div>
 
-<p class="story-caption">This timeline is fictional and contains no participant data. It illustrates why continuous sensing is a segmentation problem rather than a collection of independent clip classifications.</p>
+<p class="story-caption">The times are fictional and contain no participant data. The example shows why a continuous recording must be divided into meaningful time periods, rather than classified as unrelated short clips.</p>
 
-The output contract is deliberately small:
+The final output is deliberately small:
 
 ~~~text
 user_id, category, start, end
 ~~~
 
-Yet producing those four fields reliably requires the full chain: physical-unit
-signal handling, multi-scale window evidence, temporal consistency, boundary
-refinement, false-positive control, and segment-level evaluation.
+Producing those four fields reliably still requires several steps: read the
+physical sensor values correctly, compare short and long windows, keep the
+timeline stable, refine start and end times, remove weak false alarms, and
+evaluate complete activity periods.
 
 ## Why ordinary window accuracy is not enough
 
@@ -79,8 +80,8 @@ second introduces failure modes that window accuracy does not measure:
     <span class="scenario-tag established">Primary research use</span>
     <h3>Long-session HAR evaluation</h3>
     <p><strong>Situation.</strong> A researcher has continuous wearable recordings and needs to compare complete segmentation systems.</p>
-    <p><strong>How this helps.</strong> The repository provides user-level splits, multi-scale inference, one-to-one same-class IoU matching, segment F1, matched IoU, and false-positive analysis.</p>
-    <p><strong>Decision supported.</strong> Whether a method creates better activity records—not merely better window labels.</p>
+    <p><strong>What the project provides.</strong> Fixed user-level data splits, models that compare several time spans, and measures for record accuracy, boundary overlap, and false alarms.</p>
+    <p><strong>What you can compare.</strong> Whether a method creates better complete activity records—not merely better labels for a few seconds.</p>
   </article>
   <article class="scenario-card">
     <span class="scenario-tag scoped">Controlled prototype</span>
@@ -94,7 +95,7 @@ second introduces failure modes that window accuracy does not measure:
     <h3>Edge and mobile deployment research</h3>
     <p><strong>Situation.</strong> An engineer wants to test whether a research pipeline survives the move from saved files to a physical sensor and phone.</p>
     <p><strong>How this helps.</strong> The Android module covers BLE acquisition, signal views, CSV recording, offline recognition, and selected ONNX models.</p>
-    <p><strong>Decision supported.</strong> Whether the data contract, model assets, and temporal logic remain coherent end to end.</p>
+    <p><strong>What you can check.</strong> Whether channel order, model files, and timeline behavior stay consistent from the sensor to the phone.</p>
   </article>
   <article class="scenario-card">
     <span class="scenario-tag exploratory">Candidate workflow</span>
@@ -149,7 +150,7 @@ implementation.
   <a class="route-card" href="../../guide/pipeline/">
     <span>HAR researcher</span>
     <h3>Trace and reproduce the method</h3>
-    <p>Read the architecture, data contract, training, inference, and segment evaluator in order.</p>
+    <p>Read the architecture, input format, training, inference, and activity-record evaluation in order.</p>
   </a>
   <a class="route-card" href="../../deployment/android/">
     <span>Mobile or edge engineer</span>
@@ -161,7 +162,7 @@ implementation.
 <div class="cta-panel">
   <div>
     <h3>Now that the setting is clear, see how the records are built.</h3>
-    <p>The architecture page moves from channel order to multi-scale evidence, LBSA, TRL, and final output.</p>
+    <p>The architecture page moves from the six input channels to short and long window models, scale selection, timeline cleanup, and final records.</p>
   </div>
   <a class="md-button md-button--primary" href="../../guide/pipeline/">Continue to the architecture</a>
 </div>

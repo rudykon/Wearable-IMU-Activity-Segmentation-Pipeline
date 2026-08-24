@@ -1,9 +1,8 @@
 site_name: Wearable IMU Activity Segmentation Pipeline
 site_url: https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/
 site_description: >-
-  From continuous wearable IMU streams to auditable activity records: real-world
-  background, scoped use cases, reproducible multi-scale research, and web and
-  Android demonstrations.
+  Turn continuous wearable IMU signals into timestamped activity records.
+  Explore the use cases, research results, browser demo, and Android app.
 site_author: Kong Minghao
 
 repo_name: rudykon/Wearable-IMU-Activity-Segmentation-Pipeline
@@ -65,8 +64,8 @@ plugins:
           build: true
           site_name: 可穿戴 IMU 活动分割流水线
           site_description: >-
-            从连续可穿戴 IMU 信号到可审计活动记录：涵盖现实背景、限定应用场景、
-            可复现多尺度研究流程，以及网页和 Android 演示。
+            把连续可穿戴 IMU 信号转换为带时间戳的活动记录，了解应用场景、
+            研究结果、浏览器 Demo 和 Android 应用。
           theme:
             palette:
               - media: "(prefers-color-scheme: light)"

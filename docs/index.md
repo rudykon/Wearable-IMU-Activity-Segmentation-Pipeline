@@ -26,14 +26,14 @@ hide:
       <a class="hero-button" href="research/paper/">Inspect the evidence</a>
     </div>
     <div class="hero-proof" aria-label="Project focus">
-      <span>Long-session first</span>
-      <span>Segment-level evidence</span>
+      <span>Long recordings</span>
+      <span>Full activity records</span>
       <span>Web + Android</span>
     </div>
   </div>
   <div class="hero-visual">
     <div class="floating-badge badge-model">3-scale context</div>
-    <div class="floating-badge badge-edge">Auditable decoding</div>
+    <div class="floating-badge badge-edge">Stable timeline</div>
     <div class="signal-card">
       <div class="signal-toolbar">
         <span class="signal-live"><span class="signal-dot"></span>LIVE SENSOR STREAM</span>
@@ -62,8 +62,8 @@ hide:
       </div>
       <div class="signal-meta">
         <div><strong>3 / 5 / 8 s</strong><span>temporal scales</span></div>
-        <div><strong>CNN–BiLSTM</strong><span>window evidence</span></div>
-        <div><strong>TRL</strong><span>record layer</span></div>
+        <div><strong>3 models</strong><span>short + long views</span></div>
+        <div><strong>1 timeline</strong><span>final activity records</span></div>
       </div>
     </div>
   </div>
@@ -87,7 +87,7 @@ hide:
   </article>
   <article class="story-card story-card-output">
     <span class="story-card-kicker">What a person needs</span>
-    <strong>A concise, timestamped session story</strong>
+    <strong>A short, timestamped activity log</strong>
     <div class="record-list" aria-label="Illustrative activity records">
       <div><time>09:02–09:17</time><span>Badminton</span></div>
       <div><time>09:25–09:34</time><span>Jump rope</span></div>
@@ -136,7 +136,7 @@ hide:
 </div>
 
 <div class="paper-home-cta story-cta">
-  <p>See an illustrative session, the intended users, the exact output contract, and the validation required before adapting the system to a new device or population.</p>
+  <p>See one example session, who this system is for, what it returns, and what must be tested again before using it with a new device or population.</p>
   <a class="md-button md-button--primary" href="context/use-cases/">Read background & use cases</a>
 </div>
 
@@ -150,7 +150,7 @@ hide:
   <a class="pipeline-image-link" href="assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="Open the full-resolution window-to-record gap figure">
     <img src="assets/manuscript-figures/fig01_window_to_record_gap.png" alt="Posterior trajectories, naive fragmented records, and the stabilized activity records produced by the Temporal Record Layer" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">Paper Fig. 1. TRL converts locally plausible but unstable window evidence into fewer, more stable segment records.</figcaption>
+  <figcaption class="pipeline-caption">Paper Fig. 1. The final timeline step joins unstable short-window predictions into fewer, more reliable activity records.</figcaption>
 </figure>
 
 <div class="metric-strip paper-metrics">
@@ -161,7 +161,7 @@ hide:
 </div>
 
 <div class="paper-home-cta">
-  <p>The headline values are segment-record metrics from the fixed external test—not window accuracy. Internal diagnostics, external results, success cases, failure cases, and limitations are labeled separately.</p>
+  <p>The 0.89 and 0.90 values measure complete activity records on the fixed external test; they are not short-window accuracy. The paper page separates development analyses, final results, success cases, failure cases, and limitations.</p>
   <a class="md-button md-button--primary" href="research/paper/">Inspect the paper evidence</a>
 </div>
 
@@ -169,7 +169,7 @@ hide:
 
 ## Four steps from a wrist sensor to a reviewable timeline {: .section-title}
 
-<p class="section-lead">The technical components are easier to understand once their job in the story is clear: preserve the raw session, gather evidence at several time scales, stabilize the records, and make the result inspectable.</p>
+<p class="section-lead">Each technical component has a practical job: preserve the original session, compare short and long views of the motion, build stable records, and make the result easy to check.</p>
 
 <div class="feature-grid process-grid">
   <article class="feature-card process-card">
@@ -179,13 +179,13 @@ hide:
   </article>
   <article class="feature-card process-card">
     <span class="process-step">02</span>
-    <h3>See short and long context</h3>
-    <p>Align 3-, 5-, and 8-second CNN–BiLSTM evidence so local transitions and steadier action context can inform one decision.</p>
+    <h3>Compare short and long views</h3>
+    <p>Use 3-, 5-, and 8-second models together: short windows help locate changes, while longer windows provide steadier activity context.</p>
   </article>
   <article class="feature-card process-card">
     <span class="process-step">03</span>
     <h3>Construct stable records</h3>
-    <p>LBSA and the deterministic Temporal Record Layer smooth, decode, merge, refine, filter, and expose every temporal policy.</p>
+    <p>Choose the most useful time scale, reduce rapid label changes, join appropriate gaps, refine boundaries, and filter weak records. The paper calls these stages LBSA and TRL.</p>
   </article>
   <article class="feature-card process-card">
     <span class="process-step">04</span>
@@ -198,10 +198,10 @@ hide:
   <a class="pipeline-image-link" href="assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution overall framework figure">
     <img src="assets/fig02_overall_framework.png" alt="Existing project framework figure showing the IMU stream, scale-specific CNN–BiLSTM models, LBSA fusion, temporal record layer, and segment records" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">Repository figure: IMU stream → scale-specific CNN–BiLSTM models → LBSA → temporal record layer → segment records. Select the image to view it at full resolution.</figcaption>
+  <figcaption class="pipeline-caption">Repository figure: IMU stream → three window models → scale selection (LBSA) → timeline cleanup (TRL) → activity records. Select the image to view it at full resolution.</figcaption>
 </figure>
 
-<p class="pipeline-summary">The Python research path, public Gradio demonstration, and Android implementation share one observable contract: six physical IMU channels enter; time-aligned foreground records leave. Configuration files, fixed model assets, experiment scripts, intermediate probabilities, and segment-level evaluation keep the path auditable.</p>
+<p class="pipeline-summary">The Python code, browser demo, and Android app follow the same basic rule: six IMU channels go in, and timestamped activity records come out. Saved settings, model files, intermediate probabilities, and segment-level tests make each step easier to reproduce and check.</p>
 
 <span class="section-eyebrow">Evidence before expansion</span>
 
@@ -220,7 +220,7 @@ hide:
   </article>
   <article class="evidence-card caution">
     <span class="evidence-kicker">Requires new validation</span>
-    <h3>Claims beyond the evaluated envelope</h3>
+    <h3>Uses outside the tested setting</h3>
     <ul>
       <li>New devices, sensor placements, populations, or activity protocols.</li>
       <li>Clinical benefit, coaching quality, safety decisions, or production reliability.</li>
@@ -259,7 +259,7 @@ hide:
 
 <div class="cta-panel">
   <div>
-    <h3>Want the shortest path from story to evidence?</h3>
+    <h3>Want the shortest path from a sample to the results?</h3>
     <p>Start with the live synthetic example, then compare its timeline with the paper’s fixed evaluation protocol.</p>
   </div>
   <a class="md-button md-button--primary" href="deployment/hugging-face/">Open the demo guide</a>

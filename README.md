@@ -9,8 +9,8 @@
 <h1 align="center">Wearable IMU Activity Segmentation Pipeline</h1>
 
 <p align="center">
-  <strong>Long-session activity segmentation from wearable accelerometer and gyroscope streams</strong><br>
-  A reproducible Python research pipeline with multi-scale temporal post-processing and an Android on-device ONNX demo.
+  <strong>Turn continuous wrist motion into timestamped activity records</strong><br>
+  See what activity happened, when it started, and when it ended—from Python research code to a browser demo and Android app.
 </p>
 
 <p align="center">
@@ -42,42 +42,66 @@
 <a id="overview"></a>
 ## Overview
 
-This project segments long wearable IMU sessions into activity records:
+### Why this project exists
+
+A wearable inertial measurement unit (IMU) records acceleration and rotation
+continuously. A one-hour session can contain hundreds of thousands of sensor
+rows, but a researcher or app user usually needs a much shorter answer:
+
+- What activity happened?
+- When did it start and end?
+- How many separate activity periods were there?
+
+This project turns the continuous signal into records such as:
 
 ```text
 user_id, category, start, end
 ```
 
-The Python pipeline reads accelerometer and gyroscope streams, trains multi-scale neural classifiers, aligns 3s/5s/8s predictions, applies temporal decoding and boundary refinement, and writes segment-level prediction workbooks. The repository also includes an Android app for WT9011DCL-BT50 BLE acquisition, visualization, CSV recording, and on-device ONNX inference.
+The system looks at the same recording through 3-, 5-, and 8-second windows.
+Short windows help locate activity changes; longer windows provide steadier
+context. It then combines their predictions and cleans up brief interruptions,
+false alarms, and shifted boundaries before writing the final record list.
 
-| Goal | Implemented approach | Public boundary |
-| --- | --- | --- |
-| Segment long-session wearable motion streams | Multi-kernel 1D-CNN + BiLSTM window classifiers | Requires authorized local sensor files for full inference/training |
-| Improve temporal consistency | Multi-scale probability alignment, LBSA fusion, smoothing, Viterbi decoding, boundary refinement, overlap resolution, confidence filtering, and Top-K pruning | Smoke test uses temporary files only |
-| Support deployable demonstration | Android BLE acquisition and ONNX Runtime inference | Bundled demo assets are documented separately from private datasets |
-| Explore the tracked model in a browser | Free ZeroGPU Gradio Space with upload, plots, temporal decoding, segment table, and CSV export | Includes a synthetic example; public uploads must not contain sensitive participant data |
-| Keep experiments reproducible | Evaluation, robustness, visualization, and public-dataset portability scripts | Generated outputs remain local under ignored directories |
+### Where it can be used
 
-Supported foreground activities are `羽毛球`, `跳绳`, `飞鸟`, `跑步`, and `乒乓球`. Background/no-activity is modeled internally where needed, but submitted segment records contain foreground activities.
+- **Long-session activity-recognition research:** compare complete activity
+  timelines instead of scoring isolated clips only.
+- **Controlled workout logs:** create candidate records for badminton, rope
+  skipping, dumbbell fly, running, and table tennis.
+- **Annotation and quality review:** direct a reviewer to likely activity
+  periods and uncertain boundaries.
+- **Mobile deployment experiments:** collect a six-axis BLE signal and run the
+  corresponding ONNX models on Android.
+
+The repository includes the Python pipeline, fixed model assets, a free browser
+demo, an Android prototype, and scripts for evaluation and reproduction. Full
+training and dataset-level inference require authorized local sensor files.
+The public demo uses synthetic data by default; do not upload sensitive
+participant recordings to a public Space.
 
 <a id="pipeline"></a>
-## Pipeline
+## How the pipeline works
 
 <p align="center">
   <a href="experiments/figures/fig02_overall_framework.png">
     <img src="experiments/figures/fig02_overall_framework.png" alt="Overall wearable IMU activity-segmentation framework" width="92%">
   </a>
 </p>
-<p align="center"><em>Figure 1 | Overall activity-segmentation framework from raw IMU streams to segment records.</em></p>
+<p align="center"><em>Figure 1 | The path from a continuous IMU recording to a short list of activity records.</em></p>
 
-Key components:
+1. **Read the session.** Load the timestamp plus three acceleration and three
+   gyroscope channels.
+2. **Look at several time spans.** The 3-, 5-, and 8-second models provide
+   complementary views of short transitions and sustained movement.
+3. **Build a stable timeline.** Align the predictions, reduce rapid label
+   flicker, join appropriate gaps, refine boundaries, and filter weak records.
+4. **Return useful records.** Export the activity name, start time, and end
+   time, then evaluate those records against labeled segments.
 
-- Unified local data layout under `data/` for signals, annotations, splits, metadata, and optional public external datasets.
-- Source package under `src/imu_activity_pipeline/`, with root scripts kept as compatibility entry points.
-- Training entry points for sequential, parallel, and single-model workflows.
-- Segment-level evaluation with same-class one-to-one IoU matching.
-- Experiment scripts for internal evaluation, post-processing policy checks, public portability checks, and figure generation.
-- Android demo with BLE ingestion, live views, offline recognition, and on-device multi-scale inference.
+The detailed names—CNN–BiLSTM, Local-Boundary Scale Arbitration (LBSA), Viterbi
+decoding, and the Temporal Record Layer (TRL)—are explained on the
+[architecture page](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/guide/pipeline/).
 
 <a id="quick-start"></a>
 ## Quick Start
@@ -96,10 +120,11 @@ The smoke test checks imports, canonical paths, tiny temporary signal loading, a
 
 ### Browser demo
 
-The [`demo/`](demo/) module runs the tracked 3 s / 5 s / 8 s checkpoints through
-a bilingual Gradio interface. Upload a canonical 100 Hz TXT/TSV recording or use
-the bundled synthetic example, then inspect the six signals, class probabilities,
-decoded timeline, final segment table, and downloadable CSV.
+The browser demo is the quickest way to understand the output. Use the built-in
+synthetic session or upload a compatible 100 Hz TXT/TSV file. The page shows the
+six sensor signals, the activity likelihood over time, the final start-to-end
+records, and a downloadable CSV. It runs the repository's real 3-, 5-, and
+8-second models.
 
 [**Open the Hugging Face Space →**](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
 

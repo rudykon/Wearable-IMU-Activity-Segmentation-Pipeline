@@ -26,13 +26,13 @@ hide:
     </div>
     <div class="hero-proof" aria-label="项目重点">
       <span>面向长时记录</span>
-      <span>片段级证据</span>
+      <span>完整活动记录</span>
       <span>网页 + Android</span>
     </div>
   </div>
   <div class="hero-visual">
     <div class="floating-badge badge-model">三尺度上下文</div>
-    <div class="floating-badge badge-edge">可审计解码</div>
+    <div class="floating-badge badge-edge">稳定时间线</div>
     <div class="signal-card">
       <div class="signal-toolbar">
         <span class="signal-live"><span class="signal-dot"></span>实时传感器流</span>
@@ -61,8 +61,8 @@ hide:
       </div>
       <div class="signal-meta">
         <div><strong>3 / 5 / 8 秒</strong><span>时间尺度</span></div>
-        <div><strong>CNN–BiLSTM</strong><span>窗口证据</span></div>
-        <div><strong>TRL</strong><span>记录构建</span></div>
+        <div><strong>3 个模型</strong><span>兼顾短时与长时</span></div>
+        <div><strong>1 条时间线</strong><span>最终活动记录</span></div>
       </div>
     </div>
   </div>
@@ -70,7 +70,7 @@ hide:
 
 <span class="section-eyebrow">先从现实问题讲起</span>
 
-## 传感器记录的是运动，人真正需要的是一段活动故事 {: .section-title}
+## 传感器记录的是运动，人真正需要的是活动记录 {: .section-title}
 
 <p class="section-lead">六轴传感器连续记录 1 小时，会产生 36 万个时间点、216 万个通道读数，但其中没有一行会直接写着“09:02 开始打羽毛球，09:17 结束”。真正有用的结果不是另一张波形图，而是一组数量不多、可以复核的活动记录。</p>
 
@@ -125,7 +125,7 @@ hide:
   <article class="scenario-card">
     <span class="scenario-tag established">已有完整实现</span>
     <h3>验证研究模型到手机的部署</h3>
-    <p>沿用同一六通道数据契约，从 WT9011DCL-BT50 传感器经 BLE 进入 Android ONNX 推理并显示时间线。</p>
+    <p>使用相同的六路信号格式，从 WT9011DCL-BT50 传感器经 BLE 进入 Android ONNX 推理并显示时间线。</p>
   </article>
   <article class="scenario-card">
     <span class="scenario-tag exploratory">人在回路</span>
@@ -135,7 +135,7 @@ hide:
 </div>
 
 <div class="paper-home-cta story-cta">
-  <p>进一步查看一段完整示例、适用人群、准确的输入输出契约，以及迁移到新设备或新人群前必须完成的验证。</p>
+  <p>进一步查看一段完整示例、谁适合使用、系统会返回什么，以及迁移到新设备或新人群前必须重新完成哪些验证。</p>
   <a class="md-button md-button--primary" href="context/use-cases/">阅读背景与应用场景</a>
 </div>
 
@@ -149,7 +149,7 @@ hide:
   <a class="pipeline-image-link" href="../assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的窗口到记录落差图">
     <img src="../assets/manuscript-figures/fig01_window_to_record_gap.png" alt="后验概率轨迹、朴素提取得到的碎片记录以及时间记录层稳定后的活动记录" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">论文图 1。TRL 将局部看似合理但不稳定的窗口证据转换为更少、更稳定的活动片段记录。</figcaption>
+  <figcaption class="pipeline-caption">论文图 1。时间线整理步骤把不稳定的短窗口预测合并成数量更少、更加可靠的活动记录。</figcaption>
 </figure>
 
 <div class="metric-strip paper-metrics">
@@ -168,7 +168,7 @@ hide:
 
 ## 从腕部传感器到可复核时间线的四个步骤 {: .section-title}
 
-<p class="section-lead">先理解每个模块在故事中的任务，再看技术名词会更容易：保留完整会话、在多个时间尺度收集证据、稳定地构建记录，最后让结果可以审查与部署。</p>
+<p class="section-lead">每个技术模块都有一个具体作用：保留原始会话、比较短时与长时运动、构建稳定记录，并让结果便于核对。</p>
 
 <div class="feature-grid process-grid">
   <article class="feature-card process-card">
@@ -178,13 +178,13 @@ hide:
   </article>
   <article class="feature-card process-card">
     <span class="process-step">02</span>
-    <h3>同时观察短时与长时上下文</h3>
-    <p>对齐 3、5、8 秒 CNN–BiLSTM 证据，让局部切换细节和更稳定的动作上下文共同参与判断。</p>
+    <h3>比较短时与长时运动</h3>
+    <p>同时使用 3、5、8 秒模型：短窗口帮助确定活动切换位置，长窗口提供更稳定的动作背景。</p>
   </article>
   <article class="feature-card process-card">
     <span class="process-step">03</span>
     <h3>构建稳定活动记录</h3>
-    <p>LBSA 与确定性的时间记录层依次完成平滑、解码、合并、边界细化和过滤，并公开所有时序策略。</p>
+    <p>选择更合适的时间尺度，减少标签快速跳变，合并合理间隔，修正边界并过滤较弱记录。论文把这两个阶段称为 LBSA 和 TRL。</p>
   </article>
   <article class="feature-card process-card">
     <span class="process-step">04</span>
@@ -197,10 +197,10 @@ hide:
   <a class="pipeline-image-link" href="../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的总体框架图">
     <img src="../assets/fig02_overall_framework.png" alt="仓库总体框架图，展示 IMU 数据流、分尺度 CNN–BiLSTM 模型、LBSA 融合、时序记录层与活动片段记录" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">仓库框架图：IMU 数据流 → 分尺度 CNN–BiLSTM → LBSA → 时间记录层 → 活动片段记录。点击图片可查看完整分辨率。</figcaption>
+  <figcaption class="pipeline-caption">仓库框架图：IMU 数据流 → 三种窗口模型 → 尺度选择（LBSA）→ 时间线整理（TRL）→ 活动记录。点击图片可查看完整分辨率。</figcaption>
 </figure>
 
-<p class="pipeline-summary">Python 研究流程、公开 Gradio 演示与 Android 实现遵循同一项可观察契约：六路物理 IMU 信号进入系统，时间对齐的前景活动记录离开系统。配置文件、固定模型资产、实验脚本、中间概率与片段级评估让整个过程可以审计。</p>
+<p class="pipeline-summary">Python 代码、浏览器 Demo 和 Android 应用遵循同一条基本规则：输入六路 IMU 信号，输出带时间戳的活动记录。保存的设置、模型文件、中间概率和片段级测试，使每一步都更容易复现和核对。</p>
 
 <span class="section-eyebrow">先看证据，再谈扩展</span>
 
@@ -219,7 +219,7 @@ hide:
   </article>
   <article class="evidence-card caution">
     <span class="evidence-kicker">必须重新验证</span>
-    <h3>超出当前评估范围的结论</h3>
+    <h3>当前测试范围之外的用途</h3>
     <ul>
       <li>新设备、新传感器位置、新人群或新活动协议。</li>
       <li>临床收益、训练指导质量、安全决策或生产级可靠性。</li>
@@ -258,7 +258,7 @@ hide:
 
 <div class="cta-panel">
   <div>
-    <h3>想走最短的“故事 → 证据”路线？</h3>
+    <h3>想从一个样例最快看到研究结果？</h3>
     <p>先运行公开合成示例，再把输出时间线与论文中的固定评估协议对应起来。</p>
   </div>
   <a class="md-button md-button--primary" href="deployment/hugging-face/">打开在线演示指南</a>

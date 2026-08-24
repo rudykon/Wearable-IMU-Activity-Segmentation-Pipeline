@@ -50,12 +50,12 @@ python run_inference.py
 3. Filter and normalize the six physical IMU channels.
 4. Build 3-, 5-, and 8-second windows on a common one-second step.
 5. Produce and align scale-specific class probabilities.
-6. Fuse scales with the configured LBSA policy.
-7. Smooth probabilities and run Viterbi sequence decoding.
+6. Combine the three window lengths using the configured scale-selection rule (LBSA).
+7. Reduce rapid label changes and choose a consistent activity sequence (Viterbi decoding).
 8. Refine boundaries, resolve overlaps, and apply segment policies.
 9. Write foreground segment records to the workbook.
 
-## Output contract
+## Output records
 
 | Column | Description |
 | --- | --- |
@@ -107,4 +107,4 @@ For lower-level I/O, see the [Python API](../reference/api.md).
 
     The decoder may have classified the recording as background or removed all
     foreground candidates through duration/confidence policies. Inspect the
-    probability and policy diagnostics before weakening filters.
+    probability plots and filtering settings before weakening the filters.
