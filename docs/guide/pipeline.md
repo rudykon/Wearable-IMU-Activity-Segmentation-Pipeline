@@ -1,18 +1,15 @@
-# Pipeline architecture
+# Pipeline
 
-This page explains how the system changes a long sensor recording into a short
-activity log. It does more than label separate clips: it must decide how many
-activities occurred and where each one started and ended. This task is called
-**temporal activity segmentation**.
+The pipeline turns a long IMU recording into timestamped activity records.
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution overall framework figure">
     <img src="../../assets/fig02_overall_framework.png" alt="Existing project framework figure showing the wearable IMU activity segmentation architecture" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">Project overview: read six IMU channels, examine 3-, 5-, and 8-second windows, combine their predictions, clean up the timeline, and output activity records.</figcaption>
+  <figcaption class="pipeline-caption">Six channels → three window scales → fusion → timeline → records.</figcaption>
 </figure>
 
-## Inputs and outputs at a glance
+## I/O
 
 | Item | What the system expects or returns |
 | --- | --- |
@@ -24,36 +21,28 @@ activities occurred and where each one started and ended. This task is called
 | Public output | `user_id, category, start, end` |
 | Evaluation | same-class one-to-one matching at IoU > 0.5 |
 
-## 1. Signal ingestion
+## 1. Read
 
-`imu_activity_pipeline.signal_file_reader.DataReader` loads each tab-separated
-`.txt` file in an input directory and keys the resulting sessions by file
-stem. The model uses:
+`DataReader` loads tab-separated `.txt` sessions. Required channels:
 
 ~~~text
 ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 ~~~
 
-Millisecond timestamps in `ACC_TIME` anchor windows and final boundaries to
-the source recording.
+`ACC_TIME` stores millisecond timestamps.
 
 ## 2. Preprocessing
 
-The research and Android paths preserve the same physical-channel order and
-normalization contract. The temporal pipeline includes:
+Python and Android use the same channel order and normalization:
 
 - low-pass Butterworth filtering;
 - fixed channel order;
 - scale-specific normalization parameters; and
 - timestamp-preserving window construction.
 
-Keeping normalization assets beside their corresponding checkpoint is
-essential. A checkpoint and a normalization file from different training runs
-are not interchangeable.
+Keep each checkpoint with its matching normalization file.
 
-## 3. Look at short and long windows
-
-The same session is viewed at three temporal resolutions:
+## 3. Window
 
 | Scale | Samples | Why it helps |
 | --- | ---: | --- |
@@ -61,12 +50,11 @@ The same session is viewed at three temporal resolutions:
 | 5 seconds | 500 | Balances local detail and activity context |
 | 8 seconds | 800 | Stabilizes longer or repetitive actions |
 
-All scales advance by one second, which makes their probability sequences
-alignable before temporal decoding.
+All scales advance by one second.
 
-## 4. Classify each window
+## 4. Classify
 
-The practical `CombinedModel` is a six-class network:
+`CombinedModel` has six classes and five parts:
 
 1. parallel 1D convolution branches with kernels 3, 7, and 15;
 2. concatenated multi-resolution feature maps;
@@ -74,22 +62,16 @@ The practical `CombinedModel` is a six-class network:
 4. a two-layer bidirectional LSTM path; and
 5. a fused classification head.
 
-The source also retains separate stage-one activity/background and stage-two
-foreground classifiers for controlled experiments.
+The source also keeps two-stage classifiers for experiments.
 
-!!! info "Why both CNN and BiLSTM?"
+!!! info "CNN + BiLSTM"
 
-    The CNN looks for short waveform patterns. The BiLSTM looks at how those
-    patterns change from the beginning to the end of a window. Combining them
-    gives the model both local detail and within-window context.
+    CNN captures local patterns; BiLSTM captures their order.
 
-## 5. Combine the 3-, 5-, and 8-second views
+## 5. Fuse
 
-Each model produces one probability timeline. The pipeline aligns all three on
-the same one-second grid. It then gives more influence to the time scale that is
-most useful at each point—for example, a shorter window near a possible change
-and a longer window during steady movement. The paper calls this rule
-**Local-Boundary Scale Arbitration (LBSA)**.
+The three probability timelines share a one-second grid. **LBSA** favors short
+windows near changes and long windows during steady motion.
 
 The ensemble configuration is explicit in:
 
@@ -97,13 +79,11 @@ The ensemble configuration is explicit in:
 saved_models/ensemble_config.json
 ~~~
 
-This file records which models and timeline settings were used, so an
-experiment can be checked and repeated.
+It records the selected models and timeline settings.
 
-## 6. Turn window guesses into continuous records
+## 6. Decode
 
-The system does not turn every one-second prediction directly into a record.
-Instead, a final timeline stage can:
+The **Temporal Record Layer (TRL)** applies:
 
 - multi-scale fusion;
 - probability smoothing;
@@ -114,23 +94,19 @@ Instead, a final timeline stage can:
 - confidence filtering; and
 - final Top-K or duration policies.
 
-Together, these operations reduce rapid label changes and turn a grid of
-short-window guesses into continuous start-to-end activity periods. The paper
-calls this stage the **Temporal Record Layer (TRL)**.
+The result is a set of continuous activity periods.
 
-## 7. Segment output
+## 7. Export
 
-`imu_activity_pipeline.prediction_writer.DataOutput` writes records to an
-Excel workbook:
+`DataOutput` writes an Excel workbook:
 
 ~~~text
 user_id, category, start, end
 ~~~
 
-Background is useful internally for decoding but is excluded from foreground
-submission records.
+Background is not exported.
 
-## How the Python and Android versions stay aligned
+## Python and Android
 
 | Python research pipeline | Android app |
 | --- | --- |
@@ -140,5 +116,4 @@ submission records.
 | Experiment scripts and evaluator | Live views and on-device timeline |
 | XLSX segment output | UI segments with confidence |
 
-The software formats differ, but both versions use the same channel order,
-window lengths, activity names, and start-to-end record format.
+Both use the same channels, windows, labels, and record format.

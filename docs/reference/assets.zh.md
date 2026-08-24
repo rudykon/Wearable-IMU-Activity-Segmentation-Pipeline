@@ -1,9 +1,9 @@
-# 数据与模型资产
+# 资产
 
 代码、参与者数据、选定的可复现权重、Android 资产与生成的实验材料具有不同的
 分发边界。使用或扩展仓库时，请明确保持这些边界。
 
-## 范围概览
+## 范围
 
 | 资产类别 | 仓库状态 | 说明 |
 | --- | --- | --- |
@@ -16,7 +16,7 @@
 | 生成的检查点与日志 | 默认仅本地 | 除非有意整理，否则被忽略 |
 | 可选公开数据集 | 由用户下载 | 遵循原始许可与引用要求 |
 
-## 默认 Python 推理资产集
+## Python
 
 ~~~text
 saved_models/
@@ -36,7 +36,7 @@ saved_models/
     加载模型时必须使用训练该模型时的归一化参数、通道顺序、窗口长度与类别映射。
     某个文件组合能够成功加载，并不表示该组合有效。
 
-## 完整本地研究目录结构
+## 研究目录
 
 ~~~text
 data/
@@ -62,7 +62,7 @@ experiments/logs/
 回退模型。SHA-256 校验和与运行假设请参阅
 [Android 模型卡](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/android_realtime_app/MODEL_CARD.md)。
 
-## 环境变量覆盖
+## 路径
 
 | 变量 | 默认值 |
 | --- | --- |
@@ -74,7 +74,7 @@ experiments/logs/
 | `HLS_HAR_INFERENCE_SPLIT` | `external_test` |
 | `HLS_HAR_EVALUATION_SPLIT` | `external_test` |
 
-## 完整性检查表
+## 完整性
 
 报告或部署结果前，请记录：
 

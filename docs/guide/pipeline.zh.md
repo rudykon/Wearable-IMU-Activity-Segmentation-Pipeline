@@ -1,17 +1,15 @@
-# 流水线架构
+# 流水线
 
-本页说明系统怎样把一条长时传感器记录变成简洁活动日志。它不只是给若干短片段分类，
-还必须判断发生了几次活动，以及每次活动从哪里开始、在哪里结束。这个任务称为
-**时序活动分割**。
+流水线把长时 IMU 记录转换成带时间戳的活动记录。
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="../../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的总体框架图">
     <img src="../../../assets/fig02_overall_framework.png" alt="仓库现有可穿戴 IMU 活动分割总体框架图" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">项目总览：读取六路 IMU 信号，用 3、5、8 秒窗口观察运动，组合预测，整理时间线，最后输出活动记录。</figcaption>
+  <figcaption class="pipeline-caption">六路信号 → 三种窗口 → 融合 → 时间线 → 活动记录。</figcaption>
 </figure>
 
-## 输入与输出概览
+## 输入输出
 
 | 项目 | 系统要求或返回的内容 |
 | --- | --- |
@@ -23,32 +21,28 @@
 | 公开输出 | `user_id, category, start, end` |
 | 评估 | IoU > 0.5 时同类别一对一匹配 |
 
-## 1. 信号读取
+## 1. 读取
 
-`imu_activity_pipeline.signal_file_reader.DataReader` 会加载输入目录中的每个
-制表符分隔 `.txt` 文件，并以文件名主干作为会话键。模型使用：
+`DataReader` 加载制表符分隔的 `.txt` 会话。必需通道：
 
 ~~~text
 ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 ~~~
 
-`ACC_TIME` 中的毫秒时间戳将窗口和最终边界锚定到源记录。
+`ACC_TIME` 保存毫秒时间戳。
 
 ## 2. 预处理
 
-研究流程与 Android 流程保持相同的物理通道顺序与归一化契约。时序流水线包括：
+Python 与 Android 使用相同的通道顺序和归一化：
 
 - 低通 Butterworth 滤波；
 - 固定通道顺序；
 - 各尺度独立的归一化参数；
 - 保留时间戳的窗口构建。
 
-必须将归一化资产与对应检查点放在一起。不同训练运行生成的检查点与归一化文件
-不可互换。
+每个检查点必须配套对应的归一化文件。
 
-## 3. 同时观察短窗口与长窗口
-
-系统从三个时间分辨率观察同一会话：
+## 3. 分窗
 
 | 尺度 | 样本数 | 作用 |
 | --- | ---: | --- |
@@ -56,11 +50,11 @@ ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 | 5 秒 | 500 | 平衡局部细节与活动上下文 |
 | 8 秒 | 800 | 稳定更长或重复性动作 |
 
-所有尺度均以一秒为步长，因此可以在时序解码前对齐其概率序列。
+所有尺度都以一秒为步长。
 
-## 4. 判断每个窗口的活动
+## 4. 分类
 
-实际使用的 `CombinedModel` 是一个六分类网络：
+`CombinedModel` 有六个类别、五个部分：
 
 1. 核大小为 3、7、15 的并行一维卷积分支；
 2. 拼接后的多分辨率特征图；
@@ -68,18 +62,15 @@ ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 4. 双层双向 LSTM 路径；
 5. 融合分类头。
 
-源码还保留独立的第一阶段活动／背景分类器和第二阶段前景分类器，用于受控实验。
+源码还保留用于实验的两阶段分类器。
 
-!!! info "为什么同时使用 CNN 与 BiLSTM？"
+!!! info "CNN + BiLSTM"
 
-    CNN 寻找较短的波形模式，BiLSTM 观察这些模式从窗口开头到结尾怎样变化。
-    二者结合后，模型可以同时利用局部细节和窗口内的前后信息。
+    CNN 捕捉局部模式，BiLSTM 捕捉前后顺序。
 
-## 5. 组合 3 秒、5 秒和 8 秒的判断
+## 5. 融合
 
-三个模型分别生成一条类别概率时间线。系统先把它们对齐到相同的一秒网格，再让每个
-时刻最有用的时间尺度发挥更大作用。例如，可能发生活动切换时更重视短窗口，动作稳定
-时更重视长窗口。论文把这条规则称为**局部边界尺度仲裁（LBSA）**。
+三条概率时间线共用一秒网格。**LBSA** 在切换附近侧重短窗口，在稳定动作中侧重长窗口。
 
 集成配置明确记录在：
 
@@ -87,11 +78,11 @@ ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 saved_models/ensemble_config.json
 ~~~
 
-该文件记录使用了哪些模型和时间线设置，便于核对并重复实验。
+它记录模型和时间线设置。
 
-## 6. 把窗口判断整理成连续活动记录
+## 6. 解码
 
-系统不会把每个一秒判断直接当作活动记录，而是通过最后的时间线整理步骤：
+**时间记录层（TRL）**执行：
 
 - 多尺度融合；
 - 概率平滑；
@@ -102,20 +93,19 @@ saved_models/ensemble_config.json
 - 置信度过滤；
 - 最终 Top-K 或持续时间策略。
 
-这些操作共同减少标签快速跳变，并把短窗口判断整理成连续的开始—结束区间。论文把
-这个阶段称为**时间记录层（TRL）**。
+输出是一组连续活动区间。
 
-## 7. 片段输出
+## 7. 导出
 
-`imu_activity_pipeline.prediction_writer.DataOutput` 将记录写入 Excel 工作簿：
+`DataOutput` 写入 Excel 工作簿：
 
 ~~~text
 user_id, category, start, end
 ~~~
 
-背景类别对内部解码有用，但不会出现在前景提交记录中。
+背景类别不导出。
 
-## Python 与 Android 版本怎样保持一致
+## Python 与 Android
 
 | Python 研究流水线 | Android 应用 |
 | --- | --- |
@@ -125,4 +115,4 @@ user_id, category, start, end
 | 实验脚本与评估器 | 实时视图与端侧时间线 |
 | XLSX 片段输出 | 带置信度的 UI 片段 |
 
-两种软件格式不同，但都使用相同的通道顺序、窗口长度、活动名称和开始—结束记录格式。
+两端使用相同的通道、窗口、标签和记录格式。

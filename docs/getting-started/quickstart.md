@@ -1,10 +1,10 @@
-# Quick start
+# Quickstart
 
 This walkthrough first proves that the public code is healthy, then shows the
 minimum authorized-data path from one folder of sensor streams to an activity
 workbook.
 
-## 1. Install and smoke-test
+## 1. Install
 
 ~~~bash
 conda env create -f environment.yml
@@ -15,7 +15,7 @@ python tests/smoke_test.py
 
 No private recordings or trained checkpoints are needed for this step.
 
-## 2. Prepare the canonical layout
+## 2. Layout
 
 ~~~text
 data/
@@ -46,7 +46,7 @@ ACC_TIME  ACC_X  ACC_Y  ACC_Z  GYRO_X  GYRO_Y  GYRO_Z
 The default model consumes the six physical channels. `ACC_TIME` contains
 millisecond timestamps; released files may retain additional columns.
 
-## 3. Run the default inference path
+## 3. Inference
 
 Put authorized input files under `data/signals/external_test/`, then run:
 
@@ -66,7 +66,7 @@ Every prediction row follows:
 user_id, category, start, end
 ~~~
 
-## 4. Select an explicit input and output
+## 4. Paths
 
 ~~~bash
 python -m imu_activity_pipeline.inference \
@@ -83,7 +83,7 @@ export HLS_HAR_INFERENCE_SPLIT=internal_eval
 python run_inference.py
 ~~~
 
-## 5. Evaluate a labeled split
+## 5. Evaluate
 
 ~~~bash
 python evaluate.py \
@@ -94,7 +94,7 @@ python evaluate.py \
 The evaluator performs same-class, one-to-one segment matching and reports
 precision, recall, and F1 at IoU > 0.5.
 
-## 6. Reproduce the experiment suite
+## 6. Reproduce
 
 When the required local data and fixed assets are present:
 
@@ -116,7 +116,7 @@ Use a specific interpreter when needed:
 PYTHON_BIN=/absolute/path/to/python bash run_reproducibility_experiments.sh
 ~~~
 
-## Where to go next
+## Next
 
 - Understand the [end-to-end architecture](../guide/pipeline.md).
 - Check the exact [data schema and access boundary](../guide/data.md).

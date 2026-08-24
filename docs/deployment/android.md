@@ -1,4 +1,4 @@
-# Android app
+# Android
 
 The `android_realtime_app/` module is a deployable companion to the Python
 research pipeline. It supports WT9011DCL-BT50 BLE acquisition, live
@@ -17,7 +17,7 @@ inference.
 | Temporal logic | Filtering, LBSA fusion, smoothing, Viterbi decoding, boundary refinement, and segment filtering |
 | Localization | Chinese and English UI strings |
 
-## Runtime chain
+## Runtime
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" target="_blank" rel="noopener" aria-label="Open the full-resolution physical deployment chain figure">
@@ -26,7 +26,7 @@ inference.
   <figcaption class="pipeline-caption">Physical deployment chain from wearable IMU acquisition to Android-side recognition. Select the image to view it at full resolution.</figcaption>
 </figure>
 
-## Field-test examples
+## Field tests
 
 <figure class="paper-figure compact">
   <a class="pipeline-image-link" href="../../assets/manuscript-figures/fig08_app_field_test.png" target="_blank" rel="noopener" aria-label="Open the full-resolution app field-test figure">
@@ -60,7 +60,7 @@ cd android_realtime_app
 Android Studio creates `local.properties` automatically. Do not commit that
 machine-specific file.
 
-## Run with a sensor
+## Sensor
 
 1. Install the debug APK on a BLE-capable Android device.
 2. Turn on the WT9011DCL-BT50 sensor.
@@ -78,7 +78,7 @@ imu_yyyyMMdd_HHmmss.csv
 
 and are saved in the device Downloads directory.
 
-## Offline recognition
+## Offline
 
 On the recognition view, either:
 
@@ -90,7 +90,7 @@ On the recognition view, either:
 This exercises the app-side model and temporal layer without a live BLE
 connection.
 
-## Bundled inference assets
+## Assets
 
 | Asset | Role |
 | --- | --- |
@@ -108,7 +108,7 @@ The detailed
 contains input assumptions, output mapping, checksums, intended use, and known
 limitations.
 
-## Output classes
+## Classes
 
 | Index | Chinese | English |
 | ---: | --- | --- |
@@ -125,7 +125,7 @@ limitations.
     reproducible prototype evaluation. They do not claim production safety,
     clinical validity, or cross-device generalization.
 
-## Desktop BLE tools
+## BLE tools
 
 Optional utilities under `android_realtime_app/tools/desktop/` provide:
 

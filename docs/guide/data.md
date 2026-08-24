@@ -18,7 +18,7 @@ review procedure maintained in the repository's
 After a PhysioNet release, that file is the canonical place for the current
 repository link and citation information.
 
-## Canonical local layout
+## Layout
 
 ~~~text
 data/
@@ -57,7 +57,7 @@ The split names are part of the public interface:
 - `internal_eval` — development/calibration evaluation; and
 - `external_test` — final evaluation or default inference.
 
-## Sensor stream schema
+## Signals
 
 Each recording is a UTF-8 tab-separated file. The default model requires:
 
@@ -76,7 +76,7 @@ Example header:
 ACC_TIME	ACC_X	ACC_Y	ACC_Z	GYRO_X	GYRO_Y	GYRO_Z
 ~~~
 
-## Annotation schema
+## Labels
 
 CSV annotation files use:
 
@@ -94,7 +94,7 @@ split,user_id,category,start,end
 | 跑步 | Running |
 | 乒乓球 | Table tennis |
 
-## Redirecting local paths
+## Paths
 
 Canonical paths can be replaced through environment variables:
 
@@ -115,7 +115,7 @@ export HLS_HAR_MODEL_DIR=/mnt/models/imu_activity
 python run_inference.py
 ~~~
 
-## Public portability checks
+## Portability
 
 Optional adapters under
 `experiments/public_temporal_record_layer_checks/` exercise the segment-record

@@ -3,7 +3,7 @@
 本指南先验证公开代码可以正常运行，再说明如何用最少步骤将一组经授权的传感器流
 转换为活动工作簿。
 
-## 1. 安装并运行冒烟测试
+## 1. 安装
 
 ~~~bash
 conda env create -f environment.yml
@@ -14,7 +14,7 @@ python tests/smoke_test.py
 
 此步骤不需要私有记录或已训练检查点。
 
-## 2. 准备规范目录结构
+## 2. 目录
 
 ~~~text
 data/
@@ -44,7 +44,7 @@ ACC_TIME  ACC_X  ACC_Y  ACC_Z  GYRO_X  GYRO_Y  GYRO_Z
 
 默认模型使用六个物理通道。`ACC_TIME` 保存毫秒时间戳；发布的文件可以保留其他列。
 
-## 3. 运行默认推理流程
+## 3. 推理
 
 将经授权的输入文件放入 `data/signals/external_test/`，然后运行：
 
@@ -64,7 +64,7 @@ predictions_external_test.xlsx
 user_id, category, start, end
 ~~~
 
-## 4. 指定输入与输出
+## 4. 路径
 
 ~~~bash
 python -m imu_activity_pipeline.inference \
@@ -81,7 +81,7 @@ export HLS_HAR_INFERENCE_SPLIT=internal_eval
 python run_inference.py
 ~~~
 
-## 5. 评估带标签的数据划分
+## 5. 评估
 
 ~~~bash
 python evaluate.py \
@@ -91,7 +91,7 @@ python evaluate.py \
 
 评估器执行同类别、一对一的片段匹配，并报告 IoU > 0.5 时的精确率、召回率和 F1。
 
-## 6. 复现实验套件
+## 6. 复现
 
 准备好所需的本地数据与固定资产后，运行：
 
@@ -113,7 +113,7 @@ experiments/logs/
 PYTHON_BIN=/absolute/path/to/python bash run_reproducibility_experiments.sh
 ~~~
 
-## 后续阅读
+## 下一步
 
 - 了解[端到端架构](../guide/pipeline.md)。
 - 核对准确的[数据模式与访问边界](../guide/data.md)。

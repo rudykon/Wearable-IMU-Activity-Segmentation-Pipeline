@@ -1,14 +1,14 @@
 # 推理
 
-推理会将输入目录中的每个长时传感器文件转换为带时间戳的前景活动片段。
+把长时传感器文件转换成带时间戳的活动。
 
-## 默认命令
+## 运行
 
 ~~~bash
 python run_inference.py
 ~~~
 
-默认情况下，封装脚本读取：
+读取：
 
 ~~~text
 data/signals/external_test/*.txt
@@ -17,15 +17,15 @@ saved_models/*.pth
 saved_models/*.pkl
 ~~~
 
-并写入：
+写入：
 
 ~~~text
 predictions_external_test.xlsx
 ~~~
 
-## 显式路径
+## 路径
 
-如需指定输入目录与输出工作簿，请调用软件包模块：
+指定输入与输出：
 
 ~~~bash
 python -m imu_activity_pipeline.inference \
@@ -33,7 +33,7 @@ python -m imu_activity_pipeline.inference \
   --output predictions_internal_eval.xlsx
 ~~~
 
-当数据和模型位于仓库外部时，可以使用环境变量：
+外部数据与模型：
 
 ~~~bash
 export HLS_HAR_DATA_ROOT=/absolute/path/to/data
@@ -42,19 +42,19 @@ export HLS_HAR_INFERENCE_SPLIT=external_test
 python run_inference.py
 ~~~
 
-## 一次运行中发生的步骤
+## 步骤
 
-1. 加载选定尺度的检查点与配套归一化参数。
-2. 读取每条制表符分隔的会话记录。
-3. 过滤并归一化六个物理 IMU 通道。
-4. 以共同的一秒步长构建 3、5、8 秒窗口。
-5. 生成并对齐各尺度类别概率。
-6. 使用配置的尺度选择规则（LBSA）组合三种窗口长度。
-7. 减少标签快速跳变，并用 Viterbi 解码选择前后更一致的活动序列。
-8. 细化边界、消解重叠并应用片段策略。
-9. 将前景片段记录写入工作簿。
+1. 加载检查点和归一化参数。
+2. 读取会话。
+3. 滤波并归一化六个通道。
+4. 构建 3、5、8 秒窗口。
+5. 对齐概率。
+6. 用 LBSA 融合尺度。
+7. 用 Viterbi 解码序列。
+8. 修正并过滤片段。
+9. 写入工作簿。
 
-## 输出记录
+## 输出
 
 | 列 | 说明 |
 | --- | --- |
@@ -82,7 +82,7 @@ segments = run_inference(
 print(f"generated {len(segments)} segments")
 ~~~
 
-更底层的输入输出接口请查看 [Python API](../reference/api.md)。
+底层输入输出见 [Python API](../reference/api.md)。
 
 ## 故障排查
 

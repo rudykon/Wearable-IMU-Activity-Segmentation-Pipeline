@@ -1,8 +1,6 @@
 site_name: Wearable IMU Activity Segmentation Pipeline
 site_url: https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/
-site_description: >-
-  Turn continuous wearable IMU signals into timestamped activity records.
-  Explore the use cases, research results, browser demo, and Android app.
+site_description: Segment wrist IMU data into timestamped activities.
 site_author: Kong Minghao
 
 repo_name: rudykon/Wearable-IMU-Activity-Segmentation-Pipeline
@@ -63,9 +61,7 @@ plugins:
           name: 简体中文
           build: true
           site_name: 可穿戴 IMU 活动分割流水线
-          site_description: >-
-            把连续可穿戴 IMU 信号转换为带时间戳的活动记录，了解应用场景、
-            研究结果、浏览器 Demo 和 Android 应用。
+          site_description: 把腕部 IMU 数据分割成带时间戳的活动。
           theme:
             palette:
               - media: "(prefers-color-scheme: light)"
@@ -84,25 +80,25 @@ plugins:
                   name: 切换至浅色模式
           nav_translations:
             Home: 首页
-            Background & scenarios: 背景与应用场景
-            Getting started: 快速上手
+            Scenarios: 场景
+            Start: 入门
             Installation: 安装
-            Quick start: 快速开始
+            Quickstart: 快速开始
             Pipeline: 流水线
             Architecture: 架构
             Data: 数据
             Training: 训练
             Inference: 推理
             Evaluation: 评估
-            Research: 研究
-            Paper highlights: 论文要点
-            Deployment: 部署
-            Web demo: 在线演示
-            Android app: Android 应用
+            Results: 结果
+            Paper: 论文
+            Deploy: 部署
+            Demo: 演示
+            Android: Android
             Reference: 参考
-            Python API: Python API
-            Data & model assets: 数据与模型资产
-            Citation & license: 引用与许可
+            API: API
+            Assets: 资产
+            Citation: 引用
 
 markdown_extensions:
   - abbr
@@ -141,22 +137,22 @@ copyright: Copyright &copy; 2026 Kong Minghao · Apache-2.0
 
 nav:
   - Home: index.md
-  - Background & scenarios: context/use-cases.md
-  - Getting started:
+  - Scenarios: context/use-cases.md
+  - Start:
       - Installation: getting-started/installation.md
-      - Quick start: getting-started/quickstart.md
+      - Quickstart: getting-started/quickstart.md
   - Pipeline:
       - Architecture: guide/pipeline.md
       - Data: guide/data.md
       - Training: guide/training.md
       - Inference: guide/inference.md
       - Evaluation: guide/evaluation.md
-  - Research:
-      - Paper highlights: research/paper.md
-  - Deployment:
-      - Web demo: deployment/hugging-face.md
-      - Android app: deployment/android.md
+  - Results:
+      - Paper: research/paper.md
+  - Deploy:
+      - Demo: deployment/hugging-face.md
+      - Android: deployment/android.md
   - Reference:
-      - Python API: reference/api.md
-      - Data & model assets: reference/assets.md
-      - Citation & license: reference/citation.md
+      - API: reference/api.md
+      - Assets: reference/assets.md
+      - Citation: reference/citation.md

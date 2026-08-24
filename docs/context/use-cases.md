@@ -1,64 +1,51 @@
-# Background & use cases
+# Scenarios
 
-<p class="research-lead">A wearable records a continuous stream of motion, but people usually want a short activity log. This project connects the two: it identifies what happened, marks when each activity began and ended, and keeps enough intermediate information to investigate mistakes.</p>
+<p class="research-lead">A wearable records motion. This project turns it into an activity log.</p>
 
-!!! info "Intended scope"
+!!! info "Scope"
 
-    The repository is a research and teaching prototype for **segment-level
-    activity recognition**. Its strongest fit is reproducible long-session
-    evaluation and end-to-end deployment experiments. Any new device,
-    population, sport protocol, coaching workflow, or clinical setting needs
-    its own validation.
+    This is a research prototype for **segment-level activity recognition**.
+    New devices, users, activities, and high-stakes uses need new validation.
 
-## One example session
+## Example
 
-Imagine a participant wearing a six-axis IMU for one mixed workout. The device
-does not receive a “start badminton” command. It only receives acceleration,
-angular velocity, and timestamps while the person prepares, exercises, pauses,
-changes activity, and walks away.
+A six-axis IMU receives no activity commands. It records acceleration, angular
+velocity, and time through exercise, pauses, and transitions.
 
 <div class="session-story" aria-label="Illustrative mixed workout timeline">
   <article class="story-moment">
     <time>08:55</time>
-    <div><strong>Sensor connected</strong><span>Background movement, equipment setup, and walking all enter the stream.</span></div>
+    <div><strong>Connected</strong><span>Setup and walking enter the stream.</span></div>
   </article>
   <article class="story-moment">
     <time>09:02</time>
-    <div><strong>Badminton begins</strong><span>Repetitive wrist motion becomes locally recognizable, but brief pauses can interrupt confidence.</span></div>
+    <div><strong>Badminton</strong><span>Repeated wrist motion becomes recognizable.</span></div>
   </article>
   <article class="story-moment">
     <time>09:17</time>
-    <div><strong>Transition and rest</strong><span>The system must close one record without mistaking nearby motion for another event.</span></div>
+    <div><strong>Rest</strong><span>The first record must end cleanly.</span></div>
   </article>
   <article class="story-moment">
     <time>09:25</time>
-    <div><strong>Jump rope begins</strong><span>Short and long windows provide different views of the same repeated action.</span></div>
+    <div><strong>Jump rope</strong><span>Short and long windows see the motion differently.</span></div>
   </article>
   <article class="story-moment">
     <time>09:34</time>
-    <div><strong>Session reviewed</strong><span>The desired result is a short record list with labels, starts, ends, durations, and visible evidence.</span></div>
+    <div><strong>Review</strong><span>The output is a short activity list.</span></div>
   </article>
 </div>
 
-<p class="story-caption">The times are fictional and contain no participant data. The example shows why a continuous recording must be divided into meaningful time periods, rather than classified as unrelated short clips.</p>
+<p class="story-caption">Fictional times; no participant data.</p>
 
-The final output is deliberately small:
+Output:
 
 ~~~text
 user_id, category, start, end
 ~~~
 
-Producing those four fields reliably still requires several steps: read the
-physical sensor values correctly, compare short and long windows, keep the
-timeline stable, refine start and end times, remove weak false alarms, and
-evaluate complete activity periods.
+## Window vs record
 
-## Why ordinary window accuracy is not enough
-
-A window classifier answers “what does this short slice resemble?” A session
-record answers a different question: “how many activities happened, what were
-they, and where were their boundaries?” Converting the first answer into the
-second introduces failure modes that window accuracy does not measure:
+A good window classifier can still produce a bad activity log:
 
 - one true activity can fragment into several short records;
 - two nearby events can merge into one;
@@ -70,99 +57,78 @@ second introduces failure modes that window accuracy does not measure:
   <a class="pipeline-image-link" href="../../assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="Open the full-resolution window-to-record gap figure">
     <img src="../../assets/manuscript-figures/fig01_window_to_record_gap.png" alt="Posterior trajectories, naive fragmented activity records, and the stabilized records produced by the Temporal Record Layer" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">Paper Fig. 1 makes the central gap visible: plausible local evidence can still yield the wrong record list.</figcaption>
+  <figcaption class="pipeline-caption">Paper Fig. 1. Good local predictions can still produce bad records.</figcaption>
 </figure>
 
-## Four concrete use scenarios
+## Uses
 
 <div class="scenario-grid detailed">
   <article class="scenario-card">
-    <span class="scenario-tag established">Primary research use</span>
-    <h3>Long-session HAR evaluation</h3>
-    <p><strong>Situation.</strong> A researcher has continuous wearable recordings and needs to compare complete segmentation systems.</p>
-    <p><strong>What the project provides.</strong> Fixed user-level data splits, models that compare several time spans, and measures for record accuracy, boundary overlap, and false alarms.</p>
-    <p><strong>What you can compare.</strong> Whether a method creates better complete activity records—not merely better labels for a few seconds.</p>
+    <span class="scenario-tag established">Research</span>
+    <h3>Long-session evaluation</h3>
+    <p>Compare full records with fixed splits, segment F1, overlap, and false alarms.</p>
   </article>
   <article class="scenario-card">
-    <span class="scenario-tag scoped">Controlled prototype</span>
-    <h3>Automatic workout diary</h3>
-    <p><strong>Situation.</strong> A controlled session contains badminton, rope skipping, dumbbell fly, running, or table tennis.</p>
-    <p><strong>How this helps.</strong> The output can become a candidate activity log with event count, timing, and duration for later review.</p>
-    <p><strong>Validation needed.</strong> New users, devices, sensor positions, and protocols must be tested before the log is treated as reliable.</p>
+    <span class="scenario-tag scoped">Prototype</span>
+    <h3>Workout log</h3>
+    <p>Create candidate records for five supported activities. New settings need validation.</p>
   </article>
   <article class="scenario-card">
-    <span class="scenario-tag established">Implemented system path</span>
-    <h3>Edge and mobile deployment research</h3>
-    <p><strong>Situation.</strong> An engineer wants to test whether a research pipeline survives the move from saved files to a physical sensor and phone.</p>
-    <p><strong>How this helps.</strong> The Android module covers BLE acquisition, signal views, CSV recording, offline recognition, and selected ONNX models.</p>
-    <p><strong>What you can check.</strong> Whether channel order, model files, and timeline behavior stay consistent from the sensor to the phone.</p>
+    <span class="scenario-tag established">Mobile</span>
+    <h3>Edge deployment</h3>
+    <p>Test BLE capture, ONNX inference, and timelines on Android.</p>
   </article>
   <article class="scenario-card">
-    <span class="scenario-tag exploratory">Candidate workflow</span>
-    <h3>Human-assisted annotation or QA</h3>
-    <p><strong>Situation.</strong> A reviewer needs to inspect many hours of continuous motion and find likely foreground intervals.</p>
-    <p><strong>How this helps.</strong> Candidate records and probability plots can direct attention to boundaries, splits, merges, and false alarms.</p>
-    <p><strong>Human role.</strong> A reviewer must confirm or correct every consequential label; this use was not the paper’s primary evaluated endpoint.</p>
+    <span class="scenario-tag exploratory">Review</span>
+    <h3>Annotation aid</h3>
+    <p>Find likely events and boundary errors. A reviewer confirms every label.</p>
   </article>
 </div>
 
-## Physical path: from a wrist to a record
+## Sensor to phone
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" target="_blank" rel="noopener" aria-label="Open the full-resolution physical deployment chain figure">
     <img src="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" alt="Physical deployment chain from a wearable IMU through BLE and Android inference to activity records" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">Repository figure: WT9011DCL-BT50 wearable IMU → BLE acquisition → Android signal processing → on-device multi-scale inference → activity recognition.</figcaption>
+  <figcaption class="pipeline-caption">WT9011DCL-BT50 → BLE → Android → activity records.</figcaption>
 </figure>
 
-The browser demo provides a second entry point. It runs the tracked 3 s, 5 s,
-and 8 s models on a synthetic or uploaded compatible session, then shows the
-six signals, class probabilities, decoded timeline, final records, and a CSV
-download. It is the fastest way to understand the output before reading the
-implementation.
+The [browser demo](../deployment/hugging-face.md) runs the 3 s, 5 s, and 8 s
+models and returns plots, records, and CSV.
 
-## What the current evidence supports
+## Evidence
 
 | Question | Current answer |
 | --- | --- |
-| Does the repository implement a complete sensing-to-record path? | Yes: Python, public Gradio, and Android paths are documented and tested. |
-| Are records evaluated as segments rather than independent windows? | Yes: same-class one-to-one matching at IoU > 0.5. |
-| Is there a fixed external test? | Yes: 37 long recordings with 114 labeled foreground segments. |
-| Does the final reported system cover arbitrary activities? | No: the evaluated foreground vocabulary contains five activities. |
-| Is cross-device or cross-population generalization established? | No. |
-| Is this a clinical, coaching, or safety product? | No. |
+| End-to-end path? | Yes: Python, Gradio, and Android. |
+| Segment-level evaluation? | Yes: same-class IoU > 0.5. |
+| Fixed external test? | Yes: 37 recordings, 114 segments. |
+| Any activity? | No: five evaluated activities. |
+| New devices or users? | Not established. |
+| Clinical, coaching, or safety use? | No. |
 
-!!! warning "Do not silently broaden the claim"
+!!! warning "Limits"
 
-    The existing results measure **activity-record quality** under the studied
-    protocol. They do not establish clinical outcomes, coaching correctness,
-    injury prevention, safety monitoring, or production reliability. A useful
-    prototype can motivate those studies, but it cannot replace them.
+    Results measure **activity-record quality** in the studied protocol. They
+    do not establish clinical, coaching, safety, or production performance.
 
-## Follow the route that matches your role
+## Next
 
 <div class="route-grid compact">
   <a class="route-card" href="../../deployment/hugging-face/">
-    <span>Visitor or reviewer</span>
-    <h3>See one complete run</h3>
-    <p>Start with the live demo, then inspect the fixed paper evidence and its limitations.</p>
+    <span>Visitor</span>
+    <h3>Demo</h3>
+    <p>Run one complete example.</p>
   </a>
   <a class="route-card" href="../../guide/pipeline/">
-    <span>HAR researcher</span>
-    <h3>Trace and reproduce the method</h3>
-    <p>Read the architecture, input format, training, inference, and activity-record evaluation in order.</p>
+    <span>Researcher</span>
+    <h3>Pipeline</h3>
+    <p>Trace and reproduce the method.</p>
   </a>
   <a class="route-card" href="../../deployment/android/">
-    <span>Mobile or edge engineer</span>
-    <h3>Follow the physical deployment path</h3>
-    <p>Review the sensor assumptions, ONNX assets, Android build, and BLE runtime chain.</p>
+    <span>Engineer</span>
+    <h3>Android</h3>
+    <p>Build the BLE and ONNX path.</p>
   </a>
-</div>
-
-<div class="cta-panel">
-  <div>
-    <h3>Now that the setting is clear, see how the records are built.</h3>
-    <p>The architecture page moves from the six input channels to short and long window models, scale selection, timeline cleanup, and final records.</p>
-  </div>
-  <a class="md-button md-button--primary" href="../../guide/pipeline/">Continue to the architecture</a>
 </div>

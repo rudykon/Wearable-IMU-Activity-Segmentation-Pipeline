@@ -1,15 +1,14 @@
 # Inference
 
-Inference converts every long sensor file in an input directory into
-timestamped foreground activity segments.
+Convert long sensor files into timestamped activities.
 
-## Default command
+## Run
 
 ~~~bash
 python run_inference.py
 ~~~
 
-By default, the wrapper reads:
+Reads:
 
 ~~~text
 data/signals/external_test/*.txt
@@ -18,15 +17,15 @@ saved_models/*.pth
 saved_models/*.pkl
 ~~~
 
-and writes:
+Writes:
 
 ~~~text
 predictions_external_test.xlsx
 ~~~
 
-## Explicit paths
+## Paths
 
-Use the package module when choosing an input directory and output workbook:
+Set input and output:
 
 ~~~bash
 python -m imu_activity_pipeline.inference \
@@ -34,7 +33,7 @@ python -m imu_activity_pipeline.inference \
   --output predictions_internal_eval.xlsx
 ~~~
 
-Use environment variables when data and models live outside the repository:
+For external data and models:
 
 ~~~bash
 export HLS_HAR_DATA_ROOT=/absolute/path/to/data
@@ -43,19 +42,19 @@ export HLS_HAR_INFERENCE_SPLIT=external_test
 python run_inference.py
 ~~~
 
-## What happens during a run
+## Steps
 
-1. Load the selected scale checkpoints and matching normalization parameters.
-2. Read each tab-separated session.
-3. Filter and normalize the six physical IMU channels.
-4. Build 3-, 5-, and 8-second windows on a common one-second step.
-5. Produce and align scale-specific class probabilities.
-6. Combine the three window lengths using the configured scale-selection rule (LBSA).
-7. Reduce rapid label changes and choose a consistent activity sequence (Viterbi decoding).
-8. Refine boundaries, resolve overlaps, and apply segment policies.
-9. Write foreground segment records to the workbook.
+1. Load checkpoints and normalization.
+2. Read each session.
+3. Filter and normalize six channels.
+4. Build 3-, 5-, and 8-second windows.
+5. Align probabilities.
+6. Fuse scales with LBSA.
+7. Decode the sequence with Viterbi.
+8. Refine and filter segments.
+9. Write the workbook.
 
-## Output records
+## Output
 
 | Column | Description |
 | --- | --- |
@@ -83,7 +82,7 @@ segments = run_inference(
 print(f"generated {len(segments)} segments")
 ~~~
 
-For lower-level I/O, see the [Python API](../reference/api.md).
+See [Python API](../reference/api.md) for lower-level I/O.
 
 ## Troubleshooting
 

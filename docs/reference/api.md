@@ -1,4 +1,4 @@
-# Python API
+# API
 
 The package is deliberately small and source-oriented. Install it in editable
 mode before importing:
@@ -7,7 +7,7 @@ mode before importing:
 python -m pip install -e .
 ~~~
 
-## Package map
+## Package
 
 | Module | Main responsibility |
 | --- | --- |
@@ -34,7 +34,7 @@ Current package version:
 0.1.0
 ~~~
 
-## Read signal files
+## Signals
 
 `DataReader` reads every `.txt` file in a directory and returns a dictionary
 keyed by file stem.
@@ -52,7 +52,7 @@ for user_id, frame in sessions.items():
 Each frame should contain the canonical timestamp and six IMU channels described
 in [Data](../guide/data.md).
 
-## Run end-to-end inference
+## Inference
 
 ~~~python
 from imu_activity_pipeline.inference import run_inference
@@ -69,7 +69,7 @@ The returned segment rows and workbook use:
 user_id, category, start, end
 ~~~
 
-## Write segment records
+## Output
 
 ~~~python
 from imu_activity_pipeline.prediction_writer import DataOutput
@@ -84,7 +84,7 @@ DataOutput(
 ).save_predictions()
 ~~~
 
-## Instantiate a window classifier
+## Classifier
 
 ~~~python
 import torch
@@ -118,7 +118,7 @@ print(config.ACTIVITIES)
 Path settings such as `HLS_HAR_DATA_ROOT` and `HLS_HAR_MODEL_DIR` are read
 when `config` is imported. Set environment variables before launching Python.
 
-## Compatibility entry points
+## Compatibility
 
 The scripts at repository root preserve source-checkout commands while
 delegating to the package:

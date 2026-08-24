@@ -3,7 +3,7 @@
 Training builds scale-specific activity classifiers and normalization assets
 from authorized long-session recordings and annotations.
 
-## Before training
+## Setup
 
 Confirm that:
 
@@ -18,7 +18,7 @@ Run the public health check first:
 python tests/smoke_test.py
 ~~~
 
-## Entry points
+## Commands
 
 === "Sequential"
 
@@ -53,7 +53,7 @@ python tests/smoke_test.py
 
     Starts and records a persistent terminal training session.
 
-## Multi-scale experiment matrix
+## Experiments
 
 The default configuration covers:
 
@@ -69,7 +69,7 @@ The model uses parallel convolution kernels, a bidirectional LSTM, and a fused
 classification head. Focal and triplet losses are available for imbalance and
 embedding separation experiments.
 
-## Runtime tuning
+## Runtime
 
 Several long-run controls can be changed without editing source:
 
@@ -84,7 +84,7 @@ Batch size, learning rate, window construction, augmentation, and device
 defaults live in `imu_activity_pipeline.config`. Record any non-default values
 with experiment outputs.
 
-## Generated assets
+## Outputs
 
 A complete run can write:
 
@@ -106,7 +106,7 @@ Locally generated checkpoints, logs, and plots are ignored unless intentionally
 curated as reproducibility assets. Keep every checkpoint paired with the
 normalization parameters and configuration used to create it.
 
-## Reproducible experiment suite
+## Reproduce
 
 After training and calibration:
 

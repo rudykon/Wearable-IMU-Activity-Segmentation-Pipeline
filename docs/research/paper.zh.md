@@ -1,58 +1,52 @@
-# 论文要点
+# 研究结果
 
-<p class="research-lead"><strong>《An End-to-End Wearable IMU System for Segment-Level Activity Recognition via Multi-Scale Arbitration and a Temporal Record Layer》</strong>研究一个实际问题：能否把一次长时训练可靠地整理成活动日志？因此，论文评价活动类别、开始和结束时间、持续时间及事件次数，而不只看几秒钟窗口是否分类正确。</p>
+<p class="research-lead">论文评价完整活动记录：类别、开始、结束、时长和次数。</p>
 
 <div class="metric-strip paper-metrics">
-  <div class="metric"><strong>137</strong><span>条长时记录</span></div>
-  <div class="metric"><strong>259.6 h</strong><span>连续感知数据</span></div>
+  <div class="metric"><strong>137</strong><span>条记录</span></div>
+  <div class="metric"><strong>259.6 h</strong><span>传感器数据</span></div>
   <div class="metric"><strong>0.89</strong><span>平均用户 F1</span></div>
   <div class="metric"><strong>0.90</strong><span>Micro-F1</span></div>
 </div>
 
-!!! note "如何阅读这些证据"
+!!! note "评估协议"
 
-    主要结果评价的是完整活动记录，而不是相互独立的短窗口。模型和时间线规则在
-    37 条独立外部测试记录评分前已经固定。下文会分别标明开发阶段分析与最终外部
-    测试结果。
+    分数衡量完整记录，不是窗口。模型和规则在 37 条外部记录测试前已固定。
 
-## 为什么短窗口准确率还不够
+## 记录错误
 
-即使大部分短窗口分类正确，最终活动日志仍可能出错。短暂的置信度下降会把一次活动
-拆成两段，背景运动可能被误报为活动，正确类别也可能拥有错误的开始或结束时间。
-这些问题会直接改变活动次数、持续时间和最终时间线。
+窗口分类正确，仍可能拆分活动、移动边界或产生误报。
 
 <figure class="paper-figure">
   <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的窗口到记录落差图">
     <img src="../../../assets/manuscript-figures/fig01_window_to_record_gap.png" alt="后验概率轨迹、朴素提取得到的碎片记录以及时间记录层稳定后的记录列表" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">论文图 1。短窗口概率看似合理时，最终记录仍可能出现错误拆分、误报和边界偏移；最后的时间线整理阶段负责合并并稳定这些记录。</figcaption>
+  <figcaption class="pipeline-caption">图 1。窗口预测可能把最终记录拆碎。</figcaption>
 </figure>
 
-## 系统的三项关键作用
+## 方法
 
 <div class="research-grid">
   <article class="research-card">
-    <span class="research-card-kicker">判断每个窗口</span>
-    <h3>结合局部模式与前后顺序</h3>
-    <p>CNN 寻找较短的运动模式，BiLSTM 观察这些模式在 3、5 或 8 秒窗口内怎样变化。</p>
+    <span class="research-card-kicker">模型</span>
+    <h3>CNN–BiLSTM</h3>
+    <p>分类 3、5、8 秒窗口。</p>
   </article>
   <article class="research-card">
-    <span class="research-card-kicker">选择合适的时间范围</span>
-    <h3>兼顾稳定背景与准确边界</h3>
-    <p>动作稳定时更重视长窗口，可能发生活动切换时提高 3 秒模型的作用。论文把这条规则称为 LBSA。</p>
+    <span class="research-card-kicker">融合</span>
+    <h3>LBSA</h3>
+    <p>在边界内外选择合适尺度。</p>
   </article>
   <article class="research-card">
-    <span class="research-card-kicker">生成最终活动日志</span>
-    <h3>整理并连接时间线</h3>
-    <p>最后阶段减少标签快速跳变，合并合理间隔，修正边界，处理重叠，并去除较弱或不合理的记录。论文把这个阶段称为 TRL。</p>
+    <span class="research-card-kicker">解码</span>
+    <h3>TRL</h3>
+    <p>平滑、合并、修正并过滤记录。</p>
   </article>
 </div>
 
-论文评价的是长度不固定的 `(活动, 开始, 结束)` 记录列表。每条预测最多匹配一条
-同类人工标注，并且二者的时间重叠比例（IoU）必须大于 0.5。因此，错误拆分、合并、
-时间偏移和类别错误都会降低评分。
+预测与同类别标注按 IoU > 0.5 一对一匹配。拆分、合并、时间和类别错误都会扣分。
 
-## 固定评估协议
+## 数据划分
 
 | 数据角色 | 记录数 | 用途 |
 | --- | ---: | --- |
@@ -60,16 +54,15 @@
 | 开发／校准集 | 20 | 时序策略校准、诊断与划分分离选择 |
 | 独立外部测试集 | 37 | 工作点冻结后进行一次最终评估 |
 
-完整语料包含约 **4680 万**个 100 Hz ACC/GYRO 有效样本，覆盖羽毛球、跳绳、
-哑铃飞鸟、跑步和乒乓球五类前景活动。外部测试集含 114 个标注活动片段。
+语料含 **4680 万**个有效样本和五类活动；外部测试集有 114 个标注片段。
 
-## 独立外部测试结果
+## 外部测试
 
 <figure class="paper-figure portrait">
   <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig04_external_variant_comparison.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的外部测试变体对比图">
     <img src="../../../assets/manuscript-figures/fig04_external_variant_comparison.png" alt="五种固定系统变体的外部测试平均用户 F1、Micro-F1、假阳性和假阴性计数" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">论文图 4。五种固定方案使用同一组 37 条外部记录。LBSA + TRL 获得最高的四舍五入平均用户 F1，并在三尺度方案中产生最少误报。</figcaption>
+  <figcaption class="pipeline-caption">图 4。五种固定方案测试同一组 37 条记录。</figcaption>
 </figure>
 
 | 固定变体 | 平均用户 F1 | 95% CI | Micro-F1 | TP / FP / FN |
@@ -80,9 +73,9 @@
 | LBSA + 宽松 Top-K | 0.88 | 0.80-0.95 | 0.88 | 103 / 17 / 11 |
 | **LBSA + TRL** | **0.89** | **0.82-0.94** | **0.90** | **99 / 7 / 15** |
 
-<div class="result-callout"><strong>通俗解释。</strong>保留更多候选记录可以多找回少量真实活动，但也会产生更多误报。最终 LBSA + TRL 设置在保持最高四舍五入 F1 的同时，去除了更多虚假记录。</div>
+<div class="result-callout"><strong>结论。</strong>LBSA + TRL 保持最高的四舍五入 F1，同时减少误报。</div>
 
-### 外部测试分类别结果
+### 分类结果
 
 | 活动 | 真实片段 | TP / FP / FN | 精确率 | 召回率 | F1 | 匹配 IoU |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -92,68 +85,58 @@
 | 跑步 | 20 | 18 / 1 / 2 | 0.95 | 0.90 | 0.92 | 0.82 |
 | 乒乓球 | 22 | 17 / 2 / 5 | 0.90 | 0.77 | 0.83 | 0.86 |
 
-描述性分类别结果显示，剩余错误并不均匀：固定外部集上乒乓球召回率最低，跳绳
-则具有最高的片段 F1。
+乒乓球召回率最低，跳绳 F1 最高。
 
-## 为什么需要多个时间尺度
+## 时间尺度
 
 <figure class="paper-figure compact">
   <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig05_multiscale_tsne_diagnostic.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的多尺度 t-SNE 图">
     <img src="../../../assets/manuscript-figures/fig05_multiscale_tsne_diagnostic.png" alt="3 秒、5 秒和 8 秒窗口模型在六种活动状态上的倒数第二层表征 t-SNE 图" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">论文图 5。独立嵌入的 3 秒、5 秒与 8 秒表征在各活动上呈现互补的定性结构。</figcaption>
+  <figcaption class="pipeline-caption">图 5。三种尺度学习到互补结构。</figcaption>
 </figure>
 
-短窗口保留局部转换细节，但更容易受噪声影响；长窗口提供更稳定的上下文，却会
-模糊活动边界。t-SNE 面板是**内部定性诊断**，不是主要性能结果；它用于解释
-跨尺度仲裁的动机，不能替代固定的片段级外部测试。
+短窗口保留边界，长窗口提供上下文。t-SNE 是**定性诊断**，不是性能证据。
 
-## 时间记录层带来了什么变化
+## TRL 效果
 
 <figure class="paper-figure portrait">
   <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig06_outer_split_boundary_summary.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的 TRL 外层划分诊断图">
     <img src="../../../assets/manuscript-figures/fig06_outer_split_boundary_summary.png" alt="重复外层划分 F1 分布，以及时间记录层累积策略的边界质量与假阳性代价" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">论文图 6。固定 3 秒后验源上的划分分离诊断；时序一致性与置信裁剪相较基线记录构建策略带来最清晰的改善。</figcaption>
+  <figcaption class="pipeline-caption">图 6。主要增益来自时序一致性和置信裁剪。</figcaption>
 </figure>
 
-在 50 次随机 10/10 开发用户划分中，选定时序策略的平均外层 F1 为 **0.913**，
-基线后处理为 **0.802**。在累积边界诊断中，每记录小时假阳性由 **0.862**
-降至 **0.190**，匹配 IoU 则由 **0.835** 变为 **0.843**。这些结果支持一个
-较窄的结论：恢复的记录质量主要来自时序一致性控制与假阳性抑制，而不是改变
-固定的局部预测器。
+在 50 次开发划分中，TRL 把平均 F1 从 **0.802 提高到 0.913**。每小时误报从
+**0.862 降至 0.190**，匹配 IoU 从 **0.835 变为 0.843**。这些是开发诊断，
+不是外部测试结果。
 
-## 代表性时间线：成功与失败
+## 案例
 
 <figure class="paper-figure compact">
   <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig07_representative_timeline_cases.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的代表性时间线图">
     <img src="../../../assets/manuscript-figures/fig07_representative_timeline_cases.png" alt="一个成功案例和一个部分失败案例中真实时间线及四种固定融合时序变体的对比" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">论文图 7。上图中 3 秒分支将乒乓球记录延长到满足 IoU 规则；下图保留真实局限：乒乓球仍未匹配，后续背景运动成为羽毛球假阳性。</figcaption>
+  <figcaption class="pipeline-caption">图 7。一个成功案例和一个失败案例。</figcaption>
 </figure>
 
-两个案例被有意并列展示：它们同时说明边界敏感多尺度融合的收益，以及弱活动证据
-与运动样背景区间对记录假设造成压力时仍会出现的失败模式。
+融合改善了一个边界；弱证据仍造成漏检和误报。
 
-## 物理演示与现场测试
+## Android 测试
 
 <figure class="paper-figure compact">
   <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig08_app_field_test.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的 App 现场测试图">
     <img src="../../../assets/manuscript-figures/fig08_app_field_test.png" alt="隐私保护动作模型与 Android 识别截图，覆盖背景和五种目标活动" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">论文图 8。面向 App 的现场测试示例，覆盖背景运动、羽毛球、跳绳、哑铃飞鸟、跑步与乒乓球。</figcaption>
+  <figcaption class="pipeline-caption">图 8。Android 上的背景和五类活动测试。</figcaption>
 </figure>
 
-物理链路将 WT9011DCL-BT50 BLE 六轴 IMU 与 Android 识别应用连接。最终每尺度
-选择三模型并结合 LBSA 与 TRL 的配置，在被测主动设备上平均每条用户记录耗时
-**2.1 秒**。它慢于紧凑单模型诊断配置的 0.21 秒，但仍适合离线会话分析、同步前
-训练记录处理或近实时记录复核。
+Android 应用连接 WT9011DCL-BT50 BLE IMU。完整三模型流水线在被测设备上平均
+每条记录耗时 **2.1 秒**。
 
-??? info "公共语料可移植性检查——不是排行榜结果"
+??? info "公共数据集——仅检查可移植性"
 
-    论文还把 TRL 风格解码连接到 HAR70+、WISDM-phone、PAMAP2 与 OPPORTUNITY
-    的神经窗口后验生成器。这些数据集并不匹配长时腕部运动协议，因此这里只检验
-    时序接口能否重新参数化。
+    这些数据集不匹配腕部运动协议。结果只检验时序接口能否重新配置。
 
     | 数据集 | Argmax F1 | TRL F1 | Argmax FP/h | TRL FP/h |
     | --- | ---: | ---: | ---: | ---: |
@@ -162,18 +145,16 @@
     | PAMAP2 | 0.09 | 0.53 | 90 | 9.3 |
     | OPPORTUNITY | 0.29 | 0.29 | 320 | 110 |
 
-## 适用范围与局限
+## 边界
 
-!!! warning "只在已评估的层级使用论文结论"
+!!! warning "评估范围"
 
-    - 现有证据衡量的是**片段记录质量**，不是临床收益、训练指导质量或安全决策。
-    - 对新设备、新人群、新传感器位置、运动协议和标注方式的泛化尚未建立。
-    - 用户级统计功效由 20 条开发／校准记录和 37 条独立外部测试记录决定，不能仅
-      根据原始样本数量判断。
-    - 当前系统更适合作为分钟级训练记录生成器。高度交错的会话以及相邻同类事件的
-      分别计数仍然困难。
+    - 结果衡量**片段记录**，不代表临床、训练或安全价值。
+    - 新设备、人群、佩戴位置和协议需要重测。
+    - 证据来自 20 条开发记录和 37 条外部测试记录。
+    - 密集会话和相邻同类事件仍然困难。
 
-## 复现软件流程
+## 复现
 
 - [运行公开冒烟测试](../getting-started/quickstart.md)
 - [查看流水线架构](../guide/pipeline.md)
