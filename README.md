@@ -20,12 +20,14 @@
   <a href="#quick-start"><img src="https://img.shields.io/badge/Smoke%20test-no%20raw%20data-2CA02C?style=flat-square" alt="Smoke test does not require raw data"></a>
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"><img src="https://img.shields.io/badge/Docs-Project%20Website-0F8F8C?style=flat-square&logo=materialformkdocs&logoColor=white" alt="Project website"></a>
   <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Live%20Demo-Hugging%20Face%20Spaces-FFD21E?style=flat-square" alt="Live demo on Hugging Face Spaces"></a>
+  <a href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Models-PyTorch%20%2B%20ONNX-7C3AED?style=flat-square" alt="Public model weights on Hugging Face"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-4C78A8?style=flat-square" alt="Apache License 2.0"></a>
 </p>
 
 <p align="center">
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/">Website</a> ·
   <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">Live Demo</a> ·
+  <a href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">Models</a> ·
   <a href="#overview">Overview</a> ·
   <a href="#pipeline">Pipeline</a> ·
   <a href="#quick-start">Quick Start</a> ·
@@ -37,7 +39,7 @@
 </p>
 
 > [!IMPORTANT]
-> The GitHub repository does not distribute participant sensor recordings. Repository-authored source code and the distributed Python/Android model assets are Apache-2.0; datasets and third-party dependencies retain their own terms.
+> GitHub contains source code, not model binaries or participant recordings. Public Python and Android weights are hosted on Hugging Face under Apache-2.0; datasets and third-party dependencies retain their own terms.
 
 <a id="overview"></a>
 ## Overview
@@ -144,7 +146,8 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 ```
 
-After placing authorized data under `data/` and model assets under `saved_models/`, run inference:
+After placing authorized data under `data/`, run inference. Missing public model
+assets are downloaded from Hugging Face and verified automatically:
 
 ```bash
 python run_inference.py
@@ -186,7 +189,17 @@ Until the PhysioNet repository is formally released, research-use access is requ
 <a id="model-assets"></a>
 ## Model Assets
 
-The Python research pipeline is code-first. Selected reproducibility checkpoints, normalization parameters, and ensemble configuration files are tracked under `saved_models/`; additional local training outputs are ignored by Git.
+Model binaries are published in the public
+[Hugging Face Model repository](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline),
+not GitHub. Python inference downloads missing files into `saved_models/` and
+checks their SHA-256 values before use. Android builds do the same for ONNX
+assets.
+
+Download everything in advance:
+
+```bash
+python scripts/download_model_assets.py all
+```
 
 Default multi-scale inference expects:
 
@@ -202,10 +215,11 @@ saved_models/norm_params_8s.pkl
 
 Asset documentation:
 
+- [model-assets.json](model-assets.json) records the public file sizes and SHA-256 checksums.
 - [docs/ASSETS.md](docs/ASSETS.md) describes local data, checkpoint, and generated-output boundaries.
-- [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE) covers the distributed Python model assets.
+- [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE) covers the public Python model assets.
 - [android_realtime_app/MODEL_CARD.md](android_realtime_app/MODEL_CARD.md) documents Android ONNX assets, checksums, intended use, and limitations.
-- [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE) covers the distributed Android model assets.
+- [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE) covers the public Android model assets.
 
 <a id="android-app"></a>
 ## Android App
@@ -260,7 +274,7 @@ PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 | --- | --- |
 | `src/imu_activity_pipeline/` | Core Python package for configuration, loading, training, inference, post-processing, and evaluation |
 | `run_inference.py`, `train.py`, `train_parallel.py`, `evaluate.py` | Source-checkout compatibility entry points |
-| `saved_models/` | Tracked reproducibility assets plus ignored local training outputs |
+| `saved_models/` | Local HF downloads and ignored training outputs; only small configuration files are tracked |
 | `data/` | Local data layout placeholders and access instructions |
 | `experiments/` | Evaluation, robustness, visualization, and public-dataset portability scripts |
 | `scripts/` | Auxiliary analysis, tuning, and figure helpers |
@@ -271,4 +285,4 @@ PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 <a id="license"></a>
 ## License
 
-Repository-authored source code and the distributed Python and Android model assets are licensed under the [Apache License 2.0](LICENSE). Scope-specific copies are kept at [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE), [android_realtime_app/LICENSE](android_realtime_app/LICENSE), and [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE). Datasets and third-party dependencies retain their own terms.
+Repository-authored source code and the public Hugging Face Python/Android model assets are licensed under the [Apache License 2.0](LICENSE). Scope-specific copies are kept at [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE), [android_realtime_app/LICENSE](android_realtime_app/LICENSE), and [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE). Datasets and third-party dependencies retain their own terms.

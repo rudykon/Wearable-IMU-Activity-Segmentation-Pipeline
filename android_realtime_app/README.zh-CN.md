@@ -33,7 +33,7 @@
 .
 ├── app/                         # Android 应用模块
 │   └── src/main/
-│       ├── assets/              # ONNX 模型、归一化参数和示例数据
+│       ├── assets/              # 运行配置；ONNX 权重在构建时下载
 │       ├── java/com/imu/realtime/
 │       └── res/
 ├── gradle/                      # Gradle Wrapper
@@ -57,6 +57,11 @@
 ./gradlew assembleDebug
 ```
 
+`preBuild` 会从公开的
+[Hugging Face Model 仓库](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
+下载 4 个 ONNX 文件并校验 SHA-256。仅在自行提供兼容本地权重时使用
+`-PskipModelDownload`。
+
 使用 Android Studio 打开项目时会自动生成 `local.properties`。该文件包含本机 Android SDK 路径，不应提交到 GitHub。
 
 ## 运行
@@ -76,7 +81,7 @@ imu_yyyyMMdd_HHmmss.csv
 
 ## 模型资产
 
-当前 `.onnx` 权重文件直接保存在本仓库中。由于每个权重文件都明显低于 GitHub 普通文件大小限制，因此不需要 Git LFS。
+`.onnx` 权重已公开发布在 Hugging Face，不再保存在 GitHub。Gradle 会在构建前下载并校验每个文件的 SHA-256。
 
 Android 应用会加载以下模型和归一化参数：
 
@@ -96,7 +101,7 @@ Android 应用会加载以下模型和归一化参数：
 
 本仓库已在 `android_realtime_app/motion_segments/` 下提供派生切片TXT文件（相对于本 App 目录为 `motion_segments/`）。没有类似实物传感器时，可以将这些 TXT 文件复制到 Android 设备，在 App 的识别页面通过“选择TXT文件”载入，从而体验离线数据运动识别。
 
-模型用途、输入格式、校验和、已知限制等信息见 `MODEL_CARD.md`。随仓库分发的模型权重和归一化参数适用 `WEIGHTS_LICENSE`。训练数据不包含在本 app 仓库中。
+模型用途、输入格式、校验和、已知限制等信息见 `MODEL_CARD.md`。公开模型权重和归一化参数适用 `WEIGHTS_LICENSE`。训练数据不包含在本 app 仓库中。
 
 ## 桌面调试工具
 
@@ -121,4 +126,4 @@ tools/desktop/README.md
 
 ## 开源说明
 
-Android 应用源代码以及随应用分发的模型权重和归一化参数均采用 Apache License 2.0，分别见 `LICENSE` 与 `WEIGHTS_LICENSE`；第三方依赖保留其各自许可证。
+Android 应用源代码以及 Hugging Face 公开发布的模型权重和归一化参数均采用 Apache License 2.0，分别见 `LICENSE` 与 `WEIGHTS_LICENSE`；第三方依赖保留其各自许可证。

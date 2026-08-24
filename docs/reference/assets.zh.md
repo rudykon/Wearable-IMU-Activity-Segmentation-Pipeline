@@ -10,9 +10,10 @@
 | 仓库原创源码 | 已跟踪 | Apache-2.0 |
 | 文档与公开冒烟测试 | 已跟踪 | 不需要私有数据 |
 | 参与者传感器流 | 不分发 | 仅保存在已被忽略的本地 `data/` 路径 |
-| 选定的 Python 检查点 | 已跟踪 | `saved_models/` 下的可复现／推理资产 |
-| 选定的归一化文件 | 已跟踪 | 必须与检查点尺度配对 |
-| Android ONNX 资产 | 已跟踪 | 存储在 Android 应用资产目录中 |
+| 选定的 Python 检查点 | Hugging Face | 需要时下载到 `saved_models/` |
+| 选定的归一化文件 | Hugging Face | 与各尺度检查点配套 |
+| Android ONNX 资产 | Hugging Face | Android 构建前自动下载 |
+| 模型清单 | 已跟踪 | `model-assets.json` 中的文件大小和 SHA-256 |
 | 生成的检查点与日志 | 默认仅本地 | 除非有意整理，否则被忽略 |
 | 可选公开数据集 | 由用户下载 | 遵循原始许可与引用要求 |
 
@@ -30,6 +31,15 @@ saved_models/
 ~~~
 
 `ensemble_config.example.json` 记录配置结构。
+
+离线工作前可提前下载：
+
+~~~bash
+python scripts/download_model_assets.py python
+~~~
+
+Python 推理会在文件缺失时自动完成这一步。已有的本地重训练文件不会被覆盖，除非明确使用
+`--force`。
 
 !!! danger "不要混用尺度或训练运行"
 
@@ -58,9 +68,13 @@ experiments/logs/
 
 ## Android 资产
 
-应用包含选定的 3 秒、5 秒、8 秒 ONNX 模型和 JSON 归一化文件，以及一个旧版
-回退模型。SHA-256 校验和与运行假设请参阅
+构建过程会从公开模型仓库下载选定的 3 秒、5 秒、8 秒 ONNX 模型与旧版回退模型。
+JSON 归一化参数体积很小，仍作为运行配置跟踪。SHA-256 与运行假设请参阅
 [Android 模型卡](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/android_realtime_app/MODEL_CARD.md)。
+
+~~~bash
+python scripts/download_model_assets.py android
+~~~
 
 ## 路径
 
@@ -71,6 +85,9 @@ experiments/logs/
 | `HLS_HAR_INTERNAL_EVAL_DATA_DIR` | `data/signals/internal_eval` |
 | `HLS_HAR_EXTERNAL_TEST_DATA_DIR` | `data/signals/external_test` |
 | `HLS_HAR_MODEL_DIR` | `<bundle>/saved_models` |
+| `HLS_HAR_MODEL_REPO_ID` | `config-h/Wearable-IMU-Activity-Segmentation-Pipeline` |
+| `HLS_HAR_MODEL_REVISION` | `main` |
+| `HLS_HAR_OFFLINE` | 默认未设置；设为 `1` 时禁止下载 |
 | `HLS_HAR_INFERENCE_SPLIT` | `external_test` |
 | `HLS_HAR_EVALUATION_SPLIT` | `external_test` |
 
@@ -90,7 +107,6 @@ experiments/logs/
 ## 许可
 
 - 仓库原创代码：[Apache License 2.0](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/LICENSE)。
-- Python 模型资产：`saved_models/WEIGHTS_LICENSE`。
-- Android 源码与权重：`android_realtime_app/LICENSE` 和
-  `android_realtime_app/WEIGHTS_LICENSE`。
+- Python 与 Android 权重：[公开 Hugging Face Model 仓库](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)（Apache-2.0）。
+- Android 源码：`android_realtime_app/LICENSE`。
 - 数据集与第三方依赖：遵循各自条款。

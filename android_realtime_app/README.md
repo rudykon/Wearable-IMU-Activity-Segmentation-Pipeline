@@ -40,7 +40,7 @@ The bundled classifier outputs six classes:
 .
 ├── app/                         # Android application module
 │   └── src/main/
-│       ├── assets/              # ONNX models, normalization parameters, sample data
+│       ├── assets/              # Runtime config; ONNX weights download at build time
 │       ├── java/com/imu/realtime/
 │       └── res/
 ├── gradle/                      # Gradle wrapper
@@ -63,6 +63,10 @@ Build from the repository root:
 ```bash
 ./gradlew assembleDebug
 ```
+
+`preBuild` downloads the four checksum-verified ONNX files from the public
+[Hugging Face Model repository](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline).
+Use `-PskipModelDownload` only when supplying your own compatible local files.
 
 Android Studio will create `local.properties` automatically when the project is
 opened. Do not commit that file.
@@ -87,9 +91,8 @@ like `imu_yyyyMMdd_HHmmss.csv`.
 
 ## Model Assets
 
-The current `.onnx` weights are stored directly in this repository. Git LFS is
-not required because each bundled weight file is well below GitHub's regular
-file-size limit.
+The `.onnx` weights are public on Hugging Face and are not stored in GitHub.
+Gradle downloads them before building the app and verifies each SHA-256 value.
 
 The Android app loads these selected assets:
 
@@ -110,7 +113,7 @@ these files to the Android device and select it from the recognition page to
 experience the app-side offline activity-recognition path.
 
 For model details, checksums, intended use, and limitations, see
-`MODEL_CARD.md`. The bundled model weights and normalization files are covered
+`MODEL_CARD.md`. The public model weights and normalization files are covered
 by `WEIGHTS_LICENSE`.
 
 ## Desktop Debug Tools
@@ -135,6 +138,6 @@ hardware-development materials are available in `docs/`:
 
 ## License
 
-Application source code and bundled model weights and normalization files are
+Application source code and the public model weights and normalization files are
 licensed under the Apache License 2.0; see `LICENSE` and `WEIGHTS_LICENSE`,
 respectively. Third-party dependencies retain their own licenses.

@@ -1,6 +1,64 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import java.security.MessageDigest
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+}
+
+def hfModelBase = "https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline/resolve/main/android_realtime_app/app/src/main/assets"
+def hfModelAssets = [
+    "combined_model_3s_seed42.onnx": "5adb8807bfc737e11ee40cca0af0690c22fdd8d29b5c5aaa35c3e83f9f646839",
+    "combined_model_5s_seed123.onnx": "d812c5fc04df6c1ca249e3cec8c977a28c2de8036736c134210b3173490f2681",
+    "combined_model_8s_seed123.onnx": "75fb093eca823003c6f5e44b0a0363f24b04659ab2ae08ddb08c334481087f8d",
+    "hand_motion.onnx": "c41f8c7fab431d407504eba0141976047f5f010597e7fa8e0a6b57872f8f9456",
+]
+
+def fileSha256 = { File input ->
+    MessageDigest digest = MessageDigest.getInstance("SHA-256")
+    input.withInputStream { stream ->
+        byte[] buffer = new byte[1024 * 1024]
+        int count
+        while ((count = stream.read(buffer)) != -1) {
+            digest.update(buffer, 0, count)
+        }
+    }
+    digest.digest().encodeHex().toString()
+}
+
+tasks.register("downloadModelAssets") {
+    description = "Downloads checksum-verified ONNX assets from Hugging Face."
+    group = "build setup"
+    outputs.files(hfModelAssets.keySet().collect { file("src/main/assets/${it}") })
+    outputs.upToDateWhen { false }
+    onlyIf { !providers.gradleProperty("skipModelDownload").isPresent() }
+
+    doLast {
+        hfModelAssets.each { name, expectedSha256 ->
+            File destination = file("src/main/assets/${name}")
+            if (destination.isFile() && fileSha256(destination) == expectedSha256) {
+                return
+            }
+
+            destination.parentFile.mkdirs()
+            File temporary = file("${destination}.download")
+            temporary.delete()
+            new URL("${hfModelBase}/${name}").withInputStream { input ->
+                temporary.withOutputStream { output -> output << input }
+            }
+            String actualSha256 = fileSha256(temporary)
+            if (actualSha256 != expectedSha256) {
+                temporary.delete()
+                throw new GradleException("Checksum mismatch for ${name}")
+            }
+            Files.move(
+                temporary.toPath(),
+                destination.toPath(),
+                StandardCopyOption.REPLACE_EXISTING,
+            )
+        }
+    }
 }
 
 android {
@@ -47,4 +105,8 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.6.2'
     // ONNX Runtime —— 运动识别模型推理
     implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.17.3'
+}
+
+tasks.named("preBuild").configure {
+    dependsOn(tasks.named("downloadModelAssets"))
 }

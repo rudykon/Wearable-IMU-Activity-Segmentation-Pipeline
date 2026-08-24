@@ -19,6 +19,7 @@ hide:
         Demo
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
+      <a class="hero-button" href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">Models</a>
       <a class="hero-button" href="research/paper/">Results</a>
     </div>
     <div class="hero-proof" aria-label="Project focus">

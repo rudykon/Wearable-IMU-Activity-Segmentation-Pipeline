@@ -28,7 +28,7 @@
 
 ## 许可
 
-仓库原创源代码以及分发的 Python 和 Android 模型资产采用
+仓库原创源代码以及 Hugging Face 公开发布的 Python 和 Android 模型资产采用
 [Apache License 2.0](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/LICENSE)
 许可。模型资产旁保留了各范围专用的许可副本。
 
@@ -42,6 +42,7 @@ Apache-2.0 不会改变：
 ## 链接
 
 - [源码仓库](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline)
+- [公开模型权重](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
 - [Issue 跟踪器](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/issues)
 - [数据集访问说明](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md)
 - [Android 模型卡](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/android_realtime_app/MODEL_CARD.md)

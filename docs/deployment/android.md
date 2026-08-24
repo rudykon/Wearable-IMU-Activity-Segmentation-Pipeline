@@ -57,6 +57,11 @@ cd android_realtime_app
 ./gradlew assembleDebug
 ~~~
 
+The build downloads the four ONNX weights from the public
+[HF Model repository](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
+and verifies their SHA-256 values. GitHub stores the app source and small JSON
+configuration, not the model binaries.
+
 Android Studio creates `local.properties` automatically. Do not commit that
 machine-specific file.
 
@@ -121,7 +126,7 @@ limitations.
 
 !!! warning "Research demonstration"
 
-    The app and bundled models are intended for research, teaching, and
+    The app and public models are intended for research, teaching, and
     reproducible prototype evaluation. They do not claim production safety,
     clinical validity, or cross-device generalization.
 

@@ -6,7 +6,7 @@ Purpose:
     temporal labels, refines boundaries, filters segments, and writes results.
 Inputs:
     Uses saved model assets from `MODEL_DIR` and signal files from the configured
-    split data directory.
+    split data directory. Missing published assets are fetched from Hugging Face.
 Outputs:
     Produces activity-segment rows in `user_id`, `category`, `start`, `end`
     format through the `DataOutput` writer.
@@ -74,6 +74,9 @@ def load_ensemble_models():
         model_groups: dict mapping window_suffix -> list of (model, window_size, norm_params)
         device: torch device
     """
+    from .model_assets import ensure_python_model_assets
+
+    ensure_python_model_assets(MODEL_DIR)
     device = torch.device(DEVICE if torch.cuda.is_available() else 'cpu')
 
     # Load ensemble config

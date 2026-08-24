@@ -29,12 +29,7 @@ data/
 
 saved_models/
 ├── ensemble_config.json
-├── combined_model_3s_seed42.pth
-├── combined_model_5s_seed123.pth
-├── combined_model_8s_seed123.pth
-├── norm_params_3s.pkl
-├── norm_params_5s.pkl
-└── norm_params_8s.pkl
+└── <HF downloads appear here>
 ~~~
 
 Each sensor file is UTF-8, tab-separated, and contains at least:
@@ -53,6 +48,10 @@ Put authorized input files under `data/signals/external_test/`, then run:
 ~~~bash
 python run_inference.py
 ~~~
+
+The first run downloads and verifies the public PyTorch assets from
+[Hugging Face](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline).
+Prepare them in advance with `python scripts/download_model_assets.py python`.
 
 The compatibility entry point calls the installed package and writes:
 
