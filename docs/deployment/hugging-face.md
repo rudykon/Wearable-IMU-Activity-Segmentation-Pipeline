@@ -1,8 +1,10 @@
 # Hugging Face Space demo
 
-The browser demo runs the repository's tracked 3 s, 5 s, and 8 s
-CNN–BiLSTM checkpoints in a free ZeroGPU allocation, then applies the same multi-scale fusion and
-temporal record layer used by the research pipeline.
+The browser demo is the fastest way to see the project work. Choose the built-in
+sample or upload a compatible wrist-motion recording; the real 3-, 5-, and
+8-second repository models then produce a timestamped activity timeline for
+that recording. The same model combination and timeline-cleanup
+steps are used by the Python research pipeline.
 
 [Open the Hugging Face Space](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button .md-button--primary target="_blank" rel="noopener" }
 [Inspect the demo source](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/tree/main/demo){ .md-button target="_blank" rel="noopener" }
@@ -11,17 +13,17 @@ temporal record layer used by the research pipeline.
   <a class="pipeline-image-link" href="../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution overall framework figure">
     <img src="../../assets/fig02_overall_framework.png" alt="Project framework showing IMU input, scale-specific CNN–BiLSTM models, LBSA fusion, temporal record layer, and segment records" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">The Space exposes the tracked inference path shown in the repository's original framework figure: six-channel IMU input, multi-scale window models, LBSA fusion, temporal decoding, and activity segments.</figcaption>
+  <figcaption class="pipeline-caption">The Space follows the repository's original path: six IMU channels → three window models → scale selection → timeline cleanup → activity records.</figcaption>
 </figure>
 
-## Interactive outputs
+## What you can see and download
 
 One request produces:
 
-- a downsampled preview of all six uploaded IMU channels;
-- smoothed probabilities for background and five foreground activities;
-- the Viterbi-decoded class path;
-- a bilingual segment table with relative boundaries, duration, and confidence;
+- a preview of all six uploaded IMU channels;
+- activity-likelihood curves for background and five supported activities;
+- the final activity timeline after short prediction changes are cleaned up;
+- a bilingual record table with start time, end time, duration, and confidence;
 - a downloadable UTF-8 CSV with absolute millisecond timestamps.
 
 Models are registered when the ZeroGPU Space starts, and each complete model
@@ -42,14 +44,14 @@ long-session reporting policy:
 
 | Control | Demo default | Purpose |
 | --- | ---: | --- |
-| Fusion | `local_boundary` | Use the selected LBSA policy |
+| How the three models are combined | `local_boundary` | Adapt the model weights near possible activity changes |
 | Minimum duration | 5 s | Make short synthetic phases visible |
 | Minimum confidence | 0.30 | Avoid hiding all outputs in a short demonstration |
 | Top-K | 5 | Limit the result table |
 
-For benchmark reproduction, use the fixed repository evaluation scripts and
-their documented protocol rather than interpreting adjustable demo thresholds
-as reported study settings.
+To reproduce the paper, use the repository's fixed evaluation scripts. The
+adjustable Demo controls are for exploration and are not the reported study
+settings.
 
 ## Upload format
 
@@ -63,7 +65,7 @@ ACC_TIME	ACC_X	ACC_Y	ACC_Z	GYRO_X	GYRO_Y	GYRO_Z
 The demo validates strictly increasing timestamps and a median sampling
 interval from 8 to 12 ms. Extra source columns are ignored. Before comparing
 predictions, confirm that sensor placement, axis orientation, physical units,
-and preprocessing match the documented dataset contract.
+and preprocessing match the documented input format.
 
 ## Run locally
 

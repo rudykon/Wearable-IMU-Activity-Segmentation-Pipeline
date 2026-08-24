@@ -1,6 +1,6 @@
 # Paper highlights
 
-<p class="research-lead"><strong>An End-to-End Wearable IMU System for Segment-Level Activity Recognition via Multi-Scale Arbitration and a Temporal Record Layer</strong> studies wearable activity recognition as a complete sensing-to-record measurement chain. The central question is not only whether short windows are classified correctly, but whether a long workout becomes a reliable list of labeled records with usable boundaries, durations, and event counts.</p>
+<p class="research-lead"><strong>An End-to-End Wearable IMU System for Segment-Level Activity Recognition via Multi-Scale Arbitration and a Temporal Record Layer</strong> asks a practical question: can a long workout be converted into a reliable activity log? The study therefore evaluates activity names, start and end times, durations, and event counts—not only whether a model labels a few seconds correctly.</p>
 
 <div class="metric-strip paper-metrics">
   <div class="metric"><strong>137</strong><span>long-session recordings</span></div>
@@ -11,51 +11,50 @@
 
 !!! note "How to read the evidence"
 
-    The headline values are **segment-record metrics**, not window-classification
-    accuracy. Models, fusion, and temporal policies were fixed before the 37
-    independent external-test labels were used for final scoring. Internal
-    development diagnostics and external-test results are identified separately
-    below.
+    The headline values score complete activity records, not isolated windows.
+    The models and timeline rules were fixed before the 37 independent external
+    test recordings were scored. Development analyses and final external-test
+    results are labeled separately below.
 
-## The window-to-record gap
+## Why short-window accuracy is not enough
 
-A locally plausible posterior trajectory can still produce the wrong record
-list. Brief confidence dips may split one activity into two records, weak motion
-may become a short false positive, and window-centered decisions may shift an
-otherwise correct boundary. These errors directly bias activity counts,
-durations, and timelines.
+A model may label most short windows correctly and still produce the wrong
+activity log. A brief drop in confidence can split one activity into two;
+background movement can become a false activity; and a correct label can start
+or end at the wrong time. These errors change activity counts, durations, and
+the final timeline.
 
 <figure class="paper-figure">
   <a class="pipeline-image-link" href="../../assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="Open the full-resolution window-to-record gap figure">
     <img src="../../assets/manuscript-figures/fig01_window_to_record_gap.png" alt="Posterior trajectories, naive fragmented activity records, and the stabilized record list produced by the Temporal Record Layer" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">Paper Fig. 1. Window posteriors can look reasonable while naive record extraction still creates false splits, short false positives, and shifted boundaries. TRL merges and stabilizes the final record list.</figcaption>
+  <figcaption class="pipeline-caption">Paper Fig. 1. Short-window probabilities can look reasonable while the final record list still contains false splits, false alarms, and shifted boundaries. The last timeline stage merges and stabilizes these records.</figcaption>
 </figure>
 
 ## What the system contributes
 
 <div class="research-grid">
   <article class="research-card">
-    <span class="research-card-kicker">Local evidence</span>
-    <h3>CNN + BiLSTM posterior generator</h3>
-    <p>Multi-kernel one-dimensional convolutions capture local motion motifs while a bidirectional recurrent path models their evolution inside each 3 s, 5 s, or 8 s window.</p>
+    <span class="research-card-kicker">Recognize each window</span>
+    <h3>Combine local patterns and time order</h3>
+    <p>A CNN finds short motion patterns, while a BiLSTM follows how they change within each 3-, 5-, or 8-second window.</p>
   </article>
   <article class="research-card">
-    <span class="research-card-kicker">Scale uncertainty</span>
-    <h3>Local-Boundary Scale Arbitration</h3>
-    <p>LBSA retains longer-window stability in steady regions and raises the contribution of the 3 s branch near candidate transitions, where localization matters most.</p>
+    <span class="research-card-kicker">Choose the useful time span</span>
+    <h3>Balance stable context and precise boundaries</h3>
+    <p>Longer windows receive more influence during steady movement; the 3-second model contributes more near possible activity changes. The paper calls this LBSA.</p>
   </article>
   <article class="research-card">
-    <span class="research-card-kicker">Record construction</span>
-    <h3>Deterministic Temporal Record Layer</h3>
-    <p>TRL exposes smoothing, constrained Viterbi decoding, same-class gap merging, boundary refinement, overlap handling, duration filtering, confidence clipping, and pruning as auditable steps.</p>
+    <span class="research-card-kicker">Build the final activity log</span>
+    <h3>Clean up and join the timeline</h3>
+    <p>The final stage reduces rapid label changes, joins appropriate gaps, refines boundaries, handles overlaps, and removes weak or implausible records. The paper calls this TRL.</p>
   </article>
 </div>
 
-The reported measurand is a variable-length record set
-`(activity, start, end)`. A prediction is matched to at most one reference
-segment of the same class when IoU is greater than 0.5. This makes fragmented,
-merged, mistimed, and misclassified records visible in the score.
+The study scores a variable-length list of `(activity, start, end)` records.
+Each prediction can match at most one labeled segment of the same activity, and
+their time overlap (IoU) must be greater than 0.5. Splits, merges, wrong times,
+and wrong activity names therefore reduce the score.
 
 ## Fixed evaluation protocol
 
@@ -75,7 +74,7 @@ and table tennis. The external set contains 114 labeled activity segments.
   <a class="pipeline-image-link" href="../../assets/manuscript-figures/fig04_external_variant_comparison.png" target="_blank" rel="noopener" aria-label="Open the full-resolution external-test comparison figure">
     <img src="../../assets/manuscript-figures/fig04_external_variant_comparison.png" alt="External-test mean-user F1 and micro-F1 together with false-positive and false-negative counts for five fixed system variants" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">Paper Fig. 4. Fixed external-test operating points on the same 37 recordings. LBSA + TRL reaches the top rounded mean-user F1 and the lowest false-positive count among the three-scale variants.</figcaption>
+  <figcaption class="pipeline-caption">Paper Fig. 4. All five fixed variants are tested on the same 37 recordings. LBSA + TRL reaches the highest rounded mean-user F1 and the fewest false alarms among the three-scale variants.</figcaption>
 </figure>
 
 | Fixed variant | Mean-user F1 | 95% CI | Micro-F1 | TP / FP / FN |
@@ -86,7 +85,7 @@ and table tennis. The external set contains 114 labeled activity segments.
 | LBSA + relaxed Top-K | 0.88 | 0.80-0.95 | 0.88 | 103 / 17 / 11 |
 | **LBSA + TRL** | **0.89** | **0.82-0.94** | **0.90** | **99 / 7 / 15** |
 
-<div class="result-callout"><strong>Interpretation.</strong> Relaxed pruning recovers more true segments but also produces substantially more false positives. The final frozen LBSA + TRL setting retains the strongest rounded F1 while suppressing spurious records.</div>
+<div class="result-callout"><strong>Plain-language reading.</strong> Keeping more candidate records finds a few more real activities, but it also creates many more false alarms. The final LBSA + TRL setting keeps the strongest rounded F1 while removing more spurious records.</div>
 
 ### Per-class external-test outcomes
 

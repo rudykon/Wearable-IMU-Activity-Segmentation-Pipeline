@@ -48,6 +48,14 @@ FUSION_MODES = (
     "weighted_long",
     "weighted_balanced",
 )
+FUSION_MODE_LABELS = {
+    "local_boundary": "Adaptive near activity changes / 活动切换处自适应",
+    "average": "Simple average / 简单平均",
+    "dynamic_boundary": "Dynamic boundary weighting / 动态边界加权",
+    "confident_conflict": "Prefer confident agreement / 优先高置信一致判断",
+    "weighted_long": "Prefer longer windows / 偏重长窗口",
+    "weighted_balanced": "Balanced fixed weights / 固定均衡权重",
+}
 CLASS_LABELS = [
     "Background",
     "Badminton",
@@ -383,7 +391,7 @@ def make_signal_figure(recording: Recording):
         axis.grid(color="#dbe4f0", linewidth=0.7, alpha=0.8)
         axis.legend(loc="upper right", ncols=3, frameon=False, fontsize=8)
         axis.spines[["top", "right"]].set_visible(False)
-    figure.suptitle("Uploaded IMU signal preview", fontsize=13, fontweight="bold")
+    figure.suptitle("Motion recorded by the six IMU channels", fontsize=13, fontweight="bold")
     figure.tight_layout()
     plt.close(figure)
     return figure
@@ -413,7 +421,7 @@ def make_timeline_figure(result: DemoResult):
             alpha=0.95 if index else 0.75,
         )
     axes[0].set_ylim(0.0, 1.02)
-    axes[0].set_ylabel("Smoothed probability")
+    axes[0].set_ylabel("Activity likelihood")
     axes[0].grid(color="#dbe4f0", linewidth=0.7, alpha=0.8)
     axes[0].legend(loc="upper center", bbox_to_anchor=(0.5, 1.20), ncols=3, frameon=False, fontsize=8)
 
@@ -422,12 +430,12 @@ def make_timeline_figure(result: DemoResult):
     axes[1].set_yticks(range(len(CLASS_LABELS)), labels=CLASS_LABELS, fontsize=8)
     axes[1].set_ylim(-0.35, len(CLASS_LABELS) - 0.65)
     axes[1].set_xlabel("Time from recording start (s)")
-    axes[1].set_ylabel("Decoded class")
+    axes[1].set_ylabel("Final activity")
     axes[1].grid(axis="x", color="#dbe4f0", linewidth=0.7, alpha=0.8)
 
     for axis in axes:
         axis.spines[["top", "right"]].set_visible(False)
-    figure.suptitle("Multi-scale probabilities and temporal decoding", fontsize=13, fontweight="bold")
+    figure.suptitle("Activity likelihood and final timeline", fontsize=13, fontweight="bold")
     figure.tight_layout()
     plt.close(figure)
     return figure
@@ -439,12 +447,13 @@ def status_markdown(result: DemoResult, fusion_mode: str) -> str:
     segment_count = len(result.segments)
     segment_text = "segment" if segment_count == 1 else "segments"
     scales = " / ".join(result.model_scales)
+    fusion_label = FUSION_MODE_LABELS.get(fusion_mode, fusion_mode)
     return (
-        "### Inference complete / 推理完成\n"
-        f"- **Recording:** `{result.recording.user_id}` · "
+        "### Activity records ready / 活动记录已生成\n"
+        f"- **Input / 输入：** `{result.recording.user_id}` · "
         f"{len(result.recording.data):,} samples · {result.recording.duration_sec:.1f} s · "
         f"{result.recording.sample_rate_hz:.1f} Hz\n"
-        f"- **Model:** {scales} CNN–BiLSTM · `{fusion_mode}` fusion · {result.device.upper()}\n"
-        f"- **Output:** {len(result.timestamps):,} aligned windows · "
-        f"**{segment_count} {segment_text}** after temporal decoding"
+        f"- **Models / 模型：** {scales} windows · {fusion_label} · {result.device.upper()}\n"
+        f"- **Result / 结果：** {len(result.timestamps):,} timeline points · "
+        f"**{segment_count} {segment_text} / {segment_count} 条活动记录**"
     )

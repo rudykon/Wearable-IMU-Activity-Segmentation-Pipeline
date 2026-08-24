@@ -1,15 +1,17 @@
 # Hugging Face Space demo
 
-This directory contains a ZeroGPU-compatible Gradio interface for the repository's real
-tracked 3 s / 5 s / 8 s CNN–BiLSTM checkpoints and temporal record layer.
+This directory contains the public browser demo. It uses the repository's real
+3-, 5-, and 8-second models to turn one continuous IMU recording into a short
+list of timestamped activity records. It can run on Hugging Face ZeroGPU or on
+a local CPU/GPU environment.
 
 ## What the demo does
 
 - accepts one UTF-8 tab-separated `.txt` or `.tsv` recording;
-- validates the canonical millisecond timestamp and six-channel IMU contract;
-- runs the tracked multi-scale models with selectable probability fusion;
-- shows the uploaded signals, smoothed class probabilities, and decoded path;
-- reports bilingual activity segments and provides a downloadable CSV;
+- checks the timestamp and six required IMU channels;
+- runs the three tracked models and lets the user choose how to combine them;
+- shows the raw signals, activity likelihood curves, and final timeline;
+- reports bilingual activity records and provides a downloadable CSV;
 - includes a deterministic synthetic example with no participant data.
 
 The public interface limits uploads to 20 MB, 60,000 samples, and one serialized
@@ -62,7 +64,7 @@ Suggested public Space ID:
 config-h/Wearable-IMU-Activity-Segmentation-Pipeline
 ```
 
-## Input contract
+## Expected input
 
 The first row must contain at least these tab-separated columns:
 

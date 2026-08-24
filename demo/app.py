@@ -14,6 +14,7 @@ import spaces
 import gradio as gr
 
 from demo.runtime import (
+    FUSION_MODE_LABELS,
     FUSION_MODES,
     SEGMENT_COLUMNS,
     DemoInputError,
@@ -27,6 +28,7 @@ from demo.runtime import (
 
 LOGGER = logging.getLogger(__name__)
 EXAMPLE_PATH = ROOT / "demo" / "examples" / "synthetic_activity_imu.tsv"
+FUSION_CHOICES = [(FUSION_MODE_LABELS[mode], mode) for mode in FUSION_MODES]
 
 CSS = """
 :root {
@@ -103,24 +105,24 @@ def segment_recording(upload, fusion_mode, min_duration_sec, confidence_min, top
     except Exception as exc:  # Avoid exposing server internals in the public UI.
         LOGGER.exception("Space inference failed")
         raise gr.Error(
-            "Inference failed. Confirm the input format and try again; "
-            "see the repository issue tracker if the problem persists."
+            "No activity records could be generated. Check the file columns, "
+            "timestamps, and sampling rate, then try again. / 无法生成活动记录，请检查文件列名、时间戳和采样率后重试。"
         ) from exc
 
 
 def build_app() -> gr.Blocks:
     """Build the bilingual, ZeroGPU-compatible Gradio application."""
 
-    with gr.Blocks(title="Wearable IMU Activity Segmentation") as app:
+    with gr.Blocks(title="Wearable IMU Activity Timeline Demo") as app:
         gr.HTML(
             """
             <section class="imu-hero">
-              <span class="imu-pill">ZeroGPU · Real tracked models · 真实模型</span>
-              <h1>Wearable IMU Activity Segmentation</h1>
-              <p>Upload a 100 Hz accelerometer + gyroscope recording and inspect
-              multi-scale CNN–BiLSTM probabilities, temporal decoding, and final
-              activity segments.</p>
-              <p>上传 100 Hz 加速度计与陀螺仪记录，查看多尺度概率、时序解码和最终活动片段。</p>
+              <span class="imu-pill">Free ZeroGPU · Repository models · 仓库真实模型</span>
+              <h1>Wearable IMU Activity Timeline Demo</h1>
+              <p>Upload a 100 Hz wrist-motion recording—or use the sample—to see
+              what activities the models find, when each one starts and ends,
+              and how confident the result is.</p>
+              <p>上传一段 100 Hz 腕部运动记录，或直接使用内置样例，查看模型识别了哪些活动、每段活动何时开始和结束，以及结果置信度。</p>
             </section>
             """
         )
@@ -128,77 +130,77 @@ def build_app() -> gr.Blocks:
         with gr.Row(equal_height=False):
             with gr.Column(scale=5):
                 upload = gr.File(
-                    label="IMU recording / IMU 记录",
+                    label="Upload a 100 Hz IMU file (optional) / 上传 100 Hz IMU 文件（可选）",
                     file_types=[".txt", ".tsv"],
                     type="filepath",
                 )
                 gr.Markdown(
-                    "Required columns: `ACC_TIME`, `ACC_X`, `ACC_Y`, `ACC_Z`, "
-                    "`GYRO_X`, `GYRO_Y`, `GYRO_Z`. `ACC_TIME` uses milliseconds."
+                    "File columns / 文件列名：`ACC_TIME`, `ACC_X`, `ACC_Y`, `ACC_Z`, "
+                    "`GYRO_X`, `GYRO_Y`, `GYRO_Z`。`ACC_TIME` uses milliseconds / 单位为毫秒。"
                 )
                 run_button = gr.Button(
-                    "Run segmentation / 开始分割",
+                    "Find activity periods / 识别活动区间",
                     variant="primary",
                     elem_classes=["primary-action"],
                 )
 
             with gr.Column(scale=4):
                 fusion_mode = gr.Dropdown(
-                    choices=list(FUSION_MODES),
+                    choices=FUSION_CHOICES,
                     value="local_boundary",
-                    label="Multi-scale fusion / 多尺度融合",
+                    label="How to combine the 3 / 5 / 8 s models / 怎样组合 3 / 5 / 8 秒模型",
                 )
                 min_duration = gr.Slider(
                     1,
                     180,
                     value=5,
                     step=1,
-                    label="Minimum segment duration (s) / 最短片段（秒）",
+                    label="Ignore activity periods shorter than (s) / 忽略短于多少秒的活动",
                 )
                 confidence = gr.Slider(
                     0.0,
                     1.0,
                     value=0.30,
                     step=0.05,
-                    label="Minimum confidence / 最低置信度",
+                    label="Ignore predictions below this confidence / 忽略低于该置信度的结果",
                 )
                 top_k = gr.Slider(
                     0,
                     10,
                     value=5,
                     step=1,
-                    label="Top-K segments (0 = off) / 最多片段数",
+                    label="Maximum records to show (0 = all) / 最多显示记录数（0 = 全部）",
                 )
 
         gr.Examples(
             examples=[[str(EXAMPLE_PATH), "local_boundary", 5, 0.30, 5]],
             inputs=[upload, fusion_mode, min_duration, confidence, top_k],
-            label="Bundled synthetic example / 内置合成示例",
+            label="Try without uploading: synthetic example / 无需上传：使用合成示例",
             cache_examples=False,
         )
 
         gr.Markdown(
-            "This example is synthetic and contains no participant recording. "
-            "Demo thresholds are intentionally shorter than the paper's conservative "
-            "long-session reporting settings. / 示例为合成数据，不含受试者记录；演示阈值短于论文的长时记录设置。",
+            "The sample is computer-generated and contains no participant data. "
+            "Its short activity periods are for demonstration only, not a paper result. / "
+            "样例由程序生成，不含参与者数据；其中的短活动区间仅用于演示，不是论文结果。",
             elem_classes=["privacy-note"],
         )
 
-        status = gr.Markdown("### Ready / 就绪\nUpload a file or select the bundled example.")
+        status = gr.Markdown("### Ready / 就绪\nChoose the sample or upload a compatible file, then find the activity periods. / 选择样例或上传兼容文件，然后开始识别活动区间。")
         with gr.Tabs():
-            with gr.Tab("Signals / 信号"):
-                signal_plot = gr.Plot(label="Six-channel IMU preview")
-            with gr.Tab("Model timeline / 模型时间线"):
-                timeline_plot = gr.Plot(label="Probabilities and decoded path")
-            with gr.Tab("Segments / 活动片段"):
+            with gr.Tab("Raw signals / 原始信号"):
+                signal_plot = gr.Plot(label="Six IMU channels / 六路 IMU 信号")
+            with gr.Tab("Activity likelihood and timeline / 活动概率与时间线"):
+                timeline_plot = gr.Plot(label="Activity likelihood and final timeline / 活动概率与最终时间线")
+            with gr.Tab("Activity records / 活动记录"):
                 segment_table = gr.Dataframe(
                     headers=SEGMENT_COLUMNS,
                     interactive=False,
-                    label="Detected segments / 检测片段",
+                    label="Detected activity records / 识别到的活动记录",
                 )
                 download = gr.File(label="Download CSV / 下载 CSV", interactive=False)
 
-        with gr.Accordion("Input, privacy, and limitations / 输入、隐私与局限", open=False):
+        with gr.Accordion("Before you upload: format, privacy, and limits / 上传前须知：格式、隐私与限制", open=False):
             gr.Markdown(
                 """
                 - The public demo accepts UTF-8 tab-separated TXT/TSV files, 800–60,000 valid samples,

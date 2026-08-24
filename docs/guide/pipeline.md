@@ -1,19 +1,20 @@
 # Pipeline architecture
 
-The project solves **temporal activity segmentation**, not isolated clip
-classification. Its input is a long per-user sensor stream; its output is a
-collection of timestamped foreground activity records.
+This page explains how the system changes a long sensor recording into a short
+activity log. It does more than label separate clips: it must decide how many
+activities occurred and where each one started and ended. This task is called
+**temporal activity segmentation**.
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution overall framework figure">
     <img src="../../assets/fig02_overall_framework.png" alt="Existing project framework figure showing the wearable IMU activity segmentation architecture" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">Existing project figure covering signal input, scale-specific models, LBSA fusion, deterministic temporal decoding, and final segment records.</figcaption>
+  <figcaption class="pipeline-caption">Project overview: read six IMU channels, examine 3-, 5-, and 8-second windows, combine their predictions, clean up the timeline, and output activity records.</figcaption>
 </figure>
 
-## System contract
+## Inputs and outputs at a glance
 
-| Item | Contract |
+| Item | What the system expects or returns |
 | --- | --- |
 | Sampling | 100 Hz accelerometer and gyroscope |
 | Model input | `(window, 6)` physical-unit IMU channels |
@@ -50,7 +51,7 @@ Keeping normalization assets beside their corresponding checkpoint is
 essential. A checkpoint and a normalization file from different training runs
 are not interchangeable.
 
-## 3. Multi-scale windows
+## 3. Look at short and long windows
 
 The same session is viewed at three temporal resolutions:
 
@@ -63,7 +64,7 @@ The same session is viewed at three temporal resolutions:
 All scales advance by one second, which makes their probability sequences
 alignable before temporal decoding.
 
-## 4. Window classifier
+## 4. Classify each window
 
 The practical `CombinedModel` is a six-class network:
 
@@ -78,17 +79,17 @@ foreground classifiers for controlled experiments.
 
 !!! info "Why both CNN and BiLSTM?"
 
-    Convolution branches detect local waveform motifs at several receptive
-    fields. The bidirectional recurrent branch encodes how those motifs evolve
-    across a window. Their fused representation is more expressive than either
-    path alone.
+    The CNN looks for short waveform patterns. The BiLSTM looks at how those
+    patterns change from the beginning to the end of a window. Combining them
+    gives the model both local detail and within-window context.
 
-## 5. Probability alignment and LBSA
+## 5. Combine the 3-, 5-, and 8-second views
 
-Each selected 3 s, 5 s, and 8 s checkpoint produces a class-probability stream.
-The pipeline aligns these streams on the common one-second grid and applies
-local-boundary scale arbitration (LBSA), allowing the preferred temporal scale
-to change around uncertain transitions.
+Each model produces one probability timeline. The pipeline aligns all three on
+the same one-second grid. It then gives more influence to the time scale that is
+most useful at each point—for example, a shorter window near a possible change
+and a longer window during steady movement. The paper calls this rule
+**Local-Boundary Scale Arbitration (LBSA)**.
 
 The ensemble configuration is explicit in:
 
@@ -96,12 +97,13 @@ The ensemble configuration is explicit in:
 saved_models/ensemble_config.json
 ~~~
 
-This keeps checkpoint selection and temporal-policy parameters reviewable.
+This file records which models and timeline settings were used, so an
+experiment can be checked and repeated.
 
-## 6. Temporal decoding
+## 6. Turn window guesses into continuous records
 
-Window predictions are not emitted directly as segments. They pass through a
-structured temporal layer that can apply:
+The system does not turn every one-second prediction directly into a record.
+Instead, a final timeline stage can:
 
 - multi-scale fusion;
 - probability smoothing;
@@ -112,8 +114,9 @@ structured temporal layer that can apply:
 - confidence filtering; and
 - final Top-K or duration policies.
 
-These operations reduce isolated label flicker and convert the regular
-one-second probability grid into contiguous timestamp intervals.
+Together, these operations reduce rapid label changes and turn a grid of
+short-window guesses into continuous start-to-end activity periods. The paper
+calls this stage the **Temporal Record Layer (TRL)**.
 
 ## 7. Segment output
 
@@ -127,7 +130,7 @@ user_id, category, start, end
 Background is useful internally for decoding but is excluded from foreground
 submission records.
 
-## Research and Android parity
+## How the Python and Android versions stay aligned
 
 | Python research pipeline | Android app |
 | --- | --- |
@@ -137,5 +140,5 @@ submission records.
 | Experiment scripts and evaluator | Live views and on-device timeline |
 | XLSX segment output | UI segments with confidence |
 
-The runtimes differ, but both implement the same channel order, temporal scales,
-class map, and segment-oriented interpretation.
+The software formats differ, but both versions use the same channel order,
+window lengths, activity names, and start-to-end record format.

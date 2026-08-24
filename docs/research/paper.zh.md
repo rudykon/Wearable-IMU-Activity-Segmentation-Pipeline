@@ -1,6 +1,6 @@
 # 论文要点
 
-<p class="research-lead"><strong>《An End-to-End Wearable IMU System for Segment-Level Activity Recognition via Multi-Scale Arbitration and a Temporal Record Layer》</strong>将可穿戴活动识别研究为一条完整的“感知到记录”测量链。核心问题不仅是短窗口能否分类正确，而是一次长时训练能否变成标签、边界、持续时间和事件计数均可用的可靠记录列表。</p>
+<p class="research-lead"><strong>《An End-to-End Wearable IMU System for Segment-Level Activity Recognition via Multi-Scale Arbitration and a Temporal Record Layer》</strong>研究一个实际问题：能否把一次长时训练可靠地整理成活动日志？因此，论文评价活动类别、开始和结束时间、持续时间及事件次数，而不只看几秒钟窗口是否分类正确。</p>
 
 <div class="metric-strip paper-metrics">
   <div class="metric"><strong>137</strong><span>条长时记录</span></div>
@@ -11,46 +11,46 @@
 
 !!! note "如何阅读这些证据"
 
-    主要结果是**片段记录指标**，并非窗口分类准确率。模型、融合方式与时序策略在
-    使用 37 条独立外部测试记录的标签进行最终评分前已经固定。下文会明确区分
-    内部开发诊断与独立外部测试结果。
+    主要结果评价的是完整活动记录，而不是相互独立的短窗口。模型和时间线规则在
+    37 条独立外部测试记录评分前已经固定。下文会分别标明开发阶段分析与最终外部
+    测试结果。
 
-## 窗口到记录的落差
+## 为什么短窗口准确率还不够
 
-局部看似合理的后验轨迹仍可能生成错误的记录列表。短暂置信下陷会把一段活动拆成
-两条记录，弱运动可能变成短假阳性，以窗口中心为基础的决策也可能使正确类别的
-边界发生偏移。这些错误会直接影响活动次数、持续时间和训练时间线。
+即使大部分短窗口分类正确，最终活动日志仍可能出错。短暂的置信度下降会把一次活动
+拆成两段，背景运动可能被误报为活动，正确类别也可能拥有错误的开始或结束时间。
+这些问题会直接改变活动次数、持续时间和最终时间线。
 
 <figure class="paper-figure">
   <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的窗口到记录落差图">
     <img src="../../../assets/manuscript-figures/fig01_window_to_record_gap.png" alt="后验概率轨迹、朴素提取得到的碎片记录以及时间记录层稳定后的记录列表" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">论文图 1。窗口后验看似合理时，朴素记录提取仍会产生假分裂、短假阳性与边界偏移；TRL 负责合并并稳定最终记录列表。</figcaption>
+  <figcaption class="pipeline-caption">论文图 1。短窗口概率看似合理时，最终记录仍可能出现错误拆分、误报和边界偏移；最后的时间线整理阶段负责合并并稳定这些记录。</figcaption>
 </figure>
 
 ## 系统的三项关键作用
 
 <div class="research-grid">
   <article class="research-card">
-    <span class="research-card-kicker">局部证据</span>
-    <h3>CNN + BiLSTM 后验生成器</h3>
-    <p>多卷积核一维卷积捕获局部运动模式，双向循环路径建模这些模式在 3 秒、5 秒或 8 秒窗口内的演化。</p>
+    <span class="research-card-kicker">判断每个窗口</span>
+    <h3>结合局部模式与前后顺序</h3>
+    <p>CNN 寻找较短的运动模式，BiLSTM 观察这些模式在 3、5 或 8 秒窗口内怎样变化。</p>
   </article>
   <article class="research-card">
-    <span class="research-card-kicker">尺度不确定性</span>
-    <h3>局部边界尺度仲裁</h3>
-    <p>LBSA 在稳定区域保留长窗口证据，在候选活动转换附近提高 3 秒分支的贡献，以兼顾稳定性与边界定位。</p>
+    <span class="research-card-kicker">选择合适的时间范围</span>
+    <h3>兼顾稳定背景与准确边界</h3>
+    <p>动作稳定时更重视长窗口，可能发生活动切换时提高 3 秒模型的作用。论文把这条规则称为 LBSA。</p>
   </article>
   <article class="research-card">
-    <span class="research-card-kicker">记录构建</span>
-    <h3>确定性时间记录层</h3>
-    <p>TRL 将平滑、受约束 Viterbi、同类间隔合并、边界细化、重叠处理、持续时间过滤、置信裁剪与剪枝公开为可审计步骤。</p>
+    <span class="research-card-kicker">生成最终活动日志</span>
+    <h3>整理并连接时间线</h3>
+    <p>最后阶段减少标签快速跳变，合并合理间隔，修正边界，处理重叠，并去除较弱或不合理的记录。论文把这个阶段称为 TRL。</p>
   </article>
 </div>
 
-系统报告的是可变长度的 `(活动, 开始, 结束)` 记录集合。仅当预测与真实片段
-类别一致且 IoU 大于 0.5 时，二者才可进行一对一匹配。因此，碎片化、错误合并、
-边界偏移和类别错误都会反映在评分中。
+论文评价的是长度不固定的 `(活动, 开始, 结束)` 记录列表。每条预测最多匹配一条
+同类人工标注，并且二者的时间重叠比例（IoU）必须大于 0.5。因此，错误拆分、合并、
+时间偏移和类别错误都会降低评分。
 
 ## 固定评估协议
 
@@ -69,7 +69,7 @@
   <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig04_external_variant_comparison.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的外部测试变体对比图">
     <img src="../../../assets/manuscript-figures/fig04_external_variant_comparison.png" alt="五种固定系统变体的外部测试平均用户 F1、Micro-F1、假阳性和假阴性计数" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">论文图 4。五个固定工作点使用同一组 37 条外部记录。LBSA + TRL 获得最高的四舍五入平均用户 F1，并在三尺度变体中具有最低假阳性计数。</figcaption>
+  <figcaption class="pipeline-caption">论文图 4。五种固定方案使用同一组 37 条外部记录。LBSA + TRL 获得最高的四舍五入平均用户 F1，并在三尺度方案中产生最少误报。</figcaption>
 </figure>
 
 | 固定变体 | 平均用户 F1 | 95% CI | Micro-F1 | TP / FP / FN |
@@ -80,7 +80,7 @@
 | LBSA + 宽松 Top-K | 0.88 | 0.80-0.95 | 0.88 | 103 / 17 / 11 |
 | **LBSA + TRL** | **0.89** | **0.82-0.94** | **0.90** | **99 / 7 / 15** |
 
-<div class="result-callout"><strong>解释。</strong>放宽剪枝可以找回更多真实片段，但也会明显增加假阳性；最终冻结的 LBSA + TRL 工作点在保持最强四舍五入 F1 的同时抑制了虚假记录。</div>
+<div class="result-callout"><strong>通俗解释。</strong>保留更多候选记录可以多找回少量真实活动，但也会产生更多误报。最终 LBSA + TRL 设置在保持最高四舍五入 F1 的同时，去除了更多虚假记录。</div>
 
 ### 外部测试分类别结果
 
