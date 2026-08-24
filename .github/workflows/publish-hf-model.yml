@@ -1,0 +1,100 @@
+name: Publish Hugging Face Model
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/publish-hf-model.yml"
+      - "model-hub/**"
+      - "model-assets.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hugging-face-model-production
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish public model assets
+    runs-on: ubuntu-latest
+    env:
+      HF_MODEL_ID: config-h/Wearable-IMU-Activity-Segmentation-Pipeline
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      MODEL_SOURCE_REF: 3f757218da0e8ce8870f0e12f7994c28bbe31f9a
+    steps:
+      - name: Check out repository history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+
+      - name: Create the public model repository
+        run: >-
+          uvx hf repos create "${HF_MODEL_ID}"
+          --type model
+          --public
+          --exist-ok
+
+      - name: Prepare model assets
+        run: |
+          HF_MODEL_STAGE="$(mktemp -d "${RUNNER_TEMP}/hugging-face-model.XXXXXX")"
+          printf 'HF_MODEL_STAGE=%s\n' "${HF_MODEL_STAGE}" >> "${GITHUB_ENV}"
+
+          while IFS= read -r asset; do
+            mkdir -p "${HF_MODEL_STAGE}/$(dirname "${asset}")"
+            git show "${MODEL_SOURCE_REF}:${asset}" > "${HF_MODEL_STAGE}/${asset}"
+          done <<'ASSETS'
+          saved_models/combined_model_3s_seed42.pth
+          saved_models/combined_model_5s_seed123.pth
+          saved_models/combined_model_8s_seed123.pth
+          saved_models/combined_model_best.pth
+          saved_models/norm_params.pkl
+          saved_models/norm_params_3s.pkl
+          saved_models/norm_params_5s.pkl
+          saved_models/norm_params_8s.pkl
+          saved_models/ensemble_config.json
+          android_realtime_app/app/src/main/assets/combined_model_3s_seed42.onnx
+          android_realtime_app/app/src/main/assets/combined_model_5s_seed123.onnx
+          android_realtime_app/app/src/main/assets/combined_model_8s_seed123.onnx
+          android_realtime_app/app/src/main/assets/hand_motion.onnx
+          android_realtime_app/app/src/main/assets/norm_params.json
+          android_realtime_app/app/src/main/assets/norm_params_3s.json
+          android_realtime_app/app/src/main/assets/norm_params_5s.json
+          android_realtime_app/app/src/main/assets/norm_params_8s.json
+          ASSETS
+
+          cp model-hub/README.md "${HF_MODEL_STAGE}/README.md"
+          cp model-assets.json "${HF_MODEL_STAGE}/model-assets.json"
+          cp saved_models/WEIGHTS_LICENSE "${HF_MODEL_STAGE}/LICENSE"
+
+      - name: Verify the staged manifest
+        run: |
+          python - "${HF_MODEL_STAGE}" <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import sys
+
+          root = pathlib.Path(sys.argv[1])
+          manifest = json.loads((root / "model-assets.json").read_text(encoding="utf-8"))
+          for item in manifest["assets"]:
+              path = root / item["path"]
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              if path.stat().st_size != item["size"] or digest != item["sha256"]:
+                  raise SystemExit(f"Manifest mismatch: {item['path']}")
+          print(f"Verified {len(manifest['assets'])} model assets")
+          PY
+
+      - name: Publish model assets
+        run: >-
+          uvx hf upload "${HF_MODEL_ID}" "${HF_MODEL_STAGE}" .
+          --type model
+          --delete "*"
+          --commit-message "Publish wearable IMU model assets"
+          --commit-description "Source GitHub revision ${MODEL_SOURCE_REF}"
