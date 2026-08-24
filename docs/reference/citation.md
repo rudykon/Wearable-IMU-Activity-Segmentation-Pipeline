@@ -1,6 +1,6 @@
-# Citation & license
+# Citation
 
-## Cite the software
+## Software
 
 Until a project-specific archival DOI or paper citation is added, cite the
 versioned repository:
@@ -19,7 +19,7 @@ versioned repository:
 For a reproducible report, replace or supplement `version` with the exact Git
 commit used for training or inference.
 
-## Suggested methods statement
+## Methods
 
 > We used the Wearable IMU Activity Segmentation Pipeline (version 0.1.0,
 > accessed at the cited commit) to process six-channel, 100 Hz accelerometer and
@@ -44,7 +44,7 @@ Apache-2.0 does not change:
 - third-party dependency licenses; or
 - the need to cite external datasets and methods.
 
-## Project links
+## Links
 
 - [Source repository](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline)
 - [Issue tracker](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/issues)

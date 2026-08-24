@@ -1,4 +1,4 @@
-# Android 应用
+# Android
 
 `android_realtime_app/` 模块是 Python 研究流水线的可部署配套应用。它支持
 WT9011DCL-BT50 BLE 采集、实时可视化、CSV 记录、离线文件识别与端侧 ONNX 推理。
@@ -15,7 +15,7 @@ WT9011DCL-BT50 BLE 采集、实时可视化、CSV 记录、离线文件识别与
 | 时序逻辑 | 滤波、LBSA 融合、平滑、Viterbi 解码、边界细化与片段过滤 |
 | 本地化 | 中文与英文界面文本 |
 
-## 运行链路
+## 运行
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="https://raw.githubusercontent.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/main/experiments/figures/fig03_physical_deployment_chain.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的物理部署链路图">
@@ -24,7 +24,7 @@ WT9011DCL-BT50 BLE 采集、实时可视化、CSV 记录、离线文件识别与
   <figcaption class="pipeline-caption">从可穿戴 IMU 采集到 Android 端识别的物理部署链路。点击图片可查看完整分辨率。</figcaption>
 </figure>
 
-## 现场测试示例
+## 现场测试
 
 <figure class="paper-figure compact">
   <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig08_app_field_test.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的 App 现场测试图">
@@ -56,7 +56,7 @@ cd android_realtime_app
 
 Android Studio 会自动创建 `local.properties`。请勿提交该机器专用文件。
 
-## 连接传感器运行
+## 传感器
 
 1. 在支持 BLE 的 Android 设备上安装调试 APK。
 2. 打开 WT9011DCL-BT50 传感器。
@@ -73,7 +73,7 @@ imu_yyyyMMdd_HHmmss.csv
 
 并保存在设备的 Downloads 目录中。
 
-## 离线识别
+## 离线
 
 在识别视图中，可以：
 
@@ -83,7 +83,7 @@ imu_yyyyMMdd_HHmmss.csv
 
 这样无需实时 BLE 连接即可运行应用侧模型与时序层。
 
-## 内置推理资产
+## 资产
 
 | 资产 | 作用 |
 | --- | --- |
@@ -99,7 +99,7 @@ imu_yyyyMMdd_HHmmss.csv
 详细的[模型卡](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/android_realtime_app/MODEL_CARD.md)
 包含输入假设、输出映射、校验和、预期用途与已知限制。
 
-## 输出类别
+## 类别
 
 | 索引 | 中文 | 英文 |
 | ---: | --- | --- |
@@ -115,7 +115,7 @@ imu_yyyyMMdd_HHmmss.csv
     应用与内置模型仅用于研究、教学和可复现原型评估，不声称具备生产安全性、
     临床有效性或跨设备泛化能力。
 
-## 桌面 BLE 工具
+## BLE 工具
 
 `android_realtime_app/tools/desktop/` 下的可选工具包括：
 

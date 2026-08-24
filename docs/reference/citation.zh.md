@@ -1,6 +1,6 @@
-# 引用与许可
+# 引用
 
-## 引用本软件
+## 软件
 
 在项目专属存档 DOI 或论文引用发布之前，请引用带版本的仓库：
 
@@ -17,7 +17,7 @@
 
 为保证报告可复现，请用训练或推理时使用的准确 Git 提交替换或补充 `version`。
 
-## 建议的方法描述
+## 方法
 
 > 我们使用 Wearable IMU Activity Segmentation Pipeline（版本 0.1.0，访问于所引
 > Git 提交）处理六通道、100 Hz 加速度计与陀螺仪数据流，并结合对齐的 3、5、8 秒
@@ -39,7 +39,7 @@ Apache-2.0 不会改变：
 - 第三方依赖许可；
 - 引用外部数据集与方法的要求。
 
-## 项目链接
+## 链接
 
 - [源码仓库](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline)
 - [Issue 跟踪器](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/issues)

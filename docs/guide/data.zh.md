@@ -8,14 +8,14 @@
     将下载的记录保存在已被忽略的 `data/` 目录中。请勿提交、再分发这些数据，
     也不要将其上传到 Issue、Pull Request 或实验产物中。
 
-## 访问方式
+## 访问
 
 在计划中的 PhysioNet 发布完成之前，研究用途申请遵循仓库
 [数据集访问说明](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md)
 中维护的表单与审核流程。PhysioNet 发布后，该文件仍是最新仓库链接与引用信息的
 规范入口。
 
-## 规范本地目录结构
+## 目录
 
 ~~~text
 data/
@@ -54,7 +54,7 @@ data/
 - `internal_eval` — 开发／校准评估；
 - `external_test` — 最终评估或默认推理。
 
-## 传感器流模式
+## 信号
 
 每条记录均为 UTF-8 编码的制表符分隔文件。默认模型需要：
 
@@ -73,7 +73,7 @@ ACC/GYRO 通道。
 ACC_TIME	ACC_X	ACC_Y	ACC_Z	GYRO_X	GYRO_Y	GYRO_Z
 ~~~
 
-## 标注模式
+## 标注
 
 CSV 标注文件使用：
 
@@ -91,7 +91,7 @@ split,user_id,category,start,end
 | 跑步 | Running |
 | 乒乓球 | Table tennis |
 
-## 重定向本地路径
+## 路径
 
 可以通过环境变量替换规范路径：
 
@@ -112,7 +112,7 @@ export HLS_HAR_MODEL_DIR=/mnt/models/imu_activity
 python run_inference.py
 ~~~
 
-## 公开可移植性检查
+## 可移植性
 
 `experiments/public_temporal_record_layer_checks/` 下的可选适配器可在用户另行下载的
 公开数据集上检查片段记录层。这些脚本不会下载数据集，也不会取代各数据集自身的

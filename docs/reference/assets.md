@@ -1,10 +1,10 @@
-# Data & model assets
+# Assets
 
 Code, participant data, selected reproducibility weights, Android assets, and
 generated experiments have different distribution boundaries. Keep those
 boundaries explicit when using or extending the repository.
 
-## Scope summary
+## Scope
 
 | Asset class | Repository status | Notes |
 | --- | --- | --- |
@@ -17,7 +17,7 @@ boundaries explicit when using or extending the repository.
 | Generated checkpoints and logs | Local by default | Ignored unless intentionally curated |
 | Optional public datasets | User-downloaded | Original licenses and citations apply |
 
-## Default Python inference set
+## Python
 
 ~~~text
 saved_models/
@@ -38,7 +38,7 @@ saved_models/
     window length, and class map used during its training. A file that happens
     to load successfully is not evidence that the combination is valid.
 
-## Complete local research layout
+## Research layout
 
 ~~~text
 data/
@@ -66,7 +66,7 @@ files, plus a legacy fallback model. See the
 [Android model card](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/android_realtime_app/MODEL_CARD.md)
 for SHA-256 checksums and runtime assumptions.
 
-## Environment overrides
+## Paths
 
 | Variable | Default |
 | --- | --- |
@@ -78,7 +78,7 @@ for SHA-256 checksums and runtime assumptions.
 | `HLS_HAR_INFERENCE_SPLIT` | `external_test` |
 | `HLS_HAR_EVALUATION_SPLIT` | `external_test` |
 
-## Integrity checklist
+## Integrity
 
 Before reporting or deploying a result, record:
 

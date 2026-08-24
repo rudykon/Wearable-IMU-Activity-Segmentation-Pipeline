@@ -4,7 +4,7 @@
 建议采用可编辑安装，使仓库根目录入口、实验脚本、Notebook 与直接 Python 导入
 都解析到同一个软件包。
 
-## 环境要求
+## 要求
 
 - Python ≥ 3.12
 - Conda，或 Python `venv` + pip
@@ -17,7 +17,7 @@
     公开冒烟测试刻意设计为可在 CPU 上安全运行，并且只使用很小的临时文件。
     完整训练与推理依赖[数据与模型资产](../reference/assets.md)中说明的数据和模型文件。
 
-## 推荐方式：Conda
+## Conda
 
 ~~~bash
 git clone https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline.git
@@ -30,7 +30,7 @@ python -m pip install -e .
 
 该环境固定了仓库使用的数值计算与机器学习软件栈，其中包括 PyTorch 2.5.1。
 
-## 备选方式：pip
+## pip
 
 === "Linux / macOS"
 
@@ -57,7 +57,7 @@ python -m pip install -e .
 wheel，然后安装项目的其余依赖。pip 依赖使用与 Hugging Face ZeroGPU 兼容的
 PyTorch 2.8.0；复现用 Conda 环境仍保留原始 PyTorch 2.5.1 研究软件栈。
 
-## 验证检出内容
+## 验证
 
 ~~~bash
 python -c "import imu_activity_pipeline; print(imu_activity_pipeline.__version__)"
@@ -77,7 +77,7 @@ python tests/smoke_test.py
 3. 标注解析；
 4. 预测工作簿写入。
 
-## 在本地预览本文档
+## 预览
 
 文档依赖与研究环境相互隔离：
 
@@ -92,7 +92,7 @@ mkdocs serve
 mkdocs build --strict
 ~~~
 
-## 常见安装问题
+## 故障排查
 
 ??? question "无法导入软件包"
 

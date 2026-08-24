@@ -9,7 +9,7 @@ accuracy.
     37-recording external-test result from internal TRL diagnostics and shows
     the corresponding comparison, boundary, and timeline figures.
 
-## Run evaluation
+## Run
 
 For the default external split:
 
@@ -30,7 +30,7 @@ predictions_internal_eval.xlsx
 data/annotations/internal_eval_annotations.csv
 ~~~
 
-## Matching rule
+## Matching
 
 A predicted segment is eligible to match a reference segment only when:
 
@@ -52,7 +52,7 @@ The evaluator then reports segment-level precision, recall, and F1:
 The project uses mean user-level segmental F1 as its default summary, preventing
 users with very long sessions from automatically dominating the score.
 
-## Interpreting errors
+## Errors
 
 | Failure mode | Metric effect | Typical diagnostic |
 | --- | --- | --- |
@@ -63,7 +63,7 @@ users with very long sessions from automatically dominating the score.
 | Merged adjacent activities | One-to-one match conflict | Recall and precision may fall |
 | Wrong activity class | No eligible match | Both precision and recall fall |
 
-## Evaluation discipline
+## Protocol
 
 - Use `internal_eval` for post-processing calibration.
 - Reserve `external_test` for the intended final evaluation workflow.
@@ -74,7 +74,7 @@ users with very long sessions from automatically dominating the score.
 - Do not infer performance from the website. Run the released evaluator on the
   authorized split and report the exact asset/configuration version.
 
-## Experiment outputs
+## Outputs
 
 The reproducibility wrapper writes evaluation and diagnostic material under:
 

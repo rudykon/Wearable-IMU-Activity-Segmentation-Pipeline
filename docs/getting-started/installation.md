@@ -19,7 +19,7 @@ package.
     files. Full training and inference depend on the data and model assets
     described in [Data & model assets](../reference/assets.md).
 
-## Recommended: Conda
+## Conda
 
 ~~~bash
 git clone https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline.git
@@ -33,7 +33,7 @@ python -m pip install -e .
 The environment pins the numerical and machine-learning stack used by the
 repository, including PyTorch 2.5.1.
 
-## Alternative: pip
+## pip
 
 === "Linux / macOS"
 
@@ -61,7 +61,7 @@ then install the remaining project dependencies. The pip requirements use
 PyTorch 2.8.0 for Hugging Face ZeroGPU compatibility; the reproducibility Conda
 environment retains the original PyTorch 2.5.1 research stack.
 
-## Verify the checkout
+## Verify
 
 ~~~bash
 python -c "import imu_activity_pipeline; print(imu_activity_pipeline.__version__)"
@@ -81,7 +81,7 @@ The smoke test checks:
 3. annotation parsing; and
 4. prediction workbook writing.
 
-## Preview this documentation locally
+## Preview
 
 Documentation dependencies are isolated from the research environment:
 
@@ -96,7 +96,7 @@ Open `http://127.0.0.1:8000/`. A strict production build is:
 mkdocs build --strict
 ~~~
 
-## Common installation issues
+## Troubleshooting
 
 ??? question "The package cannot be imported"
 

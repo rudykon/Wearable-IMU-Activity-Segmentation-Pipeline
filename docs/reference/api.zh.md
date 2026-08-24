@@ -1,4 +1,4 @@
-# Python API
+# API
 
 软件包刻意保持小巧且面向源码。导入前请以可编辑模式安装：
 
@@ -6,7 +6,7 @@
 python -m pip install -e .
 ~~~
 
-## 软件包映射
+## 软件包
 
 | 模块 | 主要职责 |
 | --- | --- |
@@ -33,7 +33,7 @@ print(imu_activity_pipeline.__version__)
 0.1.0
 ~~~
 
-## 读取信号文件
+## 信号
 
 `DataReader` 读取目录中的每个 `.txt` 文件，并返回以文件名主干为键的字典。
 
@@ -49,7 +49,7 @@ for user_id, frame in sessions.items():
 
 每个数据帧应包含[数据](../guide/data.md)页面中说明的规范时间戳与六个 IMU 通道。
 
-## 运行端到端推理
+## 推理
 
 ~~~python
 from imu_activity_pipeline.inference import run_inference
@@ -66,7 +66,7 @@ segments = run_inference(
 user_id, category, start, end
 ~~~
 
-## 写入片段记录
+## 输出
 
 ~~~python
 from imu_activity_pipeline.prediction_writer import DataOutput
@@ -81,7 +81,7 @@ DataOutput(
 ).save_predictions()
 ~~~
 
-## 实例化窗口分类器
+## 分类器
 
 ~~~python
 import torch
@@ -114,7 +114,7 @@ print(config.ACTIVITIES)
 导入 `config` 时会读取 `HLS_HAR_DATA_ROOT`、`HLS_HAR_MODEL_DIR` 等路径设置。
 请在启动 Python 前设置环境变量。
 
-## 兼容入口
+## 兼容
 
 仓库根目录的脚本在委托给软件包的同时保留源码检出命令：
 
