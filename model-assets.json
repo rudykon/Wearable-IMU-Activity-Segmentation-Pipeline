@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "repo_id": "config-h/Wearable-IMU-Activity-Segmentation-Pipeline",
+  "revision": "main",
+  "source_github_revision": "3f757218da0e8ce8870f0e12f7994c28bbe31f9a",
+  "assets": [
+    {
+      "path": "saved_models/combined_model_3s_seed42.pth",
+      "kind": "pytorch-checkpoint",
+      "size": 5664643,
+      "sha256": "5ef17adef4fcbd610473e0190c67f327ee26afbbca05b0518aefacb00eaca54e"
+    },
+    {
+      "path": "saved_models/combined_model_5s_seed123.pth",
+      "kind": "pytorch-checkpoint",
+      "size": 5665981,
+      "sha256": "9a4f9732e8b95da52c3b890b45ce51a54e5cfc77097b72d6515427c677901e18"
+    },
+    {
+      "path": "saved_models/combined_model_8s_seed123.pth",
+      "kind": "pytorch-checkpoint",
+      "size": 5664643,
+      "sha256": "e56e73db5ec9dd4c7ba0c6ddff251830f5d450c8cca53a1d5b9054b65fada190"
+    },
+    {
+      "path": "saved_models/combined_model_best.pth",
+      "kind": "pytorch-checkpoint-fallback",
+      "size": 5664643,
+      "sha256": "5ef17adef4fcbd610473e0190c67f327ee26afbbca05b0518aefacb00eaca54e"
+    },
+    {
+      "path": "saved_models/norm_params.pkl",
+      "kind": "normalization-parameters-fallback",
+      "size": 291,
+      "sha256": "b2c4a41e46777deb6cf506f9ce20ff1821c079166750f4660c962b34e8022004"
+    },
+    {
+      "path": "saved_models/norm_params_3s.pkl",
+      "kind": "normalization-parameters",
+      "size": 291,
+      "sha256": "b2c4a41e46777deb6cf506f9ce20ff1821c079166750f4660c962b34e8022004"
+    },
+    {
+      "path": "saved_models/norm_params_5s.pkl",
+      "kind": "normalization-parameters",
+      "size": 291,
+      "sha256": "6d20e78c346239d1232c7d4760dd6e716c9af527c9117fc065535230c826951a"
+    },
+    {
+      "path": "saved_models/norm_params_8s.pkl",
+      "kind": "normalization-parameters",
+      "size": 242,
+      "sha256": "91fe6b36977897ae61f693f63441746f562c3edd9851cdec9cc48436167b62e1"
+    },
+    {
+      "path": "saved_models/ensemble_config.json",
+      "kind": "ensemble-configuration",
+      "size": 1219,
+      "sha256": "faf29aad470765050afb9c6e489a8ac9735a0fbfda50dff311421ea52a302f81"
+    },
+    {
+      "path": "android_realtime_app/app/src/main/assets/combined_model_3s_seed42.onnx",
+      "kind": "onnx-checkpoint",
+      "size": 5647794,
+      "sha256": "5adb8807bfc737e11ee40cca0af0690c22fdd8d29b5c5aaa35c3e83f9f646839"
+    },
+    {
+      "path": "android_realtime_app/app/src/main/assets/combined_model_5s_seed123.onnx",
+      "kind": "onnx-checkpoint",
+      "size": 5647794,
+      "sha256": "d812c5fc04df6c1ca249e3cec8c977a28c2de8036736c134210b3173490f2681"
+    },
+    {
+      "path": "android_realtime_app/app/src/main/assets/combined_model_8s_seed123.onnx",
+      "kind": "onnx-checkpoint",
+      "size": 5647794,
+      "sha256": "75fb093eca823003c6f5e44b0a0363f24b04659ab2ae08ddb08c334481087f8d"
+    },
+    {
+      "path": "android_realtime_app/app/src/main/assets/hand_motion.onnx",
+      "kind": "onnx-checkpoint-fallback",
+      "size": 5642603,
+      "sha256": "c41f8c7fab431d407504eba0141976047f5f010597e7fa8e0a6b57872f8f9456"
+    },
+    {
+      "path": "android_realtime_app/app/src/main/assets/norm_params.json",
+      "kind": "android-normalization-parameters-fallback",
+      "size": 446,
+      "sha256": "396daf64b26765910065c0a46535e1595b12a12e13fb65485f2edfb29141cc3b"
+    },
+    {
+      "path": "android_realtime_app/app/src/main/assets/norm_params_3s.json",
+      "kind": "android-normalization-parameters",
+      "size": 322,
+      "sha256": "21d38c29325d691e49a5835254dbf1b08fb216f2e4c9af0cb31a39412e1d98c9"
+    },
+    {
+      "path": "android_realtime_app/app/src/main/assets/norm_params_5s.json",
+      "kind": "android-normalization-parameters",
+      "size": 323,
+      "sha256": "180b60e4306972072e07fd29a7c2065bab47ea8fe6daaa3c2c7eb4942b6f4ad2"
+    },
+    {
+      "path": "android_realtime_app/app/src/main/assets/norm_params_8s.json",
+      "kind": "android-normalization-parameters",
+      "size": 313,
+      "sha256": "7416395acceafc45803d8a63cc79919fc203970a061e5bc16d00337822418b7e"
+    }
+  ]
+}
