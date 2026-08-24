@@ -9,7 +9,7 @@ a local CPU/GPU environment.
 
 - accepts one UTF-8 tab-separated `.txt` or `.tsv` recording;
 - checks the timestamp and six required IMU channels;
-- runs the three tracked models and lets the user choose how to combine them;
+- runs the three public HF models and lets the user choose how to combine them;
 - shows the raw signals, activity likelihood curves, and final timeline;
 - reports bilingual activity records and provides a downloadable CSV;
 - includes a deterministic synthetic example with no participant data.
@@ -31,7 +31,7 @@ python demo/app.py
 ```
 
 Open the local Gradio URL printed by the process. The first inference request is
-slower because it loads all three tracked checkpoints.
+slower because it downloads any missing assets and loads all three checkpoints.
 
 Regenerate the bundled synthetic example with:
 
@@ -39,7 +39,7 @@ Regenerate the bundled synthetic example with:
 python demo/generate_sample.py
 ```
 
-Validate all three tracked checkpoints on CPU with:
+Validate all three public checkpoints on CPU with:
 
 ```bash
 python demo/model_smoke_test.py
@@ -48,7 +48,8 @@ python demo/model_smoke_test.py
 ## Deploy to Hugging Face Spaces
 
 Deploy the **whole repository**, not only this directory. The app imports the
-core package from `src/` and loads the tracked assets under `saved_models/`.
+core package from `src/` and downloads missing assets from the public
+[HF Model repository](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline).
 
 Space-only YAML metadata is stored in `demo/space-readme-frontmatter.md` so the
 GitHub project README can begin directly with the branded overview. During

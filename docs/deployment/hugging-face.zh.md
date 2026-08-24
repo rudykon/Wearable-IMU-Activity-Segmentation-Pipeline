@@ -3,6 +3,7 @@
 在浏览器运行 3、5、8 秒模型。可选内置样例，也可上传兼容的腕部 IMU 文件。
 
 [打开 Hugging Face Space](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button .md-button--primary target="_blank" rel="noopener" }
+[打开模型权重](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button target="_blank" rel="noopener" }
 [查看 Demo 源码](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/tree/main/demo){ .md-button target="_blank" rel="noopener" }
 
 <figure class="pipeline-frame">
@@ -56,6 +57,8 @@ python -m pip install spaces
 python -m pip install -e .
 python demo/app.py
 ```
+
+缺少的检查点会从公开 HF Model 仓库自动下载。
 
 API 端点：`/segment`。
 

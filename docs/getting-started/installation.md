@@ -16,8 +16,8 @@ package.
 !!! note
 
     The public smoke test is intentionally CPU-safe and uses tiny temporary
-    files. Full training and inference depend on the data and model assets
-    described in [Data & model assets](../reference/assets.md).
+    files. Full training needs the documented data; inference downloads missing
+    public weights as described in [Data & model assets](../reference/assets.md).
 
 ## Conda
 
@@ -112,5 +112,5 @@ mkdocs build --strict
 ??? question "The smoke test passes but inference cannot start"
 
     That usually means the code installation is healthy but required local
-    signal files or model assets are missing. Continue with the
+    signal files are missing, or the public model download failed. Continue with the
     [quick start](quickstart.md) and [asset map](../reference/assets.md).

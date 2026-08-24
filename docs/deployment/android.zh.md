@@ -54,6 +54,11 @@ cd android_realtime_app
 ./gradlew assembleDebug
 ~~~
 
+构建过程会从公开的
+[HF Model 仓库](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
+下载 4 个 ONNX 权重并核对 SHA-256。GitHub 只保存应用源码与小型 JSON 配置，
+不保存模型二进制文件。
+
 Android Studio 会自动创建 `local.properties`。请勿提交该机器专用文件。
 
 ## 传感器
@@ -112,7 +117,7 @@ imu_yyyyMMdd_HHmmss.csv
 
 !!! warning "研究演示"
 
-    应用与内置模型仅用于研究、教学和可复现原型评估，不声称具备生产安全性、
+    应用与公开模型仅用于研究、教学和可复现原型评估，不声称具备生产安全性、
     临床有效性或跨设备泛化能力。
 
 ## BLE 工具

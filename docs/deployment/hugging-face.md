@@ -4,6 +4,7 @@ Run the 3-, 5-, and 8-second models in your browser. Use the sample or upload a
 compatible wrist IMU file.
 
 [Open the Hugging Face Space](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button .md-button--primary target="_blank" rel="noopener" }
+[Open the model weights](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline){ .md-button target="_blank" rel="noopener" }
 [Inspect the demo source](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/tree/main/demo){ .md-button target="_blank" rel="noopener" }
 
 <figure class="pipeline-frame">
@@ -59,6 +60,8 @@ python -m pip install spaces
 python -m pip install -e .
 python demo/app.py
 ```
+
+Missing checkpoints download automatically from the public HF Model repository.
 
 API endpoint: `/segment`.
 

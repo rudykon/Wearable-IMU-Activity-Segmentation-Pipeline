@@ -1,4 +1,4 @@
-"""Run the bundled example through all tracked checkpoints on CPU."""
+"""Run the bundled example through all public HF checkpoints on CPU."""
 
 from __future__ import annotations
 

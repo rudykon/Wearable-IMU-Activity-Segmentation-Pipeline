@@ -1,8 +1,8 @@
 """Runtime adapter for the Hugging Face Space demo.
 
 The adapter deliberately keeps model imports lazy. Importing the Gradio app is
-therefore inexpensive, while the tracked PyTorch checkpoints are loaded only
-when the first inference request arrives.
+therefore inexpensive, while the public Hugging Face checkpoints are downloaded
+when needed and loaded only before the first inference request.
 """
 
 from __future__ import annotations
@@ -196,7 +196,7 @@ def load_imu_recording(upload: str | Path | Any, *, apply_filter: bool = True) -
 
 @lru_cache(maxsize=1)
 def _load_model_bundle():
-    """Load the tracked multi-scale checkpoints once per Space process."""
+    """Prepare and load the public multi-scale checkpoints once per process."""
 
     import torch
 

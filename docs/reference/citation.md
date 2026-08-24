@@ -32,8 +32,8 @@ reported experiment.
 
 ## License
 
-Repository-authored source code and the distributed Python and Android model
-assets are licensed under the
+Repository-authored source code and the public Hugging Face Python and Android
+model assets are licensed under the
 [Apache License 2.0](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/LICENSE).
 Scope-specific copies are retained beside model assets.
 
@@ -47,6 +47,7 @@ Apache-2.0 does not change:
 ## Links
 
 - [Source repository](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline)
+- [Public model weights](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
 - [Issue tracker](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/issues)
 - [Dataset access instructions](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md)
 - [Android model card](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/android_realtime_app/MODEL_CARD.md)

@@ -28,12 +28,7 @@ data/
 
 saved_models/
 ├── ensemble_config.json
-├── combined_model_3s_seed42.pth
-├── combined_model_5s_seed123.pth
-├── combined_model_8s_seed123.pth
-├── norm_params_3s.pkl
-├── norm_params_5s.pkl
-└── norm_params_8s.pkl
+└── <HF 下载文件保存在这里>
 ~~~
 
 每个传感器文件均采用 UTF-8 编码、制表符分隔，并至少包含：
@@ -51,6 +46,11 @@ ACC_TIME  ACC_X  ACC_Y  ACC_Z  GYRO_X  GYRO_Y  GYRO_Z
 ~~~bash
 python run_inference.py
 ~~~
+
+首次运行会从
+[Hugging Face](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
+下载并校验公开的 PyTorch 资产。也可提前运行
+`python scripts/download_model_assets.py python`。
 
 兼容入口会调用已安装的软件包并写入：
 

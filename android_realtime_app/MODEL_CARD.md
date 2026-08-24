@@ -2,9 +2,10 @@
 
 ## Model Summary
 
-This repository includes ONNX model weights for real-time activity recognition
-from WT9011DCL-BT50 BLE IMU data. The Android app loads the weights directly
-from `app/src/main/assets/` and runs inference on-device with ONNX Runtime.
+The public [Hugging Face Model repository](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
+hosts the ONNX weights for real-time activity recognition from
+WT9011DCL-BT50 BLE IMU data. Gradle downloads verified files into
+`app/src/main/assets/`, and the app runs them on-device with ONNX Runtime.
 
 The default recognition pipeline uses selected 3s, 5s, and 8s models, then
 applies multi-scale fusion and temporal post-processing in
@@ -60,7 +61,7 @@ The Android implementation:
 The fallback path loads `hand_motion.onnx` and `norm_params.json` if selected
 multi-scale assets are replaced or unavailable.
 
-## Bundled Assets
+## Published Assets
 
 | File | Purpose | SHA-256 |
 | --- | --- | --- |
@@ -86,6 +87,6 @@ multi-scale assets are replaced or unavailable.
 
 ## License
 
-The bundled model weights and normalization files are licensed under the Apache
+The public model weights and normalization files are licensed under the Apache
 License 2.0 in `WEIGHTS_LICENSE`. The application source code is licensed under
 the Apache License 2.0 in `LICENSE`.

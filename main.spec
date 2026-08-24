@@ -8,17 +8,11 @@ block_cipher = None
 # Project root (where this spec file lives)
 PROJECT_DIR = SPECPATH
 
-# Model files and config to bundle into saved_models/
+# Public HF assets to bundle after running scripts/download_model_assets.py.
 saved_models_files = [
     'combined_model_3s_seed42.pth',
-    'combined_model_3s_seed123.pth',
-    'combined_model_3s_seed456.pth',
-    'combined_model_5s_seed42.pth',
     'combined_model_5s_seed123.pth',
-    'combined_model_5s_seed456.pth',
-    'combined_model_8s_seed42.pth',
     'combined_model_8s_seed123.pth',
-    'combined_model_8s_seed456.pth',
     'combined_model_best.pth',
     'norm_params_3s.pkl',
     'norm_params_5s.pkl',
@@ -28,12 +22,19 @@ saved_models_files = [
 ]
 
 datas = []
+missing_model_files = []
 for f in saved_models_files:
     src = os.path.join(PROJECT_DIR, 'saved_models', f)
     if os.path.exists(src):
         datas.append((src, 'saved_models'))
     else:
-        print(f"WARNING: {src} not found, skipping")
+        missing_model_files.append(src)
+
+if missing_model_files:
+    raise SystemExit(
+        "Missing model assets. Run `python scripts/download_model_assets.py python` "
+        "before building the executable."
+    )
 
 a = Analysis(
     [os.path.join(PROJECT_DIR, 'main.py')],

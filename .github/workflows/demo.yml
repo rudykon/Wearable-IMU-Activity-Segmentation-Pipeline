@@ -5,8 +5,11 @@ on:
     paths:
       - "demo/**"
       - "tests/test_hf_space_demo.py"
+      - "tests/test_model_assets.py"
       - "requirements.txt"
       - "README.md"
+      - "model-assets.json"
+      - "scripts/download_model_assets.py"
       - "src/imu_activity_pipeline/**"
       - ".github/workflows/demo.yml"
       - ".github/workflows/hugging-face-space.yml"
@@ -16,8 +19,11 @@ on:
     paths:
       - "demo/**"
       - "tests/test_hf_space_demo.py"
+      - "tests/test_model_assets.py"
       - "requirements.txt"
       - "README.md"
+      - "model-assets.json"
+      - "scripts/download_model_assets.py"
       - "src/imu_activity_pipeline/**"
       - ".github/workflows/demo.yml"
       - ".github/workflows/hugging-face-space.yml"
@@ -60,12 +66,19 @@ jobs:
           MPLBACKEND: Agg
         run: python tests/test_hf_space_demo.py
 
+      - name: Validate public model downloads
+        run: python tests/test_model_assets.py
+
       - name: Build the Gradio interface
         env:
           MPLBACKEND: Agg
         run: python -c "from demo.app import demo; assert demo is not None"
 
-      - name: Run tracked-model inference
+      - name: Validate Android model bootstrap
+        working-directory: android_realtime_app
+        run: ./gradlew :app:downloadModelAssets --no-daemon
+
+      - name: Run public-model inference
         env:
           MPLBACKEND: Agg
           TORCH_NUM_THREADS: "2"

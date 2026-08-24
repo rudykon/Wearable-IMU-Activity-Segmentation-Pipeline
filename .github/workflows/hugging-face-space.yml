@@ -44,6 +44,7 @@ jobs:
             --exclude ".git/" \
             --exclude ".github/" \
             --exclude "site/" \
+            --exclude "model-hub/" \
             --exclude "demo/space-readme-frontmatter.md" \
             ./ "${HF_SPACE_STAGE}/"
           sed -n '1,$p' demo/space-readme-frontmatter.md > "${HF_SPACE_STAGE}/README.md"

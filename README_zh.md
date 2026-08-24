@@ -20,12 +20,14 @@
   <a href="#quick-start"><img src="https://img.shields.io/badge/Smoke%20test-no%20raw%20data-2CA02C?style=flat-square" alt="轻量测试不需要原始数据"></a>
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"><img src="https://img.shields.io/badge/Docs-项目网站-0F8F8C?style=flat-square&logo=materialformkdocs&logoColor=white" alt="项目网站"></a>
   <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Live%20Demo-Hugging%20Face%20Spaces-FFD21E?style=flat-square" alt="Hugging Face Spaces 在线演示"></a>
+  <a href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Models-PyTorch%20%2B%20ONNX-7C3AED?style=flat-square" alt="Hugging Face 公开模型权重"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-4C78A8?style=flat-square" alt="Apache License 2.0"></a>
 </p>
 
 <p align="center">
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/">项目网站</a> ·
   <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">在线演示</a> ·
+  <a href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">模型</a> ·
   <a href="#overview">项目概览</a> ·
   <a href="#pipeline">流程</a> ·
   <a href="#quick-start">快速开始</a> ·
@@ -37,7 +39,7 @@
 </p>
 
 > [!IMPORTANT]
-> 本 GitHub 仓库不分发参与者传感器记录。仓库作者编写的源码以及随仓库分发的 Python/Android 模型资产采用 Apache-2.0；数据集和第三方依赖仍遵循各自条款。
+> GitHub 只保存源码，不保存模型二进制文件或参与者记录。Python 与 Android 权重在 Hugging Face 公开发布，采用 Apache-2.0；数据集和第三方依赖仍遵循各自条款。
 
 <a id="overview"></a>
 ## 项目概览
@@ -129,7 +131,8 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 ```
 
-将授权数据放入 `data/`、模型资产放入 `saved_models/` 后，运行推理：
+将授权数据放入 `data/` 后即可运行推理。缺少的公开模型会从 Hugging Face
+自动下载，并在使用前核对 SHA-256：
 
 ```bash
 python run_inference.py
@@ -171,7 +174,16 @@ python -m imu_activity_pipeline.inference \
 <a id="model-assets"></a>
 ## 模型资产
 
-Python 研究流程以代码为主。`saved_models/` 下跟踪部分复现检查点、归一化参数和集成配置；额外本地训练输出由 Git 忽略。
+模型二进制文件发布在公开的
+[Hugging Face Model 仓库](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)，
+不再保存在 GitHub。Python 推理会将缺失文件下载到 `saved_models/`，并在使用前
+校验 SHA-256；Android 构建会自动获取 ONNX 权重。
+
+也可以提前下载全部资产：
+
+```bash
+python scripts/download_model_assets.py all
+```
 
 默认多尺度推理需要：
 
@@ -187,10 +199,11 @@ saved_models/norm_params_8s.pkl
 
 资产说明：
 
+- [model-assets.json](model-assets.json) 记录公开文件的大小和 SHA-256。
 - [docs/ASSETS.md](docs/ASSETS.md) 描述本地数据、检查点和生成产物边界。
-- [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE) 适用于随仓库分发的 Python 模型资产。
+- [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE) 适用于公开的 Python 模型资产。
 - [android_realtime_app/MODEL_CARD.md](android_realtime_app/MODEL_CARD.md) 说明 Android ONNX 资产、校验和、预期用途和限制。
-- [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE) 适用于随仓库分发的 Android 模型资产。
+- [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE) 适用于公开的 Android 模型资产。
 
 <a id="android-app"></a>
 ## Android App
@@ -245,7 +258,7 @@ PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 | --- | --- |
 | `src/imu_activity_pipeline/` | 核心 Python 包，覆盖配置、加载、训练、推理、后处理和评估 |
 | `run_inference.py`, `train.py`, `train_parallel.py`, `evaluate.py` | 源码检出环境下的兼容入口 |
-| `saved_models/` | 已跟踪复现资产及被忽略的本地训练输出 |
+| `saved_models/` | HF 本地下载与被忽略的训练输出；Git 仅跟踪小型配置文件 |
 | `data/` | 本地数据目录占位与访问说明 |
 | `experiments/` | 评估、鲁棒性、可视化和公开数据集可迁移性脚本 |
 | `scripts/` | 辅助分析、调参和图件工具 |
@@ -256,4 +269,4 @@ PYTHON_BIN=/path/to/python bash run_reproducibility_experiments.sh
 <a id="license"></a>
 ## 许可证
 
-仓库作者编写的源码以及随仓库分发的 Python、Android 模型资产均采用 [Apache License 2.0](LICENSE)。适用范围副本位于 [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE)、[android_realtime_app/LICENSE](android_realtime_app/LICENSE) 和 [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE)。数据集和第三方依赖仍分别遵循各自条款。
+仓库作者编写的源码以及 Hugging Face 公开发布的 Python、Android 模型资产均采用 [Apache License 2.0](LICENSE)。适用范围副本位于 [saved_models/WEIGHTS_LICENSE](saved_models/WEIGHTS_LICENSE)、[android_realtime_app/LICENSE](android_realtime_app/LICENSE) 和 [android_realtime_app/WEIGHTS_LICENSE](android_realtime_app/WEIGHTS_LICENSE)。数据集和第三方依赖仍分别遵循各自条款。

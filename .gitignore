@@ -11,6 +11,8 @@ __pycache__/
 # Environments
 .venv/
 .venv*/
+*.egg-info/
+uv.lock
 .env
 *.conda
 
@@ -33,10 +35,15 @@ __pycache__/
 # Dataset-derived Android demo samples are not distributed publicly
 /android_realtime_app/app/src/main/assets/offline_samples/*.txt
 
-# Model artifacts
+# Model weights live in the public Hugging Face Model repository.
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.onnx
+
+# Local model outputs and caches
 !saved_models/ensemble_config.example.json
-saved_models/*.pth
-saved_models/*.pt
 saved_models/*.pkl
 saved_models/*.npz
 saved_models/*.npy
@@ -46,15 +53,7 @@ saved_models/training_artifacts/
 saved_models/archive*/
 saved_models/*.log
 
-# Tracked final inference assets
-!saved_models/combined_model_3s_seed42.pth
-!saved_models/combined_model_5s_seed123.pth
-!saved_models/combined_model_8s_seed123.pth
-!saved_models/combined_model_best.pth
-!saved_models/norm_params.pkl
-!saved_models/norm_params_3s.pkl
-!saved_models/norm_params_5s.pkl
-!saved_models/norm_params_8s.pkl
+# Small configuration stays in Git; binary assets are downloaded from HF.
 !saved_models/ensemble_config.json
 
 # Generated experiment outputs

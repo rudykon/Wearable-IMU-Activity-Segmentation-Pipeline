@@ -8,10 +8,10 @@ map, integrity checklist, environment overrides, and license boundaries.
 
 - Participant recordings are **not distributed** in this GitHub repository.
 - Authorized recordings remain local under ignored `data/` directories.
-- Selected Python checkpoints and normalization files are versioned under
-  `saved_models/`.
-- Selected Android ONNX and JSON assets are versioned under
-  `android_realtime_app/app/src/main/assets/`.
+- Python checkpoints, normalization files, and Android ONNX weights are public
+  in the [Hugging Face Model repository](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline).
+- GitHub tracks their manifest and small configuration files, not the model
+  binaries. Missing assets are downloaded and verified before use.
 - Additional locally generated checkpoints, results, figures, and logs remain
   ignored unless intentionally curated.
 
