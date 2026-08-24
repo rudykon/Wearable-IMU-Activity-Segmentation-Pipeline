@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1254" height="1254" viewBox="0 0 1254 1254" fill="none">
-<title>Wearable IMU logo master</title>
-<svg xmlns="http://www.w3.org/2000/svg" width="1254" height="1254" viewBox="0 0 1254 1254" fill="none">
-<title>Wearable IMU activity segmentation logo - strict vector trace</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="520" viewBox="0 0 1600 520" fill="none" role="img" aria-labelledby="title desc">
+<title id="title">Wearable IMU Activity Segmentation Pipeline horizontal logo</title>
+<desc id="desc">Horizontal lockup with the traced wearable IMU mark and the supplied project name.</desc>
+<g id="mark" transform="translate(50 82) scale(0.386) translate(-128 -130)">
 <g id="dark">
 <path d="M 510 130 H 528 A 11 11 0 0 1 539 141 V 159 A 11 11 0 0 1 528 170 H 510 A 11 11 0 0 1 499 159 V 141 A 11 11 0 0 1 510 130 Z" fill="#022043"/>
 <path d="M 560 130 H 580 A 11 11 0 0 1 591 141 V 159 A 11 11 0 0 1 580 170 H 560 A 11 11 0 0 1 549 159 V 141 A 11 11 0 0 1 560 130 Z" fill="#022043"/>
@@ -205,8 +205,8 @@
 <path d="M 569.5 750 H 569.5 A 9.5 9.5 0 0 1 579 759.5 V 763.5 A 9.5 9.5 0 0 1 569.5 773 H 569.5 A 9.5 9.5 0 0 1 560 763.5 V 759.5 A 9.5 9.5 0 0 1 569.5 750 Z" fill="#F66548"/>
 <path d="M 420.5 751 H 420.5 A 9.5 9.5 0 0 1 430 760.5 V 762.5 A 9.5 9.5 0 0 1 420.5 772 H 420.5 A 9.5 9.5 0 0 1 411 762.5 V 760.5 A 9.5 9.5 0 0 1 420.5 751 Z" fill="#F66548"/>
 </g>
-</svg>
-
-
-
+</g>
+<text x="535" y="238" fill="#022043" font-family="Segoe UI, Arial, sans-serif" font-size="96" font-weight="700" letter-spacing="1.2">Wearable IMU</text>
+<text x="1020" y="378" text-anchor="middle" fill="#11AF98" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="600" letter-spacing="0.8">Activity Segmentation Pipeline</text>
+<path d="M540 357H690M1350 357H1500" fill="none" stroke="#15AAE3" stroke-width="6" stroke-linecap="round"/>
 </svg>

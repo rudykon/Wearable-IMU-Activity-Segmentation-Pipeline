@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/logo.svg" width="260" alt="可穿戴 IMU 活动分割流程 Logo">
+  <img src="docs/assets/logo-horizontal.svg" width="560" alt="可穿戴 IMU 活动分割流程 Logo">
 </p>
 
 <h1 align="center">可穿戴 IMU 活动分割流程</h1>
