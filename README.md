@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/logo.svg" width="260" alt="Wearable IMU Activity Segmentation Pipeline logo">
+  <img src="docs/assets/logo-horizontal.svg" width="560" alt="Wearable IMU Activity Segmentation Pipeline logo">
 </p>
 
 <h1 align="center">Wearable IMU Activity Segmentation Pipeline</h1>
