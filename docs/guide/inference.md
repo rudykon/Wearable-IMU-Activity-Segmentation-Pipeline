@@ -1,109 +1,76 @@
 # Inference
 
-Convert long sensor files into timestamped activities.
+Inference is the posterior-to-record stage of the method. It applies the three
+selected window models to a complete session, fuses their probability
+trajectories, and emits activity segments.
 
-## Run
+## Posteriors
 
-~~~bash
-python run_inference.py
-~~~
+The 3 s, 5 s, and 8 s models advance at one-second intervals. Each produces a
+six-class posterior matrix: background plus five sports. The 5 s and 8 s
+matrices are interpolated onto the 3 s reference grid before fusion.
 
-Reads:
+The scales provide complementary evidence:
 
-~~~text
-data/signals/external_test/*.txt
-saved_models/ensemble_config.json
-saved_models/*.pth
-saved_models/*.pkl
-~~~
+| Scale | Strength | Weakness |
+| --- | --- | --- |
+| 3 s | transition localization | noisier stable regions |
+| 5 s | balance of detail and context | moderate boundary blur |
+| 8 s | stable repetitive-motion context | weakest boundary precision |
 
-Writes:
+## Arbitration
 
-~~~text
-predictions_external_test.xlsx
-~~~
+LBSA begins with stable-region weights `(0.20, 0.35, 0.45)`. Around class
+changes in the 3 s trajectory, the weights move toward `(0.50, 0.27, 0.23)`.
+The adjustment is local: long-window support remains present while the short
+branch receives enough weight to sharpen a possible boundary.
 
-## Paths
+## Record decoding
 
-Set input and output:
+TRL is applied once to the fused matrix:
 
-~~~bash
-python -m imu_activity_pipeline.inference \
-  --data_dir data/signals/internal_eval \
-  --output predictions_internal_eval.xlsx
-~~~
+1. smooth each class trajectory;
+2. decode a consistent state path with constrained Viterbi;
+3. extract contiguous foreground intervals;
+4. merge same-class gaps shorter than 60 s;
+5. refine boundaries within ±15 s using acceleration energy;
+6. resolve overlaps;
+7. remove records shorter than 180 s;
+8. apply Top-K and confidence pruning.
 
-For external data and models:
+The final paper operating point uses Top-K 3 and confidence ≥ 0.45. These
+thresholds reflect minute-scale workout records and must be recalibrated for a
+different activity protocol.
 
-~~~bash
-export HLS_HAR_DATA_ROOT=/absolute/path/to/data
-export HLS_HAR_MODEL_DIR=/absolute/path/to/saved_models
-export HLS_HAR_INFERENCE_SPLIT=external_test
-python run_inference.py
-~~~
+<figure class="paper-figure">
+  <a class="pipeline-image-link" href="../../assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="Open the full-resolution window-to-record figure">
+    <img src="../../assets/manuscript-figures/fig01_window_to_record_gap.png" alt="Window posteriors, fragmented naive records, and stabilized TRL records" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">TRL reduces false splits, short false records, and boundary drift.</figcaption>
+</figure>
 
-## Steps
+## Records
 
-1. Load checkpoints and normalization.
-2. Read each session.
-3. Filter and normalize six channels.
-4. Build 3-, 5-, and 8-second windows.
-5. Align probabilities.
-6. Fuse scales with LBSA.
-7. Decode the sequence with Viterbi.
-8. Refine and filter segments.
-9. Write the workbook.
+Each foreground output contains:
 
-## Output
-
-| Column | Description |
+| Field | Meaning |
 | --- | --- |
-| `user_id` | File stem / session identifier |
-| `category` | One of the five foreground activity labels |
-| `start` | Segment start in milliseconds |
-| `end` | Segment end in milliseconds |
+| `user_id` | recording identifier |
+| `category` | one of five activities |
+| `start` | segment start in milliseconds |
+| `end` | segment end in milliseconds |
 
-Example:
+Background supports decoding but is not emitted as an activity record.
 
-~~~text
-HNU00001,跑步,1760000000000,1760000600000
-~~~
+## Complexity
 
-## Python interface
+Smoothing and segment refinement are linear in the number of windows. Viterbi
+decoding is `O(TC²)`; with six classes, neural forward passes dominate runtime.
+For fixed inputs and parameters, the record layer is deterministic and every
+merge, trim, and filter has an explicit interpretation.
 
-~~~python
-from imu_activity_pipeline.inference import run_inference
+??? info "Run the software"
 
-segments = run_inference(
-    data_dir="data/signals/internal_eval",
-    output_file="predictions_internal_eval.xlsx",
-)
-
-print(f"generated {len(segments)} segments")
-~~~
-
-See [Python API](../reference/api.md) for lower-level I/O.
-
-## Troubleshooting
-
-??? question "No input files are found"
-
-    Confirm that the selected directory contains `.txt` files and that the
-    active split or `--data_dir` points to that directory.
-
-??? question "A checkpoint loads but tensor shapes do not match"
-
-    Check that the selected checkpoint corresponds to its configured window
-    length and that the expected six-channel input order is unchanged.
-
-??? question "Predictions look unstable"
-
-    Verify sampling rate, sensor placement, physical units, filtering,
-    scale-specific normalization, and the ensemble configuration before tuning
-    temporal thresholds.
-
-??? question "The workbook is empty"
-
-    The decoder may have classified the recording as background or removed all
-    foreground candidates through duration/confidence policies. Inspect the
-    probability plots and filtering settings before weakening the filters.
+    The default entry point is `python run_inference.py`. Input paths and the
+    Python interface are documented in [Quickstart](../getting-started/quickstart.md)
+    and the [API reference](../reference/api.md).

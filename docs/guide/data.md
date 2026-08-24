@@ -1,123 +1,88 @@
-# Data
+# Dataset
 
-The repository publishes code, selected reproducibility model assets, layout
-placeholders, and access instructions. It does **not** publish participant
-sensor recordings.
+**HLS-HAR** was designed for long-session sports recording rather than isolated
+window classification. Huawei sports watches captured wrist acceleration and
+angular velocity in real sports-health monitoring sessions. Research access is
+coordinated by the Hainan University organizers.
 
-!!! important "Use only authorized data"
+<div class="metric-strip paper-metrics">
+  <div class="metric"><strong>137</strong><span>recordings</span></div>
+  <div class="metric"><strong>46.8M</strong><span>valid samples</span></div>
+  <div class="metric"><strong>259.6 h</strong><span>sensor data</span></div>
+  <div class="metric"><strong>5</strong><span>activities</span></div>
+</div>
 
-    Keep downloaded recordings in the ignored `data/` tree. Do not commit,
-    redistribute, or upload them to issues, pull requests, or experiment
-    artifacts.
+## Activities
 
-## Access
+The foreground vocabulary contains badminton, rope skipping, dumbbell fly,
+running, and table tennis. Background motion is modeled internally but is not
+reported as a workout record.
 
-Before the planned PhysioNet release, research-use requests follow the form and
-review procedure maintained in the repository's
-[dataset access instructions](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md).
-After a PhysioNet release, that file is the canonical place for the current
-repository link and citation information.
+| Activity | External-test segments |
+| --- | ---: |
+| Badminton | 32 |
+| Rope skipping | 20 |
+| Dumbbell fly | 20 |
+| Running | 20 |
+| Table tennis | 22 |
+| **Total** | **114** |
 
-## Layout
+## Splits
 
-~~~text
-data/
-├── signals/
-│   ├── train/
-│   │   └── HNUxxxxx.txt
-│   ├── internal_eval/
-│   │   └── HNUxxxxx.txt
-│   └── external_test/
-│       └── HNUxxxxx.txt
-├── annotations/
-│   ├── train_annotations.csv
-│   ├── internal_eval_annotations.csv
-│   ├── external_test_annotations.csv
-│   └── all_annotations.csv
-├── splits/
-│   ├── train_users.txt
-│   ├── internal_eval_users.txt
-│   ├── external_test_users.txt
-│   └── split_manifest.csv
-├── metadata/
-│   ├── signal_manifest.csv
-│   ├── split_summary.csv
-│   ├── label_summary_by_split.csv
-│   └── dataset_metadata.json
-└── public_external/
-    ├── har70plus/
-    ├── opportunity/
-    ├── pamap2/
-    └── wisdm_phone/
-~~~
+The split is fixed at the recording level.
 
-The split names are part of the public interface:
+| Split | Recordings | Use |
+| --- | ---: | --- |
+| Training | 80 | model fitting and training-stage selection |
+| Development / calibration | 20 | temporal-policy tuning and diagnostics |
+| Independent external test | 37 | final scoring after the operating point is frozen |
 
-- `train` — model development;
-- `internal_eval` — development/calibration evaluation; and
-- `external_test` — final evaluation or default inference.
+The 100-record model-development pool contains 284 labeled activity segments,
+about 34.8 million samples, and 130.5 hours of sensing. The 80-record training
+split contributes about 28.2 million samples and 113.5 hours.
+
+Development-set scores are **diagnostics**, not independent estimates. External
+labels are used only for final scoring; they are not used to select checkpoints,
+fusion rules, TRL parameters, or reported variants.
 
 ## Signals
 
-Each recording is a UTF-8 tab-separated file. The default model requires:
+The reported system uses six 100 Hz channels:
 
-| Column | Meaning |
+| Signal | Meaning |
 | --- | --- |
-| `ACC_TIME` | Millisecond timestamp used for output boundaries |
-| `ACC_X`, `ACC_Y`, `ACC_Z` | Three-axis acceleration |
-| `GYRO_X`, `GYRO_Y`, `GYRO_Z` | Three-axis angular velocity |
+| `ACC_X`, `ACC_Y`, `ACC_Z` | tri-axial wrist acceleration |
+| `GYRO_X`, `GYRO_Y`, `GYRO_Z` | tri-axial wrist angular velocity |
+| timestamp | millisecond reference for segment boundaries |
 
-Released files may preserve PPG timestamps, PPG channels, or other original
-columns. The default activity model reads the six ACC/GYRO channels.
+Three overlapping views are constructed with a one-second step:
 
-Example header:
-
-~~~text
-ACC_TIME	ACC_X	ACC_Y	ACC_Z	GYRO_X	GYRO_Y	GYRO_Z
-~~~
+| Window | Samples | Training windows |
+| --- | ---: | ---: |
+| 3 s | 300 | 281,871 |
+| 5 s | 500 | 281,711 |
+| 8 s | 800 | 281,471 |
 
 ## Labels
 
-CSV annotation files use:
+Each annotation is an `(activity, start, end)` segment. Evaluation therefore
+measures complete records, including event count, boundaries, and duration.
+Predictions are matched one-to-one with same-class labels at IoU > 0.5.
 
-~~~text
-split,user_id,category,start,end
-~~~
+## Scope
 
-`start` and `end` are millisecond timestamps. `category` is one of:
+Public HAR datasets only partly overlap with this setting. Some use phone
+accelerometers, short scripted windows, daily activities, or no gyroscope;
+others do not provide long-session segment records. Cross-paper window
+accuracy is therefore not directly comparable with HLS-HAR segment F1.
 
-| Label | English |
-| --- | --- |
-| 羽毛球 | Badminton |
-| 跳绳 | Jump rope |
-| 飞鸟 | Fly |
-| 跑步 | Running |
-| 乒乓球 | Table tennis |
+HAR70+, WISDM-phone, PAMAP2, and OPPORTUNITY are used only for TRL portability
+checks with dataset-specific models and parameters. They are not leaderboard
+comparisons and do not establish transfer of the HLS-HAR result.
 
-## Paths
+!!! important "Access and privacy"
 
-Canonical paths can be replaced through environment variables:
-
-| Variable | Purpose |
-| --- | --- |
-| `HLS_HAR_DATA_ROOT` | Replace the complete `data/` root |
-| `HLS_HAR_TRAIN_DATA_DIR` | Replace training signals only |
-| `HLS_HAR_INTERNAL_EVAL_DATA_DIR` | Replace internal evaluation signals |
-| `HLS_HAR_EXTERNAL_TEST_DATA_DIR` | Replace external-test signals |
-| `HLS_HAR_*_ANNOTATIONS_FILE` | Replace a split's annotation CSV |
-| `HLS_HAR_MODEL_DIR` | Replace `saved_models/` |
-
-Example:
-
-~~~bash
-export HLS_HAR_DATA_ROOT=/mnt/authorized/imu_dataset
-export HLS_HAR_MODEL_DIR=/mnt/models/imu_activity
-python run_inference.py
-~~~
-
-## Portability
-
-Optional adapters under
-`experiments/public_temporal_record_layer_checks/` exercise the segment-record
-layer on separately downloaded public datasets. The scripts do not download
-those datasets and do not replace each dataset's own license or citation terms.
+    Participant recordings are not stored in the public repository. Before the
+    planned PhysioNet release, research requests follow the
+    [dataset access instructions](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md).
+    Storage layout and asset checks are documented in [Assets](../reference/assets.md).

@@ -1,119 +1,80 @@
-# 数据
+# 数据集
 
-仓库发布代码、选定的可复现模型资产、目录占位文件与访问说明，**不发布**参与者
-传感器记录。
+**HLS-HAR** 面向长时运动记录，而不是孤立窗口分类。数据由华为运动手表在真实
+运动健康监测场景中采集腕部加速度与角速度，研究访问由海南大学组织方协调。
 
-!!! important "仅使用经授权的数据"
+<div class="metric-strip paper-metrics">
+  <div class="metric"><strong>137</strong><span>条记录</span></div>
+  <div class="metric"><strong>4680 万</strong><span>有效样本</span></div>
+  <div class="metric"><strong>259.6 h</strong><span>传感器数据</span></div>
+  <div class="metric"><strong>5</strong><span>类活动</span></div>
+</div>
 
-    将下载的记录保存在已被忽略的 `data/` 目录中。请勿提交、再分发这些数据，
-    也不要将其上传到 Issue、Pull Request 或实验产物中。
+## 活动
 
-## 访问
+五类前景活动为羽毛球、跳绳、哑铃飞鸟、跑步和乒乓球。背景运动参与内部建模，
+但不作为训练活动记录输出。
 
-在计划中的 PhysioNet 发布完成之前，研究用途申请遵循仓库
-[数据集访问说明](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md)
-中维护的表单与审核流程。PhysioNet 发布后，该文件仍是最新仓库链接与引用信息的
-规范入口。
+| 活动 | 外部测试片段数 |
+| --- | ---: |
+| 羽毛球 | 32 |
+| 跳绳 | 20 |
+| 哑铃飞鸟 | 20 |
+| 跑步 | 20 |
+| 乒乓球 | 22 |
+| **合计** | **114** |
 
-## 目录
+## 划分
 
-~~~text
-data/
-├── signals/
-│   ├── train/
-│   │   └── HNUxxxxx.txt
-│   ├── internal_eval/
-│   │   └── HNUxxxxx.txt
-│   └── external_test/
-│       └── HNUxxxxx.txt
-├── annotations/
-│   ├── train_annotations.csv
-│   ├── internal_eval_annotations.csv
-│   ├── external_test_annotations.csv
-│   └── all_annotations.csv
-├── splits/
-│   ├── train_users.txt
-│   ├── internal_eval_users.txt
-│   ├── external_test_users.txt
-│   └── split_manifest.csv
-├── metadata/
-│   ├── signal_manifest.csv
-│   ├── split_summary.csv
-│   ├── label_summary_by_split.csv
-│   └── dataset_metadata.json
-└── public_external/
-    ├── har70plus/
-    ├── opportunity/
-    ├── pamap2/
-    └── wisdm_phone/
-~~~
+数据按记录固定划分。
 
-数据划分名称属于公开接口的一部分：
+| 划分 | 记录数 | 用途 |
+| --- | ---: | --- |
+| 训练集 | 80 | 模型训练与训练阶段选择 |
+| 开发／校准集 | 20 | 时序策略校准与诊断 |
+| 独立外部测试集 | 37 | 工作点冻结后的最终评分 |
 
-- `train` — 模型开发；
-- `internal_eval` — 开发／校准评估；
-- `external_test` — 最终评估或默认推理。
+由训练集和开发／校准集组成的 100 条模型开发记录包含 284 个标注活动片段、约
+3480 万个样本和 130.5 小时数据。其中 80 条训练记录约含 2820 万个样本和
+113.5 小时数据。
+
+开发集分数只用于**诊断**，不是独立性能估计。外部测试标签只用于最终评分，不参与
+检查点、融合规则、TRL 参数或报告方案的选择。
 
 ## 信号
 
-每条记录均为 UTF-8 编码的制表符分隔文件。默认模型需要：
+论文系统使用六路 100 Hz 信号：
 
-| 列 | 含义 |
+| 信号 | 含义 |
 | --- | --- |
-| `ACC_TIME` | 用于输出边界的毫秒时间戳 |
-| `ACC_X`、`ACC_Y`、`ACC_Z` | 三轴加速度 |
-| `GYRO_X`、`GYRO_Y`、`GYRO_Z` | 三轴角速度 |
+| `ACC_X`、`ACC_Y`、`ACC_Z` | 腕部三轴加速度 |
+| `GYRO_X`、`GYRO_Y`、`GYRO_Z` | 腕部三轴角速度 |
+| 时间戳 | 活动边界的毫秒参考 |
 
-发布的文件可能保留 PPG 时间戳、PPG 通道或其他原始列。默认活动模型读取六个
-ACC/GYRO 通道。
+系统以一秒为步长构建三个重叠视图：
 
-示例表头：
-
-~~~text
-ACC_TIME	ACC_X	ACC_Y	ACC_Z	GYRO_X	GYRO_Y	GYRO_Z
-~~~
+| 窗口 | 样本数 | 训练窗口数 |
+| --- | ---: | ---: |
+| 3 秒 | 300 | 281,871 |
+| 5 秒 | 500 | 281,711 |
+| 8 秒 | 800 | 281,471 |
 
 ## 标注
 
-CSV 标注文件使用：
+每条标注都是 `(活动, 开始, 结束)` 片段。因此评价对象是完整记录，包括事件次数、
+边界与持续时间。预测和同类标注按 IoU > 0.5 一对一匹配。
 
-~~~text
-split,user_id,category,start,end
-~~~
+## 边界
 
-`start` 与 `end` 为毫秒时间戳。`category` 取以下值之一：
+公开 HAR 数据集只与本任务部分重合：有些使用手机加速度、短时脚本窗口或日常活动，
+有些缺少陀螺仪或长时片段记录。因此，其他论文的窗口准确率不能直接与 HLS-HAR
+片段 F1 比较。
 
-| 标签 | 英文 |
-| --- | --- |
-| 羽毛球 | Badminton |
-| 跳绳 | Jump rope |
-| 飞鸟 | Fly |
-| 跑步 | Running |
-| 乒乓球 | Table tennis |
+HAR70+、WISDM-phone、PAMAP2 和 OPPORTUNITY 只用于使用各自模型与参数的 TRL
+可移植性检查，不是排行榜对比，也不能证明 HLS-HAR 结果可以直接迁移。
 
-## 路径
+!!! important "访问与隐私"
 
-可以通过环境变量替换规范路径：
-
-| 变量 | 用途 |
-| --- | --- |
-| `HLS_HAR_DATA_ROOT` | 替换完整 `data/` 根目录 |
-| `HLS_HAR_TRAIN_DATA_DIR` | 仅替换训练信号目录 |
-| `HLS_HAR_INTERNAL_EVAL_DATA_DIR` | 替换内部评估信号目录 |
-| `HLS_HAR_EXTERNAL_TEST_DATA_DIR` | 替换外部测试信号目录 |
-| `HLS_HAR_*_ANNOTATIONS_FILE` | 替换某一划分的标注 CSV |
-| `HLS_HAR_MODEL_DIR` | 替换 `saved_models/` |
-
-示例：
-
-~~~bash
-export HLS_HAR_DATA_ROOT=/mnt/authorized/imu_dataset
-export HLS_HAR_MODEL_DIR=/mnt/models/imu_activity
-python run_inference.py
-~~~
-
-## 可移植性
-
-`experiments/public_temporal_record_layer_checks/` 下的可选适配器可在用户另行下载的
-公开数据集上检查片段记录层。这些脚本不会下载数据集，也不会取代各数据集自身的
-许可与引用条款。
+    公开仓库不保存参与者记录。在计划中的 PhysioNet 发布完成前，研究申请遵循
+    [数据集访问说明](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md)。
+    存储目录与资产检查见[资产](../reference/assets.md)页面。

@@ -1,119 +1,116 @@
-# Pipeline
+# Architecture
 
-The pipeline turns a long IMU recording into timestamped activity records.
+The method converts a long wrist-IMU stream into a small set of activity
+records. It separates three questions: what the current motion resembles,
+which time scale is most reliable, and how window probabilities become stable
+start-to-end records.
 
 <figure class="pipeline-frame">
-  <a class="pipeline-image-link" href="../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution overall framework figure">
-    <img src="../../assets/fig02_overall_framework.png" alt="Existing project framework figure showing the wearable IMU activity segmentation architecture" loading="lazy" decoding="async">
+  <a class="pipeline-image-link" href="../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution framework figure">
+    <img src="../../assets/fig02_overall_framework.png" alt="Wearable IMU segment-record architecture with multi-scale posterior models, LBSA, TRL, and activity records" loading="lazy" decoding="async">
   </a>
-  <figcaption class="pipeline-caption">Six channels → three window scales → fusion → timeline → records.</figcaption>
+  <figcaption class="pipeline-caption">IMU stream → multi-scale posteriors → LBSA → TRL → activity records.</figcaption>
 </figure>
 
-## I/O
+## Task
 
-| Item | What the system expects or returns |
-| --- | --- |
-| Sampling | 100 Hz accelerometer and gyroscope |
-| Model input | `(window, 6)` physical-unit IMU channels |
-| Window scales | 3 s (300 samples), 5 s (500), 8 s (800) |
-| Window step | 1 s (100 samples) |
-| Internal classes | background + five foreground activities |
-| Public output | `user_id, category, start, end` |
-| Evaluation | same-class one-to-one matching at IoU > 0.5 |
-
-## 1. Read
-
-`DataReader` loads tab-separated `.txt` sessions. Required channels:
+The input is a 100 Hz stream with six channels:
 
 ~~~text
 ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 ~~~
 
-`ACC_TIME` stores millisecond timestamps.
+The output is a variable-length set of `(activity, start, end)` records. This is
+**temporal activity segmentation**, not independent window classification. A
+useful system must recover the activity class, event count, duration, and
+boundaries of each workout segment.
 
-## 2. Preprocessing
-
-Python and Android use the same channel order and normalization:
-
-- low-pass Butterworth filtering;
-- fixed channel order;
-- scale-specific normalization parameters; and
-- timestamp-preserving window construction.
-
-Keep each checkpoint with its matching normalization file.
-
-## 3. Window
-
-| Scale | Samples | Why it helps |
-| --- | ---: | --- |
-| 3 seconds | 300 | Captures short local motion signatures |
-| 5 seconds | 500 | Balances local detail and activity context |
-| 8 seconds | 800 | Stabilizes longer or repetitive actions |
-
-All scales advance by one second.
-
-## 4. Classify
-
-`CombinedModel` has six classes and five parts:
-
-1. parallel 1D convolution branches with kernels 3, 7, and 15;
-2. concatenated multi-resolution feature maps;
-3. a deeper CNN path with adaptive pooling;
-4. a two-layer bidirectional LSTM path; and
-5. a fused classification head.
-
-The source also keeps two-stage classifiers for experiments.
-
-!!! info "CNN + BiLSTM"
-
-    CNN captures local patterns; BiLSTM captures their order.
-
-## 5. Fuse
-
-The three probability timelines share a one-second grid. **LBSA** favors short
-windows near changes and long windows during steady motion.
-
-The ensemble configuration is explicit in:
-
-~~~text
-saved_models/ensemble_config.json
-~~~
-
-It records the selected models and timeline settings.
-
-## 6. Decode
-
-The **Temporal Record Layer (TRL)** applies:
-
-- multi-scale fusion;
-- probability smoothing;
-- Viterbi sequence decoding;
-- boundary refinement;
-- short-gap handling;
-- overlap resolution;
-- confidence filtering; and
-- final Top-K or duration policies.
-
-The result is a set of continuous activity periods.
-
-## 7. Export
-
-`DataOutput` writes an Excel workbook:
-
-~~~text
-user_id, category, start, end
-~~~
-
-Background is not exported.
-
-## Python and Android
-
-| Python research pipeline | Android app |
+| Item | Definition |
 | --- | --- |
-| PyTorch checkpoints (`.pth`) | ONNX models (`.onnx`) |
-| Pickled normalization assets | JSON normalization assets |
-| Batch files from `data/signals/` | BLE history or a selected offline file |
-| Experiment scripts and evaluator | Live views and on-device timeline |
-| XLSX segment output | UI segments with confidence |
+| Sampling | 100 Hz wrist acceleration and angular velocity |
+| Window scales | 3 s, 5 s, and 8 s |
+| Step | 1 s |
+| Classes | background + five sports |
+| Record match | same class, one-to-one, IoU > 0.5 |
 
-Both use the same channels, windows, labels, and record format.
+## Dataset
+
+The study uses **HLS-HAR**, a long-session sports dataset collected with Huawei
+sports watches. It contains **137 recordings**, about **46.8 million** valid
+ACC/GYRO samples, and **259.6 hours** of sensing.
+
+| Split | Recordings | Role |
+| --- | ---: | --- |
+| Training | 80 | fit models and select checkpoints during training |
+| Development / calibration | 20 | tune and diagnose temporal policy |
+| Independent external test | 37 | one final evaluation after all choices are frozen |
+
+The five foreground activities are badminton, rope skipping, dumbbell fly,
+running, and table tennis. The external set contains 114 labeled segments.
+
+## Posterior model
+
+Each window is classified by a compact **1D-CNN + BiLSTM** network with 1.41
+million trainable parameters:
+
+1. three temporal convolution branches use kernels 3, 7, and 15;
+2. the branches capture short transients, rhythmic motion, and longer periodic cues;
+3. a BiLSTM models the order of motion patterns across the window;
+4. the fused head predicts background or one of five activities.
+
+The same architecture is trained at all three scales. Short windows preserve
+transition detail; long windows provide steadier activity context. All scales
+advance by one second so their posterior trajectories can be aligned.
+
+## LBSA
+
+**Local-Boundary Scale Arbitration (LBSA)** treats stable motion and transitions
+differently. The 5 s and 8 s posteriors are aligned to the 3 s grid. Away from
+transitions, longer windows receive more weight. Near a class change, the 3 s
+branch becomes dominant.
+
+| Region | 3 s | 5 s | 8 s |
+| --- | ---: | ---: | ---: |
+| Stable motion | 0.20 | 0.35 | 0.45 |
+| Local boundary | 0.50 | 0.27 | 0.23 |
+
+The boundary mask comes only from posterior changes; it does not use segment
+labels. Temporal decoding is applied once, after the three scales are fused.
+
+## TRL
+
+The **Temporal Record Layer (TRL)** converts the fused posterior trajectory into
+records through explicit, deterministic operations.
+
+| Operation | Purpose | Paper setting |
+| --- | --- | ---: |
+| Moving average | suppress short probability dips | 7 steps |
+| Median filter | remove isolated spikes | kernel 5 |
+| Viterbi decoding | discourage rapid state switches | constrained transitions |
+| Gap merging | join brief same-class interruptions | < 60 s |
+| Boundary refinement | correct window-centering error | ±15 s |
+| Duration filter | remove short false records | ≥ 180 s |
+| Final pruning | limit weak or excess records | Top-K 3, confidence ≥ 0.45 |
+
+These values encode minute-scale workout bouts; they are not universal HAR
+constants. New activity protocols require new calibration.
+
+## Measurement chain
+
+Each stage controls a different record-level error:
+
+| Stage | Main uncertainty | Observable effect |
+| --- | --- | --- |
+| Posterior model | ambiguous local motion | wrong or unstable class evidence |
+| LBSA | scale-dependent boundary blur | shifted starts and ends |
+| TRL | record construction | splits, merges, false alarms, and duration error |
+
+The final chain is evaluated with segment F1, matched IoU, boundary error,
+duration error, and false positives per hour. This keeps the reported evidence
+at the same level as the output people use: complete activity records.
+
+??? info "Reproduction"
+
+    Commands, file paths, and software interfaces are kept in
+    [Quickstart](../getting-started/quickstart.md),
+    [Inference](inference.md), and the [API reference](../reference/api.md).

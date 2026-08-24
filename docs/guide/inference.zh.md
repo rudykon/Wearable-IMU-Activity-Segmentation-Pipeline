@@ -1,105 +1,69 @@
 # 推理
 
-把长时传感器文件转换成带时间戳的活动。
+推理是论文中的“后验概率到活动记录”阶段。系统先对完整会话运行三个已选窗口模型，
+再融合概率时间线并输出活动片段。
 
-## 运行
+## 后验概率
 
-~~~bash
-python run_inference.py
-~~~
+3 秒、5 秒和 8 秒模型都以一秒为步长。每个模型生成六分类后验矩阵：背景加五类
+运动。融合前，5 秒和 8 秒矩阵通过插值对齐到 3 秒参考网格。
 
-读取：
+三个尺度提供互补证据：
 
-~~~text
-data/signals/external_test/*.txt
-saved_models/ensemble_config.json
-saved_models/*.pth
-saved_models/*.pkl
-~~~
+| 尺度 | 优点 | 局限 |
+| --- | --- | --- |
+| 3 秒 | 定位活动切换 | 稳定区间噪声较大 |
+| 5 秒 | 平衡细节与上下文 | 存在一定边界模糊 |
+| 8 秒 | 重复动作背景稳定 | 边界精度最低 |
 
-写入：
+## 尺度仲裁
 
-~~~text
-predictions_external_test.xlsx
-~~~
+LBSA 在稳定区间使用 `(0.20, 0.35, 0.45)`。3 秒时间线发生活动切换时，局部权重
+调整为 `(0.50, 0.27, 0.23)`。长窗口仍提供支持，短窗口则获得足够权重修正边界。
 
-## 路径
+## 记录解码
 
-指定输入与输出：
+TRL 只对融合矩阵执行一次：
 
-~~~bash
-python -m imu_activity_pipeline.inference \
-  --data_dir data/signals/internal_eval \
-  --output predictions_internal_eval.xlsx
-~~~
+1. 平滑各类别概率时间线；
+2. 用受约束 Viterbi 解码前后一致的状态序列；
+3. 提取连续前景区间；
+4. 合并小于 60 秒的同类间隔；
+5. 根据加速度能量在 ±15 秒内修正边界；
+6. 消解重叠；
+7. 删除短于 180 秒的记录；
+8. 应用 Top-K 和置信度筛选。
 
-外部数据与模型：
+论文最终工作点使用 Top-K 3 和置信度 ≥ 0.45。这些阈值面向分钟级训练记录，新的
+活动协议必须重新校准。
 
-~~~bash
-export HLS_HAR_DATA_ROOT=/absolute/path/to/data
-export HLS_HAR_MODEL_DIR=/absolute/path/to/saved_models
-export HLS_HAR_INFERENCE_SPLIT=external_test
-python run_inference.py
-~~~
+<figure class="paper-figure">
+  <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig01_window_to_record_gap.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的窗口到记录图">
+    <img src="../../../assets/manuscript-figures/fig01_window_to_record_gap.png" alt="窗口后验概率、朴素方法产生的碎片记录和 TRL 稳定后的记录" loading="lazy" decoding="async">
+  </a>
+  <figcaption class="pipeline-caption">TRL 减少错误拆分、短时误报和边界漂移。</figcaption>
+</figure>
 
-## 步骤
+## 活动记录
 
-1. 加载检查点和归一化参数。
-2. 读取会话。
-3. 滤波并归一化六个通道。
-4. 构建 3、5、8 秒窗口。
-5. 对齐概率。
-6. 用 LBSA 融合尺度。
-7. 用 Viterbi 解码序列。
-8. 修正并过滤片段。
-9. 写入工作簿。
+每条前景输出包含：
 
-## 输出
-
-| 列 | 说明 |
+| 字段 | 含义 |
 | --- | --- |
-| `user_id` | 文件名主干／会话标识符 |
-| `category` | 五种前景活动标签之一 |
+| `user_id` | 记录标识符 |
+| `category` | 五类活动之一 |
 | `start` | 片段开始时间，单位为毫秒 |
 | `end` | 片段结束时间，单位为毫秒 |
 
-示例：
+背景类别参与解码，但不作为活动记录输出。
 
-~~~text
-HNU00001,跑步,1760000000000,1760000600000
-~~~
+## 复杂度
 
-## Python 接口
+平滑与片段修正对窗口数呈线性复杂度，Viterbi 解码为 `O(TC²)`。系统只有六个类别，
+因此运行时间主要由神经网络前向计算决定。输入和参数固定时，记录层结果完全确定，
+每次合并、修正与过滤都有明确含义。
 
-~~~python
-from imu_activity_pipeline.inference import run_inference
+??? info "运行软件"
 
-segments = run_inference(
-    data_dir="data/signals/internal_eval",
-    output_file="predictions_internal_eval.xlsx",
-)
-
-print(f"generated {len(segments)} segments")
-~~~
-
-底层输入输出见 [Python API](../reference/api.md)。
-
-## 故障排查
-
-??? question "未找到输入文件"
-
-    确认选定目录包含 `.txt` 文件，并检查当前数据划分或 `--data_dir` 是否指向该目录。
-
-??? question "检查点可以加载，但张量形状不匹配"
-
-    检查选定检查点是否与配置的窗口长度对应，并确认预期的六通道输入顺序未改变。
-
-??? question "预测结果不稳定"
-
-    在调节时序阈值前，先核对采样率、传感器佩戴位置、物理单位、滤波、各尺度
-    归一化参数与集成配置。
-
-??? question "工作簿为空"
-
-    解码器可能将整条记录分类为背景，或通过持续时间／置信度策略移除了全部前景
-    候选。请先检查概率图和过滤设置，再考虑放宽过滤条件。
+    默认入口为 `python run_inference.py`。输入路径与 Python 接口见
+    [快速开始](../getting-started/quickstart.md)和 [API 参考](../reference/api.md)。

@@ -1,125 +1,91 @@
 # Training
 
-Training builds scale-specific activity classifiers and normalization assets
-from authorized long-session recordings and annotations.
+Training produces calibrated window-level posterior models for the later LBSA
+and TRL stages. The goal is stable class evidence across time, not a standalone
+window-accuracy result.
 
-## Setup
+## Protocol
 
-Confirm that:
+Only the 80-record training split is used to fit model weights and select
+checkpoints during training. The 20-record development/calibration split
+supports temporal-policy calibration and diagnostics. The 37 external-test
+recordings remain untouched until final scoring.
 
-1. the package is installed with `python -m pip install -e .`;
-2. authorized training streams are under `data/signals/train/`;
-3. labels are under `data/annotations/train_annotations.csv`; and
-4. the selected PyTorch installation can access the intended CUDA device.
+All retained models share the same architecture and training recipe. They differ
+only in window length and random seed.
 
-Run the public health check first:
-
-~~~bash
-python tests/smoke_test.py
-~~~
-
-## Commands
-
-=== "Sequential"
-
-    ~~~bash
-    python train.py
-    ~~~
-
-    Trains the configured workflow in one process.
-
-=== "Parallel"
-
-    ~~~bash
-    python train_parallel.py
-    ~~~
-
-    Coordinates independent scale/seed jobs for a machine with sufficient
-    resources.
-
-=== "Shell wrapper"
-
-    ~~~bash
-    bash run_training.sh
-    ~~~
-
-    Convenient for a long-running source checkout.
-
-=== "tmux wrapper"
-
-    ~~~bash
-    bash run_training_in_tmux.sh
-    ~~~
-
-    Starts and records a persistent terminal training session.
-
-## Experiments
-
-The default configuration covers:
-
-| Dimension | Values |
+| Setting | Value |
 | --- | --- |
-| Window length | 3 s, 5 s, 8 s |
+| Windows | 3 s, 5 s, 8 s |
 | Step | 1 s |
-| Ensemble seeds | 42, 123, 456 |
-| Input channels | 6 ACC/GYRO channels |
-| Classifier | Background + 5 foreground activities |
+| Seeds per scale | 42, 123, 456 |
+| Batch size | 256 |
+| Optimizer | AdamW |
+| Learning rate | 1×10⁻³ |
+| Schedule | cosine annealing |
+| Label smoothing | 0.1 |
 
-The model uses parallel convolution kernels, a bidirectional LSTM, and a fused
-classification head. Focal and triplet losses are available for imbalance and
-embedding separation experiments.
+## Model
 
-## Runtime
+The 1.41M-parameter classifier combines three 1D convolution branches with a
+BiLSTM. Kernels 3, 7, and 15 capture motion at different receptive fields;
+the BiLSTM adds order-sensitive context across the window. The output has six
+classes: background plus five sports.
 
-Several long-run controls can be changed without editing source:
+The backbone is deliberately compact. Its role is to provide reliable
+posterior trajectories so the later analysis can isolate scale arbitration and
+record construction.
 
-~~~bash
-export NUM_EPOCHS_STAGE2=100
-export EARLY_STOPPING_PATIENCE=30
-export MIN_EPOCHS_BEFORE_EARLY_STOP=40
-python train.py
-~~~
+## Objective
 
-Batch size, learning rate, window construction, augmentation, and device
-defaults live in `imu_activity_pipeline.config`. Record any non-default values
-with experiment outputs.
+The training loss is:
 
-## Outputs
+> **L = L<sub>CE</sub> + 0.2 L<sub>focal</sub> + 0.1 L<sub>triplet</sub>**
 
-A complete run can write:
+- cross-entropy learns the six-class decision;
+- focal loss emphasizes harder examples;
+- triplet loss improves embedding separation;
+- class-balanced sampling limits dominance by frequent classes.
 
-~~~text
-saved_models/
-├── combined_model_3s_seed42.pth
-├── combined_model_5s_seed123.pth
-├── combined_model_8s_seed123.pth
-├── combined_model_{3s,5s,8s}_seed{42,123,456}.pth
-├── norm_params_3s.pkl
-├── norm_params_5s.pkl
-├── norm_params_8s.pkl
-├── ensemble_config.json
-├── logs/
-└── plots/
-~~~
+Augmentation combines amplitude scaling, Gaussian noise, random shift, time
+warp, and Mixup. Label smoothing and Mixup also reduce over-confident posterior
+spikes near ambiguous boundaries.
 
-Locally generated checkpoints, logs, and plots are ignored unless intentionally
-curated as reproducibility assets. Keep every checkpoint paired with the
-normalization parameters and configuration used to create it.
+## Retained models
 
-## Reproduce
+Nine models are trained: three seeds at each scale. The table reports
+training-phase internal-validation F1; it is not external-test evidence.
 
-After training and calibration:
+| Scale | Seed | Best epoch | Internal-val F1 |
+| --- | ---: | ---: | ---: |
+| **3 s** | **42** | **53** | **0.81** |
+| 3 s | 123 | 37 | 0.80 |
+| 3 s | 456 | 73 | 0.81 |
+| 5 s | 42 | 37 | 0.81 |
+| **5 s** | **123** | **38** | **0.86** |
+| 5 s | 456 | 32 | 0.81 |
+| 8 s | 42 | 31 | 0.85 |
+| **8 s** | **123** | **38** | **0.85** |
+| 8 s | 456 | 27 | 0.85 |
 
-~~~bash
-bash run_reproducibility_experiments.sh
-~~~
+The final stack keeps one selected model per scale: seed 42 at 3 s and seed 123
+at 5 s and 8 s. It does not average seeds within a scale. Cross-scale fusion is
+performed later by LBSA.
 
-The wrapper coordinates saved-model evaluation, internal robustness checks,
-post-processing policy comparisons, signal-quality analyses, timeline figures,
-external-cohort stress tests, and summary figure generation.
+## Interpretation
 
-!!! warning
+Longer windows show a stronger mean internal-validation trend, but they blur
+transitions. Shorter windows localize changes better but are noisier. Training
+therefore supplies complementary posterior sources; it does not decide the
+final record policy.
 
-    The wrapper is not a substitute for asset preparation. It expects the local
-    files documented in [Data & model assets](../reference/assets.md) and will
-    not download private or public datasets.
+!!! note "Reporting boundary"
+
+    Internal-validation results select assets. They must not be mixed with the
+    fixed external-test segment scores reported on the [Results](../research/paper.md) page.
+
+??? info "Reproduce"
+
+    The default training entry point is `python train.py`. Environment setup,
+    authorized data placement, and saved-asset checks are documented in
+    [Quickstart](../getting-started/quickstart.md) and [Assets](../reference/assets.md).
