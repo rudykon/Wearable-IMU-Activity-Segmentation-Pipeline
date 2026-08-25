@@ -8,7 +8,7 @@ hide:
   <span class="hero-blob two" aria-hidden="true"></span>
   <div class="hero-copy">
     <span class="hero-kicker">可穿戴 IMU</span>
-    <h1 class="paper-title">An End-to-End Wearable IMU System for Segment-Level Activity Recognition via <span class="gradient-text">Multi-Scale Arbitration and a Temporal Record Layer</span></h1>
+    <h1 class="paper-title">基于<span class="gradient-text">多尺度仲裁与时间记录层</span>的端到端可穿戴 IMU 片段级活动识别系统</h1>
     <p class="hero-lead">把 100 Hz 腕部 IMU 数据分割成带时间戳的活动。</p>
     <div class="hero-actions">
       <a class="hero-button primary" href="context/use-cases/">
