@@ -1,9 +1,11 @@
-# Architecture
+# Method
 
 The method converts a long wrist-IMU stream into a small set of activity
 records. It separates three questions: what the current motion resembles,
 which time scale is most reliable, and how window probabilities become stable
 start-to-end records.
+
+<div class="method-chain"><code>X</code><span>→</span><code>{p<sup>3s</sup><sub>t</sub>, p<sup>5s</sup><sub>t</sub>, p<sup>8s</sup><sub>t</sub>}</code><span>LBSA →</span><code>p̃<sub>t</sub></code><span>TRL →</span><code>R</code></div>
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution framework figure">
