@@ -1,7 +1,9 @@
-# 系统架构
+# 方法
 
 本方法把长时腕部 IMU 信号转换成少量活动记录。它分别解决三个问题：当前运动像什么、
 哪个时间尺度更可靠，以及怎样把窗口概率整理成稳定的开始—结束记录。
+
+<div class="method-chain"><code>X</code><span>→</span><code>{p<sup>3s</sup><sub>t</sub>, p<sup>5s</sup><sub>t</sub>, p<sup>8s</sup><sub>t</sub>}</code><span>LBSA →</span><code>p̃<sub>t</sub></code><span>TRL →</span><code>R</code></div>
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="../../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的总体框架图">
