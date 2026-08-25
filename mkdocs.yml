@@ -96,6 +96,7 @@ plugins:
             Android: Android
             API: API
             Citation: 引用
+            GitHub: GitHub
 
 markdown_extensions:
   - abbr
@@ -121,12 +122,13 @@ markdown_extensions:
 
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/showcase.css
 
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/rudykon
-      name: rudykon on GitHub
+      link: https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline
+      name: Project source on GitHub
   generator: false
 
 copyright: Copyright &copy; 2026 Kong Minghao · Apache-2.0
@@ -150,3 +152,4 @@ nav:
       - API: reference/api.md
       - Citation: reference/citation.md
   - Demo: deployment/hugging-face.md
+  - GitHub: https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline
