@@ -8,7 +8,7 @@ hide:
   <span class="hero-blob two" aria-hidden="true"></span>
   <div class="hero-copy">
     <span class="hero-kicker">Wearable IMU</span>
-    <h1>Motion to <span class="gradient-text">activity records.</span></h1>
+    <h1 class="paper-title">An End-to-End Wearable IMU System for Segment-Level Activity Recognition via <span class="gradient-text">Multi-Scale Arbitration and a Temporal Record Layer</span></h1>
     <p class="hero-lead">Segment 100 Hz wrist IMU data into timestamped activities.</p>
     <div class="hero-actions">
       <a class="hero-button primary" href="context/use-cases/">

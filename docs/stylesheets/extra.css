@@ -421,6 +421,14 @@ pre {
   letter-spacing: -0.055em;
 }
 
+.home-hero h1.paper-title {
+  max-width: 27ch;
+  font-size: clamp(2.1rem, 3.3vw, 3.15rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
 .gradient-text {
   color: var(--ct-primary);
   background: var(--ct-gradient);
@@ -1467,6 +1475,11 @@ pre {
 
   .home-hero h1 {
     font-size: clamp(2.15rem, 11vw, 3.45rem);
+  }
+
+  .home-hero h1.paper-title {
+    font-size: clamp(1.75rem, 8.2vw, 2.4rem);
+    line-height: 1.12;
   }
 
   .hero-actions {
