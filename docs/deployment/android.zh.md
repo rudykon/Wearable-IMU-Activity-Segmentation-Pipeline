@@ -1,9 +1,56 @@
-# Android
+<section class="demo-page-hero android-demo-hero">
+  <div>
+    <p class="hero-kicker">端侧研究演示</p>
+    <h1>Android Demo</h1>
+    <p>安装公开体验版 APK，可连接 WT9011DCL-BT50 进行 BLE 采集并在手机端运行 ONNX 推理。离线体验无需传感器：下载合成 IMU 样例后，在 App 中选择该文件即可。</p>
+    <div class="demo-facts" aria-label="Android Demo 兼容性">
+      <span>Android 7.0+</span>
+      <span>arm64-v8a</span>
+      <span>端侧 ONNX</span>
+    </div>
+    <div class="demo-actions">
+      <a class="demo-action primary" href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/download/android-demo-v1.0-preview/hls-har-android-demo-v1.0-arm64-v8a-debug.apk">下载 APK · 33 MB</a>
+      <a class="demo-action" href="../../../assets/android/synthetic_activity_imu.tsv" download>下载示例数据</a>
+      <a class="demo-action github" href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/android-demo-v1.0-preview" target="_blank" rel="noopener">版本说明</a>
+    </div>
+  </div>
+  <a class="demo-page-image" href="../../../assets/manuscript-figures/fig08_app_field_test.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的 Android 现场测试图">
+    <img src="../../../assets/manuscript-figures/fig08_app_field_test.png" alt="Android 活动识别现场测试，覆盖背景和五种目标活动" loading="eager" decoding="async">
+    <span>已完成现场测试</span>
+  </a>
+</section>
 
-`android_realtime_app/` 模块是 Python 研究流水线的可部署配套应用。它支持
-WT9011DCL-BT50 BLE 采集、实时可视化、CSV 记录、离线文件识别与端侧 ONNX 推理。
+<nav class="demo-page-nav" aria-label="Android Demo 页面目录">
+  <a href="#download-and-try">下载体验</a>
+  <a href="#capabilities">功能</a>
+  <a href="#offline">离线样例</a>
+  <a href="#sensor">BLE 传感器</a>
+  <a href="#build">自行构建</a>
+</nav>
 
-## 功能
+## 下载与体验 {#download-and-try}
+
+<div class="demo-run-summary" aria-label="Android 体验版信息">
+  <div class="demo-run-stat"><strong>v1.0</strong><span>体验版</span></div>
+  <div class="demo-run-stat"><strong>33 MB</strong><span>调试版 APK</span></div>
+  <div class="demo-run-stat"><strong>API 24+</strong><span>Android 7.0+</span></div>
+  <div class="demo-run-stat"><strong>120 秒</strong><span>合成样例</span></div>
+</div>
+
+1. 下载并安装 **arm64-v8a APK**。
+2. 将 `synthetic_activity_imu.tsv` 示例数据下载到手机。
+3. 打开 App 的**识别**页，选择下载的文件并运行离线推理。
+
+样例包含 100 Hz 下的 12,000 行计算机生成数据，不含参与者信息。文件选择器可直接
+读取 `.tsv` 文件。
+
+!!! warning "体验版 APK"
+
+    当前安装包使用调试签名，用于研究体验，不是 Play Store 正式生产版本。请只安装
+    上方链接提供的 APK。其 SHA-256 为
+    `cdde56db9d915eb10918724d503597a84fb18deace096086fe87509f60348be6`。
+
+## 功能 {#capabilities}
 
 | 领域 | 已实现行为 |
 | --- | --- |
@@ -11,7 +58,7 @@ WT9011DCL-BT50 BLE 采集、实时可视化、CSV 记录、离线文件识别与
 | 可视化 | 加速度、角速度、姿态、指南针、轨迹、手部动作与仪表盘视图 |
 | 记录 | 将带时间戳的 IMU CSV 文件保存到 Android Downloads |
 | 在线推理 | 在会话历史上运行选定的 3 秒 / 5 秒 / 8 秒集成模型 |
-| 离线推理 | 识别内置样例或用户选择的 ACC/GYRO 文本文件 |
+| 离线推理 | 识别可下载的合成样例或用户选择的 ACC/GYRO 文本文件 |
 | 时序逻辑 | 滤波、LBSA 融合、平滑、Viterbi 解码、边界细化与片段过滤 |
 | 本地化 | 中文与英文界面文本 |
 
@@ -24,18 +71,6 @@ WT9011DCL-BT50 BLE 采集、实时可视化、CSV 记录、离线文件识别与
   <figcaption class="pipeline-caption">从可穿戴 IMU 采集到 Android 端识别的物理部署链路。点击图片可查看完整分辨率。</figcaption>
 </figure>
 
-## 现场测试
-
-<figure class="paper-figure compact">
-  <a class="pipeline-image-link" href="../../../assets/manuscript-figures/fig08_app_field_test.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的 App 现场测试图">
-    <img src="../../../assets/manuscript-figures/fig08_app_field_test.png" alt="隐私保护动作模型与 Android 识别截图，覆盖背景和五种目标活动" loading="lazy" decoding="async">
-  </a>
-  <figcaption class="pipeline-caption">论文现场测试示例，覆盖背景运动、羽毛球、跳绳、哑铃飞鸟、跑步与乒乓球。</figcaption>
-</figure>
-
-这些示例记录了所有目标类别的端到端 App 行为，属于实现证据，而不是额外的
-定量基准结果。
-
 ## 环境要求
 
 - Android Studio，或 JDK 17 与 Android SDK；
@@ -45,7 +80,7 @@ WT9011DCL-BT50 BLE 采集、实时可视化、CSV 记录、离线文件识别与
 
 无需物理传感器也可以体验离线识别流程：只需将兼容的派生片段文本文件复制到手机。
 
-## 构建
+## 构建 {#build}
 
 在应用目录中运行：
 
@@ -61,7 +96,7 @@ cd android_realtime_app
 
 Android Studio 会自动创建 `local.properties`。请勿提交该机器专用文件。
 
-## 传感器
+## 传感器 {#sensor}
 
 1. 在支持 BLE 的 Android 设备上安装调试 APK。
 2. 打开 WT9011DCL-BT50 传感器。
@@ -78,11 +113,11 @@ imu_yyyyMMdd_HHmmss.csv
 
 并保存在设备的 Downloads 目录中。
 
-## 离线
+## 离线 {#offline}
 
 在识别视图中，可以：
 
-- 运行内置离线样例；
+- 选择下载的 `synthetic_activity_imu.tsv` 合成样例；
 - 选择兼容论文格式的 ACC/GYRO `.txt` 文件；
 - 将 `android_realtime_app/motion_segments/` 中的派生文件复制到设备后选择该文件。
 
