@@ -142,13 +142,13 @@ pre {
   font-size: 1.02rem;
 }
 
-.md-typeset a:not(.md-button):not(.hero-button):not(.route-card) {
+.md-typeset a:not(.md-button):not(.hero-button):not(.route-card):not(.demo-action) {
   color: var(--research-accent);
   text-decoration-color: color-mix(in srgb, var(--research-accent) 38%, transparent);
   text-underline-offset: 0.16em;
 }
 
-.md-typeset a:not(.md-button):not(.hero-button):not(.route-card):hover {
+.md-typeset a:not(.md-button):not(.hero-button):not(.route-card):not(.demo-action):hover {
   text-decoration-color: currentColor;
 }
 
