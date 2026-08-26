@@ -78,6 +78,14 @@ class DemoRuntimeTests(unittest.TestCase):
         timeline_figure = make_timeline_figure(result)
         self.assertEqual(len(signal_figure.axes), 2)
         self.assertEqual(len(timeline_figure.axes), 2)
+        self.assertEqual(
+            [text.get_text() for text in signal_figure.axes[0].get_legend().get_texts()],
+            [r"$a_x$", r"$a_y$", r"$a_z$"],
+        )
+        self.assertEqual(
+            [text.get_text() for text in signal_figure.axes[1].get_legend().get_texts()],
+            [r"$\omega_x$", r"$\omega_y$", r"$\omega_z$"],
+        )
         plt.close(signal_figure)
         plt.close(timeline_figure)
 

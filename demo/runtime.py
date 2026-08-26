@@ -379,9 +379,11 @@ def make_signal_figure(recording: Recording):
 
     figure, axes = plt.subplots(2, 1, figsize=(10.8, 5.8), sharex=True)
     colors = ("#4f46e5", "#7c3aed", "#0f9f8f")
-    for channel, color, label in zip(range(1, 4), colors, ("ACC X", "ACC Y", "ACC Z")):
+    for channel, color, label in zip(range(1, 4), colors, (r"$a_x$", r"$a_y$", r"$a_z$")):
         axes[0].plot(time_sec, view[:, channel], color=color, linewidth=0.9, label=label)
-    for channel, color, label in zip(range(4, 7), colors, ("GYRO X", "GYRO Y", "GYRO Z")):
+    for channel, color, label in zip(
+        range(4, 7), colors, (r"$\omega_x$", r"$\omega_y$", r"$\omega_z$")
+    ):
         axes[1].plot(time_sec, view[:, channel], color=color, linewidth=0.9, label=label)
 
     axes[0].set_ylabel("Acceleration")

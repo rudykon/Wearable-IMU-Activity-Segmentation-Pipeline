@@ -31,11 +31,11 @@ start-to-end records.
 
 ## Task
 
-The input is a 100 Hz stream with six channels:
-
-~~~text
-ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
-~~~
+The input is a 100 Hz stream whose six-channel sample vector is
+\(\mathbf{x}_t=[a_x(t),a_y(t),a_z(t),\omega_x(t),\omega_y(t),\omega_z(t)]^{\mathsf T}\).
+Here, \(a_x,a_y,a_z\) denote wrist acceleration and
+\(\omega_x,\omega_y,\omega_z\) denote wrist angular velocity along the three
+sensor axes.
 
 The output is the variable-length record set
 \(\mathcal{R}=\{(c_i,t_i^{\mathrm{start}},t_i^{\mathrm{end}})\}_{i=1}^{N}\).

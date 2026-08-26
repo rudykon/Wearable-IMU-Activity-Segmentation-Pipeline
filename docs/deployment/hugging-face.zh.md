@@ -88,7 +88,8 @@
 
 ### 1. Raw signals / 原始信号 {#raw-signals}
 
-打开第一个结果标签页，可以在分类前检查六路信号。上图是三轴加速度，下图是三轴角速度。
+打开第一个结果标签页，可以在分类前检查六路信号。上图为加速度通道
+\(a_x,a_y,a_z\)，下图为角速度通道 \(\omega_x,\omega_y,\omega_z\)。
 
 <figure class="demo-result-figure">
   <a href="../../../assets/demo/synthetic-raw-signals.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的原始信号结果图">
@@ -177,6 +178,11 @@
 ~~~text
 ACC_TIME  ACC_X  ACC_Y  ACC_Z  GYRO_X  GYRO_Y  GYRO_Z
 ~~~
+
+图中采用论文记号：文件列 `ACC_X`、`ACC_Y`、`ACC_Z` 分别显示为
+\(a_x,a_y,a_z\)，`GYRO_X`、`GYRO_Y`、`GYRO_Z` 分别显示为
+\(\omega_x,\omega_y,\omega_z\)。上方代码块中的原始名称仍是 TSV
+文件必须使用的真实表头。
 
 `ACC_TIME` 必须是严格递增的毫秒时间戳，中位采样间隔需为 8–12 ms，对应约 100 Hz。公开界面接收 **800–60,000 个有效样本**，即 100 Hz 下约 8 秒至 10 分钟；额外列会被忽略。
 
