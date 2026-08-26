@@ -13,6 +13,16 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/actions/workflows/deploy-docs.yml"><img src="https://img.shields.io/github/actions/workflow/status/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/deploy-docs.yml?branch=main&amp;style=flat-square&amp;label=docs" alt="文档构建状态"></a>
+  <a href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/actions/workflows/demo.yml"><img src="https://img.shields.io/github/actions/workflow/status/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/demo.yml?branch=main&amp;style=flat-square&amp;label=demo" alt="Demo 测试状态"></a>
+  <a href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview"><img src="https://img.shields.io/badge/research%20preview-v0.1.0-3D6FB6?style=flat-square" alt="研究预览版本 v0.1.0"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?style=flat-square&amp;logo=python&amp;logoColor=white" alt="Python 3.12 或更高版本"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline?style=flat-square" alt="Apache 2.0 许可证"></a>
+  <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Space-Live-FFD21E?style=flat-square" alt="Hugging Face 在线演示"></a>
+  <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/deployment/android/"><img src="https://img.shields.io/badge/Android-Demo-3DDC84?style=flat-square&amp;logo=android&amp;logoColor=white" alt="Android 演示"></a>
+</p>
+
+<p align="center">
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/">网站</a> ·
   <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">演示</a> ·
   <a href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">模型</a> ·
