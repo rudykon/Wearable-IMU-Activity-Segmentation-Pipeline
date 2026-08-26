@@ -9,8 +9,8 @@
   author  = {Kong, Minghao},
   title   = {Wearable IMU Activity Segmentation Pipeline},
   year    = {2026},
-  version = {0.1.0},
-  url     = {https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline},
+  version = {0.1.0-research-preview},
+  url     = {https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview},
   license = {Apache-2.0}
 }
 ~~~
@@ -19,7 +19,8 @@
 
 ## 方法
 
-> 我们使用 Wearable IMU Activity Segmentation Pipeline（版本 0.1.0，访问于所引
+> 我们使用 Wearable IMU Activity Segmentation Pipeline（版本
+> 0.1.0-research-preview，访问于所引
 > Git 提交）处理六通道、100 Hz 加速度计与陀螺仪数据流，并结合对齐的 3、5、8 秒
 > 分类器和时序片段解码。
 
@@ -42,6 +43,7 @@ Apache-2.0 不会改变：
 ## 链接
 
 - [源码仓库](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline)
+- [v0.1.0 研究预览版](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview)
 - [公开模型权重](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
 - [Issue 跟踪器](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/issues)
 - [数据集访问说明](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md)

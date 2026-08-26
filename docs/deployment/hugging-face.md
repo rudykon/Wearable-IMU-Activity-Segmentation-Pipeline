@@ -35,6 +35,10 @@
 
 The fastest way to understand the interface is to run the deterministic [`synthetic_activity_imu.tsv`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/demo/examples/synthetic_activity_imu.tsv) example. It contains **12,000 samples**, covers **120 seconds** at **100 Hz**, and contains no participant data. The live Space opens with this file already selected.
 
+Select **English** in the language switch at the top of the Space. The complete
+interface—including controls, status messages, validation errors, result-table
+headers, and CSV export—then stays in English.
+
 <div class="demo-steps">
   <article class="demo-step">
     <span class="demo-step__number">1</span>
@@ -55,7 +59,7 @@ The fastest way to understand the interface is to run the deterministic [`synthe
   <article class="demo-step">
     <span class="demo-step__number">4</span>
     <h3>Run the current recording</h3>
-    <p>Click <strong>Run current recording / 运行当前记录</strong>, then inspect the three result tabs.</p>
+    <p>Click <strong>Run current recording</strong>, then inspect the three result tabs.</p>
   </article>
 </div>
 
@@ -67,7 +71,7 @@ The fastest way to understand the interface is to run the deterministic [`synthe
   <div><span>Top-K</span><strong>5</strong></div>
 </div>
 
-Use <strong>Reset to synthetic sample / 恢复合成样例</strong> at any time to restore the bundled file and all five defaults.
+Use <strong>Reset to synthetic sample</strong> at any time to restore the bundled file and all five defaults.
 
 !!! tip "What happens after you click Run"
 
@@ -88,7 +92,7 @@ The figures below were exported from the **current public checkpoints** with the
 
     The sample is synthetic and is intended to show the complete input-to-output path. Its detected labels and boundaries are model outputs, not ground-truth accuracy evidence. Changing fusion, duration, confidence, or Top-K can change the records.
 
-### 1. Raw signals / 原始信号 {#raw-signals}
+### 1. Raw signals {#raw-signals}
 
 Open the first result tab to inspect the six channels before classification. The upper panel contains the acceleration channels \(a_x,a_y,a_z\); the lower panel contains the angular-velocity channels \(\omega_x,\omega_y,\omega_z\).
 
@@ -96,7 +100,7 @@ Open the first result tab to inspect the six channels before classification. The
   <a href="../../assets/demo/synthetic-raw-signals.png" target="_blank" rel="noopener" aria-label="Open the full-resolution raw-signal result">
     <img src="../../assets/demo/synthetic-raw-signals.png" alt="Raw accelerometer and gyroscope signals generated from synthetic_activity_imu.tsv" loading="lazy" decoding="async">
   </a>
-  <figcaption><strong>Raw signals / 原始信号.</strong> Real output from the bundled 120-second sample.</figcaption>
+  <figcaption><strong>Raw signals.</strong> Real output from the bundled 120-second sample.</figcaption>
 </figure>
 
 <div class="demo-reading-grid">
@@ -110,7 +114,7 @@ Open the first result tab to inspect the six channels before classification. The
   </div>
 </div>
 
-### 2. Activity likelihood and timeline / 活动概率与时间线 {#activity-likelihood-and-timeline}
+### 2. Activity likelihood and timeline {#activity-likelihood-and-timeline}
 
 The second tab shows two related outputs. The upper panel is the smoothed likelihood assigned to each class over time. The lower panel is the final decoded state after multi-scale fusion and temporal post-processing.
 
@@ -118,7 +122,7 @@ The second tab shows two related outputs. The upper panel is the smoothed likeli
   <a href="../../assets/demo/synthetic-activity-likelihood-timeline.png" target="_blank" rel="noopener" aria-label="Open the full-resolution activity-likelihood and timeline result">
     <img src="../../assets/demo/synthetic-activity-likelihood-timeline.png" alt="Class likelihood curves and decoded activity timeline generated from synthetic_activity_imu.tsv" loading="lazy" decoding="async">
   </a>
-  <figcaption><strong>Activity likelihood and timeline / 活动概率与时间线.</strong> Posterior trajectories above; final decoded activity below.</figcaption>
+  <figcaption><strong>Activity likelihood and timeline.</strong> Posterior trajectories above; final decoded activity below.</figcaption>
 </figure>
 
 <div class="demo-reading-grid">
@@ -132,7 +136,7 @@ The second tab shows two related outputs. The upper panel is the smoothed likeli
   </div>
 </div>
 
-### 3. Activity records / 活动记录 {#activity-records}
+### 3. Activity records {#activity-records}
 
 The third tab converts the decoded path into the output people can use: one row per activity period, with its class, start, end, duration, and confidence.
 
@@ -140,13 +144,13 @@ The third tab converts the decoded path into the output people can use: one row 
   <a href="../../assets/demo/synthetic-activity-records.png" target="_blank" rel="noopener" aria-label="Open the full-resolution activity-record table">
     <img src="../../assets/demo/synthetic-activity-records.png" alt="Activity-record table generated from synthetic_activity_imu.tsv" loading="lazy" decoding="async">
   </a>
-  <figcaption><strong>Activity records / 活动记录.</strong> Two records returned by the default Demo configuration.</figcaption>
+  <figcaption><strong>Activity records.</strong> Two records returned by the default Demo configuration.</figcaption>
 </figure>
 
 | Activity | Start (s) | End (s) | Duration (s) | Confidence |
 | --- | ---: | ---: | ---: | ---: |
-| Fly / 飞鸟 | 29.84 | 73.15 | 43.31 | 0.4038 |
-| Running / 跑步 | 76.06 | 98.24 | 22.18 | 0.3186 |
+| Fly | 29.84 | 73.15 | 43.31 | 0.4038 |
+| Running | 76.06 | 98.24 | 22.18 | 0.3186 |
 
 The record boundaries are not copied from the sample generator. They are produced by the model probabilities, Viterbi decoding, gap handling, boundary refinement, duration filtering, and confidence filtering.
 

@@ -11,7 +11,8 @@ a local CPU/GPU environment.
 - checks the timestamp and six required IMU channels;
 - runs the three public HF models and lets the user choose how to combine them;
 - shows the raw signals, activity likelihood curves, and final timeline;
-- reports bilingual activity records and provides a downloadable CSV;
+- offers an explicit English / 简体中文 switch without mixing the two interfaces;
+- localizes the status, controls, activity records, errors, and downloadable CSV;
 - includes a deterministic synthetic example with no participant data.
 
 The public interface limits uploads to 20 MB, 60,000 samples, and one serialized

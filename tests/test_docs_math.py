@@ -327,7 +327,12 @@ class DocumentationMathTests(unittest.TestCase):
         citation = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
         self.assertIn("cff-version: 1.2.0", citation)
         self.assertIn('family-names: "Kong"', citation)
-        self.assertIn("version: 0.1.0", citation)
+        self.assertIn("version: 0.1.0-research-preview", citation)
+        self.assertIn("date-released: 2026-08-26", citation)
+        self.assertIn(
+            "releases/tag/v0.1.0-research-preview",
+            citation,
+        )
         self.assertIn("license: Apache-2.0", citation)
 
     def test_built_demo_and_data_pages_keep_their_actions(self) -> None:

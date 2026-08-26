@@ -10,8 +10,8 @@ versioned repository:
   author  = {Kong, Minghao},
   title   = {Wearable IMU Activity Segmentation Pipeline},
   year    = {2026},
-  version = {0.1.0},
-  url     = {https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline},
+  version = {0.1.0-research-preview},
+  url     = {https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview},
   license = {Apache-2.0}
 }
 ~~~
@@ -21,7 +21,8 @@ commit used for training or inference.
 
 ## Methods
 
-> We used the Wearable IMU Activity Segmentation Pipeline (version 0.1.0,
+> We used the Wearable IMU Activity Segmentation Pipeline (version
+> 0.1.0-research-preview,
 > accessed at the cited commit) to process six-channel, 100 Hz accelerometer and
 > gyroscope streams with aligned 3-, 5-, and 8-second classifiers and temporal
 > segment decoding.
@@ -47,6 +48,7 @@ Apache-2.0 does not change:
 ## Links
 
 - [Source repository](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline)
+- [v0.1.0 research preview](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview)
 - [Public model weights](https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline)
 - [Issue tracker](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/issues)
 - [Dataset access instructions](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md)

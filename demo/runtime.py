@@ -49,12 +49,22 @@ FUSION_MODES = (
     "weighted_balanced",
 )
 FUSION_MODE_LABELS = {
-    "local_boundary": "Adaptive near activity changes / 活动切换处自适应",
-    "average": "Simple average / 简单平均",
-    "dynamic_boundary": "Dynamic boundary weighting / 动态边界加权",
-    "confident_conflict": "Prefer confident agreement / 优先高置信一致判断",
-    "weighted_long": "Prefer longer windows / 偏重长窗口",
-    "weighted_balanced": "Balanced fixed weights / 固定均衡权重",
+    "en": {
+        "local_boundary": "Adaptive near activity changes",
+        "average": "Simple average",
+        "dynamic_boundary": "Dynamic boundary weighting",
+        "confident_conflict": "Prefer confident agreement",
+        "weighted_long": "Prefer longer windows",
+        "weighted_balanced": "Balanced fixed weights",
+    },
+    "zh": {
+        "local_boundary": "活动切换处自适应",
+        "average": "简单平均",
+        "dynamic_boundary": "动态边界加权",
+        "confident_conflict": "优先高置信一致判断",
+        "weighted_long": "偏重长窗口",
+        "weighted_balanced": "固定均衡权重",
+    },
 }
 CLASS_LABELS = [
     "Background",
@@ -71,14 +81,18 @@ ACTIVITY_EN = {
     "跑步": "Running",
     "乒乓球": "Table tennis",
 }
-SEGMENT_COLUMNS = [
-    "Activity",
-    "活动",
-    "Start (s)",
-    "End (s)",
-    "Duration (s)",
-    "Confidence",
-]
+ACTIVITY_ZH = {
+    "Background": "背景",
+    "Badminton": "羽毛球",
+    "Jump rope": "跳绳",
+    "Fly": "飞鸟",
+    "Running": "跑步",
+    "Table tennis": "乒乓球",
+}
+SEGMENT_COLUMNS = {
+    "en": ["Activity", "Start (s)", "End (s)", "Duration (s)", "Confidence"],
+    "zh": ["活动", "开始（秒）", "结束（秒）", "时长（秒）", "置信度"],
+}
 
 MAX_UPLOAD_BYTES = 20 * 1024 * 1024
 MAX_SAMPLES = 60_000
@@ -88,8 +102,23 @@ EXPECTED_SAMPLE_INTERVAL_MS = (8.0, 12.0)
 _INFERENCE_LOCK = threading.Lock()
 
 
+def normalise_language(language: str | None) -> str:
+    """Return one of the two UI locales supported by the public demo."""
+
+    return "zh" if str(language).lower().startswith("zh") else "en"
+
+
 class DemoInputError(ValueError):
-    """Raised when an uploaded recording does not match the public contract."""
+    """Localized validation error for the public upload contract."""
+
+    def __init__(self, english: str, chinese: str) -> None:
+        super().__init__(english)
+        self.translations = {"en": english, "zh": chinese}
+
+    def localized(self, language: str | None) -> str:
+        """Return the message for the requested UI locale."""
+
+        return self.translations[normalise_language(language)]
 
 
 @dataclass(frozen=True)
@@ -117,16 +146,32 @@ class DemoResult:
 
 def _normalise_upload_path(upload: str | Path | Any) -> Path:
     if upload is None:
-        raise DemoInputError("Upload a TSV/TXT recording or choose the bundled example.")
+        raise DemoInputError(
+            "Upload a TSV/TXT recording or restore the bundled example.",
+            "请上传 TSV/TXT 记录，或恢复内置样例。",
+        )
 
-    candidate = upload if isinstance(upload, (str, os.PathLike)) else getattr(upload, "name", upload)
+    candidate = (
+        upload
+        if isinstance(upload, (str, os.PathLike))
+        else getattr(upload, "name", upload)
+    )
     path = Path(str(candidate)).expanduser()
     if not path.is_file():
-        raise DemoInputError("The uploaded file is no longer available. Please upload it again.")
+        raise DemoInputError(
+            "The uploaded file is no longer available. Please upload it again.",
+            "上传文件已不可用，请重新上传。",
+        )
     if path.suffix.lower() not in {".txt", ".tsv"}:
-        raise DemoInputError("Use a UTF-8 tab-separated .txt or .tsv file.")
+        raise DemoInputError(
+            "Use a UTF-8 tab-separated .txt or .tsv file.",
+            "请使用 UTF-8 编码、制表符分隔的 .txt 或 .tsv 文件。",
+        )
     if path.stat().st_size > MAX_UPLOAD_BYTES:
-        raise DemoInputError("The upload exceeds the 20 MB demo limit.")
+        raise DemoInputError(
+            "The upload exceeds the 20 MB demo limit.",
+            "上传文件超过演示的 20 MB 限制。",
+        )
     return path
 
 
@@ -137,7 +182,10 @@ def load_imu_recording(upload: str | Path | Any, *, apply_filter: bool = True) -
     try:
         frame = pd.read_csv(path, sep="\t", low_memory=False)
     except (UnicodeDecodeError, pd.errors.ParserError) as exc:
-        raise DemoInputError("Could not parse the file as UTF-8 tab-separated text.") from exc
+        raise DemoInputError(
+            "Could not parse the file as UTF-8 tab-separated text.",
+            "无法按 UTF-8 制表符分隔文本解析该文件。",
+        ) from exc
 
     frame.columns = [str(column).strip() for column in frame.columns]
     if "GYRO_Z" not in frame.columns and "GYRO_" in frame.columns:
@@ -145,7 +193,11 @@ def load_imu_recording(upload: str | Path | Any, *, apply_filter: bool = True) -
 
     missing = [column for column in REQUIRED_COLUMNS if column not in frame.columns]
     if missing:
-        raise DemoInputError("Missing required columns: " + ", ".join(missing))
+        column_list = ", ".join(missing)
+        raise DemoInputError(
+            "Missing required columns: " + column_list,
+            "缺少必需列：" + column_list,
+        )
 
     numeric = frame[REQUIRED_COLUMNS].apply(pd.to_numeric, errors="coerce").dropna()
     numeric = numeric[numeric["ACC_TIME"] > 0]
@@ -153,29 +205,39 @@ def load_imu_recording(upload: str | Path | Any, *, apply_filter: bool = True) -
 
     if len(numeric) < MIN_SAMPLES:
         raise DemoInputError(
-            f"At least {MIN_SAMPLES:,} valid samples (8 seconds at 100 Hz) are required."
+            f"At least {MIN_SAMPLES:,} valid samples (8 seconds at 100 Hz) are required.",
+            f"至少需要 {MIN_SAMPLES:,} 个有效样本（100 Hz 下为 8 秒）。",
         )
     if len(numeric) > MAX_SAMPLES:
         raise DemoInputError(
-            f"This public demo accepts at most {MAX_SAMPLES:,} samples (10 minutes at 100 Hz)."
+            f"This public demo accepts at most {MAX_SAMPLES:,} samples (10 minutes at 100 Hz).",
+            f"公开演示最多接收 {MAX_SAMPLES:,} 个样本（100 Hz 下为 10 分钟）。",
         )
 
     timestamps = numeric["ACC_TIME"].to_numpy(dtype=np.int64)
     intervals = np.diff(timestamps).astype(np.float64)
     if np.any(intervals <= 0):
-        raise DemoInputError("ACC_TIME must contain strictly increasing millisecond timestamps.")
+        raise DemoInputError(
+            "ACC_TIME must contain strictly increasing millisecond timestamps.",
+            "ACC_TIME 必须包含严格递增的毫秒时间戳。",
+        )
 
     median_interval = float(np.median(intervals))
     low_ms, high_ms = EXPECTED_SAMPLE_INTERVAL_MS
     if not low_ms <= median_interval <= high_ms:
         raise DemoInputError(
             "The model expects approximately 100 Hz input "
-            f"(median interval 8–12 ms); this file has {median_interval:.2f} ms."
+            f"(median interval 8–12 ms); this file has {median_interval:.2f} ms.",
+            "模型需要约 100 Hz 的输入（中位采样间隔 8–12 毫秒）；"
+            f"该文件为 {median_interval:.2f} 毫秒。",
         )
 
     imu = numeric[REQUIRED_COLUMNS[1:]].to_numpy(dtype=np.float32)
     if not np.isfinite(imu).all():
-        raise DemoInputError("The six IMU channels must contain finite numeric values.")
+        raise DemoInputError(
+            "The six IMU channels must contain finite numeric values.",
+            "六路 IMU 通道必须全部为有限数值。",
+        )
 
     if apply_filter:
         from imu_activity_pipeline.sensor_data_processing import butterworth_filter
@@ -267,13 +329,25 @@ def run_pipeline(
     """Run one bounded, serialized inference request through the real pipeline."""
 
     if fusion_mode not in FUSION_MODES:
-        raise DemoInputError(f"Unsupported fusion mode: {fusion_mode}")
+        raise DemoInputError(
+            f"Unsupported fusion mode: {fusion_mode}",
+            f"不支持的融合方式：{fusion_mode}",
+        )
     if not 1.0 <= float(min_duration_sec) <= 180.0:
-        raise DemoInputError("Minimum duration must be between 1 and 180 seconds.")
+        raise DemoInputError(
+            "Minimum duration must be between 1 and 180 seconds.",
+            "最小时长必须在 1 到 180 秒之间。",
+        )
     if not 0.0 <= float(confidence_min) <= 1.0:
-        raise DemoInputError("Confidence threshold must be between 0 and 1.")
+        raise DemoInputError(
+            "Confidence threshold must be between 0 and 1.",
+            "置信度阈值必须在 0 到 1 之间。",
+        )
     if not 0 <= int(top_k) <= 10:
-        raise DemoInputError("Top-K must be between 0 and 10; use 0 to disable it.")
+        raise DemoInputError(
+            "Top-K must be between 0 and 10; use 0 to disable it.",
+            "Top-K 必须在 0 到 10 之间；设为 0 可关闭限制。",
+        )
 
     recording = load_imu_recording(upload)
 
@@ -288,7 +362,10 @@ def run_pipeline(
             fusion_mode=fusion_mode,
         )
         if len(timestamps) == 0:
-            raise DemoInputError("The recording did not produce any model windows.")
+            raise DemoInputError(
+                "The recording did not produce any model windows.",
+                "该记录未能生成任何模型窗口。",
+            )
         smoothed, decoded, segments = _postprocess(
             recording.data,
             timestamps,
@@ -309,68 +386,125 @@ def run_pipeline(
     )
 
 
-def segments_dataframe(result: DemoResult) -> pd.DataFrame:
-    """Convert segment dictionaries into a compact bilingual table."""
+def fusion_choices(language: str | None = "en") -> list[tuple[str, str]]:
+    """Return localized display labels while preserving stable backend values."""
 
+    locale = normalise_language(language)
+    return [(FUSION_MODE_LABELS[locale][mode], mode) for mode in FUSION_MODES]
+
+
+def _activity_name(class_name: str, language: str) -> str:
+    if language == "zh":
+        return (
+            class_name
+            if class_name in ACTIVITY_EN
+            else ACTIVITY_ZH.get(class_name, class_name)
+        )
+    return ACTIVITY_EN.get(class_name, class_name)
+
+
+def segments_dataframe(result: DemoResult, language: str | None = "en") -> pd.DataFrame:
+    """Convert segment dictionaries into a compact single-language table."""
+
+    locale = normalise_language(language)
     origin_ms = float(result.recording.data[0, 0])
     rows = []
     for segment in result.segments:
-        chinese = str(segment["class_name"])
-        rows.append(
-            {
-                "Activity": ACTIVITY_EN.get(chinese, chinese),
-                "活动": chinese,
-                "Start (s)": round((float(segment["start_ts"]) - origin_ms) / 1000.0, 2),
-                "End (s)": round((float(segment["end_ts"]) - origin_ms) / 1000.0, 2),
-                "Duration (s)": round(float(segment["duration"]), 2),
-                "Confidence": round(float(segment["confidence"]), 4),
-            }
-        )
-    return pd.DataFrame(rows, columns=SEGMENT_COLUMNS)
+        activity = _activity_name(str(segment["class_name"]), locale)
+        start_sec = round((float(segment["start_ts"]) - origin_ms) / 1000.0, 2)
+        end_sec = round((float(segment["end_ts"]) - origin_ms) / 1000.0, 2)
+        duration_sec = round(float(segment["duration"]), 2)
+        confidence = round(float(segment["confidence"]), 4)
+        if locale == "zh":
+            rows.append(
+                {
+                    "活动": activity,
+                    "开始（秒）": start_sec,
+                    "结束（秒）": end_sec,
+                    "时长（秒）": duration_sec,
+                    "置信度": confidence,
+                }
+            )
+        else:
+            rows.append(
+                {
+                    "Activity": activity,
+                    "Start (s)": start_sec,
+                    "End (s)": end_sec,
+                    "Duration (s)": duration_sec,
+                    "Confidence": confidence,
+                }
+            )
+    return pd.DataFrame(rows, columns=SEGMENT_COLUMNS[locale])
 
 
-def export_segments(result: DemoResult) -> str:
-    """Write a downloadable CSV containing absolute and relative boundaries."""
+def export_segments(result: DemoResult, language: str | None = "en") -> str:
+    """Write a localized CSV containing absolute and relative boundaries."""
 
+    locale = normalise_language(language)
     origin_ms = int(result.recording.data[0, 0])
     rows = []
     for segment in result.segments:
         start_ms = int(segment["start_ts"])
         end_ms = int(segment["end_ts"])
-        chinese = str(segment["class_name"])
-        rows.append(
-            {
-                "user_id": result.recording.user_id,
-                "category": chinese,
-                "activity_en": ACTIVITY_EN.get(chinese, chinese),
-                "start": start_ms,
-                "end": end_ms,
-                "start_relative_sec": round((start_ms - origin_ms) / 1000.0, 3),
-                "end_relative_sec": round((end_ms - origin_ms) / 1000.0, 3),
-                "duration_sec": round(float(segment["duration"]), 3),
-                "confidence": round(float(segment["confidence"]), 6),
-            }
-        )
+        activity = _activity_name(str(segment["class_name"]), locale)
+        values = {
+            "recording": result.recording.user_id,
+            "activity": activity,
+            "start_ms": start_ms,
+            "end_ms": end_ms,
+            "start_relative_sec": round((start_ms - origin_ms) / 1000.0, 3),
+            "end_relative_sec": round((end_ms - origin_ms) / 1000.0, 3),
+            "duration_sec": round(float(segment["duration"]), 3),
+            "confidence": round(float(segment["confidence"]), 6),
+        }
+        if locale == "zh":
+            rows.append(
+                {
+                    "记录标识": values["recording"],
+                    "活动": values["activity"],
+                    "开始时间戳（毫秒）": values["start_ms"],
+                    "结束时间戳（毫秒）": values["end_ms"],
+                    "相对开始时间（秒）": values["start_relative_sec"],
+                    "相对结束时间（秒）": values["end_relative_sec"],
+                    "时长（秒）": values["duration_sec"],
+                    "置信度": values["confidence"],
+                }
+            )
+        else:
+            rows.append(values)
 
     export_dir = Path(tempfile.mkdtemp(prefix="imu-space-demo-"))
-    export_path = export_dir / f"{result.recording.user_id}_segments.csv"
-    columns = [
-        "user_id",
-        "category",
-        "activity_en",
-        "start",
-        "end",
-        "start_relative_sec",
-        "end_relative_sec",
-        "duration_sec",
-        "confidence",
-    ]
+    export_path = export_dir / f"{result.recording.user_id}_segments_{locale}.csv"
+    columns = (
+        [
+            "记录标识",
+            "活动",
+            "开始时间戳（毫秒）",
+            "结束时间戳（毫秒）",
+            "相对开始时间（秒）",
+            "相对结束时间（秒）",
+            "时长（秒）",
+            "置信度",
+        ]
+        if locale == "zh"
+        else [
+            "recording",
+            "activity",
+            "start_ms",
+            "end_ms",
+            "start_relative_sec",
+            "end_relative_sec",
+            "duration_sec",
+            "confidence",
+        ]
+    )
     pd.DataFrame(rows, columns=columns).to_csv(export_path, index=False, encoding="utf-8-sig")
     return str(export_path)
 
 
 def make_signal_figure(recording: Recording):
-    """Render a bounded-resolution preview of the six uploaded channels."""
+    """Render a bounded-resolution, language-neutral preview of all six channels."""
 
     data = recording.data
     step = max(1, int(np.ceil(len(data) / 4_000)))
@@ -386,21 +520,25 @@ def make_signal_figure(recording: Recording):
     ):
         axes[1].plot(time_sec, view[:, channel], color=color, linewidth=0.9, label=label)
 
-    axes[0].set_ylabel("Acceleration")
-    axes[1].set_ylabel("Angular velocity")
-    axes[1].set_xlabel("Time from recording start (s)")
+    axes[0].set_ylabel(r"$\mathbf{a}$")
+    axes[1].set_ylabel(r"$\boldsymbol{\omega}$")
+    axes[1].set_xlabel(r"$t$ (s)")
     for axis in axes:
         axis.grid(color="#dbe4f0", linewidth=0.7, alpha=0.8)
         axis.legend(loc="upper right", ncols=3, frameon=False, fontsize=8)
         axis.spines[["top", "right"]].set_visible(False)
-    figure.suptitle("Motion recorded by the six IMU channels", fontsize=13, fontweight="bold")
+    figure.suptitle(
+        r"$\mathbf{X}=[a_x,a_y,a_z,\omega_x,\omega_y,\omega_z]$",
+        fontsize=13,
+        fontweight="bold",
+    )
     figure.tight_layout()
     plt.close(figure)
     return figure
 
 
 def make_timeline_figure(result: DemoResult):
-    """Render smoothed class probabilities and the decoded activity timeline."""
+    """Render a language-neutral posterior plot and decoded timeline."""
 
     origin_ms = float(result.recording.data[0, 0])
     time_sec = (result.timestamps.astype(np.float64) - origin_ms) / 1000.0
@@ -413,7 +551,8 @@ def make_timeline_figure(result: DemoResult):
         sharex=True,
         gridspec_kw={"height_ratios": [3.2, 1.25]},
     )
-    for index, (label, color) in enumerate(zip(CLASS_LABELS, palette)):
+    class_symbols = [rf"$c_{index}$" for index in range(len(CLASS_LABELS))]
+    for index, (label, color) in enumerate(zip(class_symbols, palette)):
         axes[0].plot(
             time_sec,
             result.probabilities[:, index],
@@ -423,39 +562,75 @@ def make_timeline_figure(result: DemoResult):
             alpha=0.95 if index else 0.75,
         )
     axes[0].set_ylim(0.0, 1.02)
-    axes[0].set_ylabel("Activity likelihood")
+    axes[0].set_ylabel(r"$p(c_t\mid\mathbf{X})$")
     axes[0].grid(color="#dbe4f0", linewidth=0.7, alpha=0.8)
-    axes[0].legend(loc="upper center", bbox_to_anchor=(0.5, 1.20), ncols=3, frameon=False, fontsize=8)
+    axes[0].legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, 1.20),
+        ncols=3,
+        frameon=False,
+        fontsize=8,
+    )
 
     axes[1].step(time_sec, result.decoded_path, where="mid", color="#312e81", linewidth=1.8)
     axes[1].fill_between(time_sec, 0, result.decoded_path, step="mid", color="#c7d2fe", alpha=0.55)
-    axes[1].set_yticks(range(len(CLASS_LABELS)), labels=CLASS_LABELS, fontsize=8)
+    axes[1].set_yticks(range(len(CLASS_LABELS)), labels=class_symbols, fontsize=8)
     axes[1].set_ylim(-0.35, len(CLASS_LABELS) - 0.65)
-    axes[1].set_xlabel("Time from recording start (s)")
-    axes[1].set_ylabel("Final activity")
+    axes[1].set_xlabel(r"$t$ (s)")
+    axes[1].set_ylabel(r"$\hat{y}_t$")
     axes[1].grid(axis="x", color="#dbe4f0", linewidth=0.7, alpha=0.8)
 
     for axis in axes:
         axis.spines[["top", "right"]].set_visible(False)
-    figure.suptitle("Activity likelihood and final timeline", fontsize=13, fontweight="bold")
+    figure.suptitle(
+        r"$\{\mathbf{p}_t^{(3s)},\mathbf{p}_t^{(5s)},\mathbf{p}_t^{(8s)}\}"
+        r"\;\rightarrow\;\widetilde{\mathbf{p}}_t\;\rightarrow\;\hat{y}_t$",
+        fontsize=12,
+        fontweight="bold",
+    )
     figure.tight_layout()
     plt.close(figure)
     return figure
 
 
-def status_markdown(result: DemoResult, fusion_mode: str) -> str:
-    """Create a concise, non-sensitive inference summary for the UI."""
+def timeline_class_key(language: str | None = "en") -> str:
+    """Explain the language-neutral class symbols beneath the timeline."""
 
+    locale = normalise_language(language)
+    labels = CLASS_LABELS if locale == "en" else [ACTIVITY_ZH[label] for label in CLASS_LABELS]
+    prefix = "Class key" if locale == "en" else "类别对照"
+    return f"**{prefix}:** " + " · ".join(
+        f"$c_{index}$ = {label}" for index, label in enumerate(labels)
+    )
+
+
+def status_markdown(
+    result: DemoResult, fusion_mode: str, language: str | None = "en"
+) -> str:
+    """Create a concise, localized, non-sensitive inference summary."""
+
+    locale = normalise_language(language)
     segment_count = len(result.segments)
     segment_text = "segment" if segment_count == 1 else "segments"
     scales = " / ".join(result.model_scales)
-    fusion_label = FUSION_MODE_LABELS.get(fusion_mode, fusion_mode)
+    fusion_label = FUSION_MODE_LABELS[locale].get(fusion_mode, fusion_mode)
+    if locale == "zh":
+        return (
+            "### 活动记录已生成\n"
+            f"- **输入：** `{result.recording.user_id}` · "
+            f"{len(result.recording.data):,} 个样本 · "
+            f"{result.recording.duration_sec:.1f} 秒 · "
+            f"{result.recording.sample_rate_hz:.1f} Hz\n"
+            f"- **模型：** {scales} 窗口 · {fusion_label} · {result.device.upper()}\n"
+            f"- **结果：** {len(result.timestamps):,} 个时间线点 · "
+            f"**{segment_count} 条活动记录**"
+        )
     return (
-        "### Activity records ready / 活动记录已生成\n"
-        f"- **Input / 输入：** `{result.recording.user_id}` · "
+        "### Activity records ready\n"
+        f"- **Input:** `{result.recording.user_id}` · "
         f"{len(result.recording.data):,} samples · {result.recording.duration_sec:.1f} s · "
         f"{result.recording.sample_rate_hz:.1f} Hz\n"
-        f"- **Models / 模型：** {scales} windows · {fusion_label} · {result.device.upper()}\n"
-        f"- **Result / 结果：** {len(result.timestamps):,} timeline points · "
-        f"**{segment_count} {segment_text} / {segment_count} 条活动记录**"
+        f"- **Models:** {scales} windows · {fusion_label} · {result.device.upper()}\n"
+        f"- **Result:** {len(result.timestamps):,} timeline points · "
+        f"**{segment_count} {segment_text}**"
     )
