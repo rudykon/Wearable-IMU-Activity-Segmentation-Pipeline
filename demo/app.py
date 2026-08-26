@@ -732,6 +732,6 @@ if __name__ == "__main__":
         theme=THEME,
         css=CSS,
         max_file_size="20mb",
-        footer_links=["api", "gradio"],
+        footer_links=[],
         run_history=False,
     )
