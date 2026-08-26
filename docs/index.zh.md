@@ -152,7 +152,7 @@ hide:
 
 <div class="demo-showcase">
   <a class="demo-showcase__media" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener" aria-label="打开 Hugging Face 在线演示">
-    <img src="assets/demo-results.jpg" alt="真实 Hugging Face 演示输出，展示合成腕部 IMU 信号和带时间戳的活动记录" loading="lazy" decoding="async">
+    <img src="assets/demo-results-paper-notation.jpg" alt="真实 Hugging Face 演示输出，展示论文式腕部 IMU 通道记号和带时间戳的活动记录" loading="lazy" decoding="async">
     <span>打开在线演示 ↗</span>
   </a>
   <div class="demo-showcase__copy">

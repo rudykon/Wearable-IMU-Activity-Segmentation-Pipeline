@@ -54,6 +54,21 @@ class DocumentationMathTests(unittest.TestCase):
         self.assertIn("a_x", combined)
         self.assertIn("\\omega_x", combined)
 
+    def test_demo_pages_use_the_current_notation_screenshot(self) -> None:
+        screenshot = ROOT / "docs" / "assets" / "demo-results-paper-notation.jpg"
+        self.assertTrue(screenshot.is_file())
+        self.assertGreater(screenshot.stat().st_size, 100_000)
+        page_paths = [
+            ROOT / "docs" / "index.md",
+            ROOT / "docs" / "index.zh.md",
+            ROOT / "docs" / "deployment" / "hugging-face.md",
+            ROOT / "docs" / "deployment" / "hugging-face.zh.md",
+        ]
+        for page in page_paths:
+            source = page.read_text(encoding="utf-8")
+            self.assertIn("demo-results-paper-notation.jpg", source)
+            self.assertNotIn("demo-results.jpg", source)
+
     def test_built_pages_contain_arithmatex_and_mathjax(self) -> None:
         pages = [
             SITE / "guide" / "pipeline" / "index.html",

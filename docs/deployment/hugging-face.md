@@ -17,8 +17,8 @@
       <a class="demo-action" href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">Model weights</a>
     </div>
   </div>
-  <a class="demo-page-image" href="../../assets/demo-results.jpg" target="_blank" rel="noopener" aria-label="Open the full-resolution demo screenshot">
-    <img src="../../assets/demo-results.jpg" alt="Actual Hugging Face demo output showing a synthetic IMU input, model controls, and timestamped activity records" loading="eager" decoding="async">
+  <a class="demo-page-image" href="../../assets/demo-results-paper-notation.jpg" target="_blank" rel="noopener" aria-label="Open the full-resolution demo screenshot">
+    <img src="../../assets/demo-results-paper-notation.jpg" alt="Actual Hugging Face demo output showing paper-style IMU channel notation, model controls, and timestamped activity records" loading="eager" decoding="async">
     <span>Actual bundled example</span>
   </a>
 </section>

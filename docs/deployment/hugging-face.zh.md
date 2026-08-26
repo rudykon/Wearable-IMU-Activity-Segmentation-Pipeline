@@ -17,8 +17,8 @@
       <a class="demo-action" href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">模型权重</a>
     </div>
   </div>
-  <a class="demo-page-image" href="../../../assets/demo-results.jpg" target="_blank" rel="noopener" aria-label="打开完整分辨率的演示截图">
-    <img src="../../../assets/demo-results.jpg" alt="真实 Hugging Face 演示输出，展示合成 IMU 输入、模型控制项和带时间戳的活动记录" loading="eager" decoding="async">
+  <a class="demo-page-image" href="../../../assets/demo-results-paper-notation.jpg" target="_blank" rel="noopener" aria-label="打开完整分辨率的演示截图">
+    <img src="../../../assets/demo-results-paper-notation.jpg" alt="真实 Hugging Face 演示输出，展示论文式 IMU 通道记号、模型控制项和带时间戳的活动记录" loading="eager" decoding="async">
     <span>内置样例真实输出</span>
   </a>
 </section>
