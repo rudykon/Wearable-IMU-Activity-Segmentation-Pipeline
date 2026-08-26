@@ -18,10 +18,126 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Upload current demo screenshot
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install demo dependencies
+        run: >-
+          python -m pip install
+          --extra-index-url https://download.pytorch.org/whl/cpu
+          numpy==1.26.4
+          pandas==2.2.3
+          scipy==1.15.3
+          matplotlib==3.9.2
+          gradio==6.25.0
+          spaces
+          torch==2.8.0+cpu
+
+      - name: Export real synthetic-example outputs
+        env:
+          MPLBACKEND: Agg
+          TORCH_NUM_THREADS: "2"
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          import matplotlib.pyplot as plt
+
+          from demo.runtime import (
+              make_signal_figure,
+              make_timeline_figure,
+              run_pipeline,
+              segments_dataframe,
+          )
+
+          source = Path("demo/examples/synthetic_activity_imu.tsv")
+          output = Path("demo-doc-assets")
+          output.mkdir(parents=True, exist_ok=True)
+
+          result = run_pipeline(
+              source,
+              fusion_mode="local_boundary",
+              min_duration_sec=5,
+              confidence_min=0.30,
+              top_k=5,
+          )
+
+          signal_figure = make_signal_figure(result.recording)
+          signal_figure.savefig(
+              output / "synthetic-raw-signals.png",
+              dpi=180,
+              bbox_inches="tight",
+              facecolor="white",
+          )
+
+          timeline_figure = make_timeline_figure(result)
+          timeline_figure.savefig(
+              output / "synthetic-activity-likelihood-timeline.png",
+              dpi=180,
+              bbox_inches="tight",
+              facecolor="white",
+          )
+
+          records = segments_dataframe(result)
+          records.to_csv(output / "synthetic-activity-records.csv", index=False)
+
+          figure_height = max(2.8, 1.4 + 0.62 * max(len(records), 1))
+          records_figure, axis = plt.subplots(figsize=(12.8, figure_height))
+          axis.axis("off")
+          axis.set_title(
+              "Activity records from synthetic_activity_imu.tsv",
+              loc="left",
+              fontsize=15,
+              fontweight="bold",
+              pad=18,
+          )
+          table = axis.table(
+              cellText=records.values,
+              colLabels=records.columns,
+              cellLoc="left",
+              colLoc="left",
+              loc="center",
+              colWidths=[0.18, 0.12, 0.14, 0.14, 0.16, 0.16],
+          )
+          table.auto_set_font_size(False)
+          table.set_fontsize(10.5)
+          table.scale(1, 1.65)
+          for (row, column), cell in table.get_celld().items():
+              cell.set_edgecolor("#d9e1e8")
+              cell.set_linewidth(0.8)
+              if row == 0:
+                  cell.set_facecolor("#edf3fb")
+                  cell.set_text_props(weight="bold", color="#172b4d")
+              else:
+                  cell.set_facecolor("#ffffff")
+                  cell.set_text_props(color="#253858")
+          records_figure.tight_layout()
+          records_figure.savefig(
+              output / "synthetic-activity-records.png",
+              dpi=180,
+              bbox_inches="tight",
+              facecolor="white",
+          )
+          plt.close(records_figure)
+
+          summary = [
+              f"samples={len(result.recording.data)}",
+              f"duration_sec={result.recording.duration_sec:.1f}",
+              f"sample_rate_hz={result.recording.sample_rate_hz:.1f}",
+              f"timeline_points={len(result.timestamps)}",
+              f"segments={len(result.segments)}",
+              records.to_string(index=False),
+          ]
+          (output / "summary.txt").write_text("\n".join(summary), encoding="utf-8")
+          PY
+
+      - name: Upload generated documentation assets
         uses: actions/upload-artifact@v4
         with:
-          name: demo-preview
-          path: docs/assets/demo-results.jpg
+          name: demo-doc-assets
+          path: demo-doc-assets/
           if-no-files-found: error
           retention-days: 1
