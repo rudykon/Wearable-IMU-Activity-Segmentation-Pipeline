@@ -1,8 +1,0 @@
-samples=12000
-duration_sec=120.0
-sample_rate_hz=100.0
-timeline_points=118
-segments=2
-Activity 活动  Start (s)  End (s)  Duration (s)  Confidence
-     Fly 飞鸟      29.84    73.15         43.31      0.4038
- Running 跑步      76.06    98.24         22.18      0.3186
