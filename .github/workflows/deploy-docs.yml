@@ -8,12 +8,14 @@ on:
       - "docs/**"
       - "mkdocs.yml"
       - "requirements-docs.txt"
+      - "tests/test_docs_math.py"
       - ".github/workflows/deploy-docs.yml"
   pull_request:
     paths:
       - "docs/**"
       - "mkdocs.yml"
       - "requirements-docs.txt"
+      - "tests/test_docs_math.py"
       - ".github/workflows/deploy-docs.yml"
   workflow_dispatch:
 
@@ -43,6 +45,9 @@ jobs:
 
       - name: Build documentation
         run: mkdocs build --strict
+
+      - name: Validate rendered equations
+        run: python tests/test_docs_math.py
 
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'
