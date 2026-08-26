@@ -2,7 +2,7 @@
   <div>
     <p class="hero-kicker">Interactive browser demo</p>
     <h1>From wrist IMU signals to activity records</h1>
-    <p>Run the public 3-, 5-, and 8-second models with the bundled synthetic recording or a compatible 100 Hz wrist-IMU file.</p>
+    <p>The bundled <code>synthetic_activity_imu.tsv</code> recording is loaded by default. Run it immediately, or replace it with a compatible 100 Hz wrist-IMU file.</p>
     <div class="demo-facts" aria-label="Demo capabilities">
       <span>Real public models</span>
       <span>Six signal channels</span>
@@ -33,7 +33,7 @@
 
 ## Run the bundled example {#run-the-bundled-example}
 
-The fastest way to understand the interface is to run the deterministic [`synthetic_activity_imu.tsv`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/demo/examples/synthetic_activity_imu.tsv) example. It contains **12,000 samples**, covers **120 seconds** at **100 Hz**, and contains no participant data.
+The fastest way to understand the interface is to run the deterministic [`synthetic_activity_imu.tsv`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/demo/examples/synthetic_activity_imu.tsv) example. It contains **12,000 samples**, covers **120 seconds** at **100 Hz**, and contains no participant data. The live Space opens with this file already selected.
 
 <div class="demo-steps">
   <article class="demo-step">
@@ -44,8 +44,8 @@ The fastest way to understand the interface is to run the deterministic [`synthe
   </article>
   <article class="demo-step">
     <span class="demo-step__number">2</span>
-    <h3>Select the sample</h3>
-    <p>Under <strong>Try without uploading</strong>, click the row containing <code>synthetic_activity_imu.tsv</code>.</p>
+    <h3>Confirm the preloaded sample</h3>
+    <p>The file input already contains <code>synthetic_activity_imu.tsv</code>. No upload or example selection is required.</p>
   </article>
   <article class="demo-step">
     <span class="demo-step__number">3</span>
@@ -54,8 +54,8 @@ The fastest way to understand the interface is to run the deterministic [`synthe
   </article>
   <article class="demo-step">
     <span class="demo-step__number">4</span>
-    <h3>Run segmentation</h3>
-    <p>Click <strong>Find activity periods / 识别活动区间</strong>, then inspect the three result tabs.</p>
+    <h3>Run the loaded sample</h3>
+    <p>Click <strong>Run the loaded sample / 运行当前样例</strong>, then inspect the three result tabs.</p>
   </article>
 </div>
 
@@ -69,7 +69,7 @@ The fastest way to understand the interface is to run the deterministic [`synthe
 
 !!! tip "What happens after you click Run"
 
-    The Space validates the file, loads the public checkpoints, runs the 3-, 5-, and 8-second models, fuses their posterior trajectories, applies the Temporal Record Layer, and returns plots, records, and a CSV in one request.
+    The Space validates the preloaded file, loads the public checkpoints, runs the 3-, 5-, and 8-second models, fuses their posterior trajectories, applies the Temporal Record Layer, and returns plots, records, and a CSV in one request.
 
 ## Reproducible example output {#reproducible-example-output}
 
@@ -168,7 +168,7 @@ The short settings above make the 120-second sample easy to inspect. They are **
 ## Use your own recording {#use-your-own-recording}
 
 1. Prepare a UTF-8 tab-separated `.txt` or `.tsv` file.
-2. Upload it in the file control instead of selecting the bundled example.
+2. Replace the preloaded synthetic file in the input control with your recording.
 3. Start with the Demo defaults, run once, and inspect **Raw signals** before interpreting the model output.
 4. Adjust one control at a time so its effect remains understandable.
 
