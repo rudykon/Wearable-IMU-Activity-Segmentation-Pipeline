@@ -1,13 +1,13 @@
 window.MathJax = {
   loader: {
-    load: ["[tex]/ams", "[tex]/boldsymbol"]
+    load: ["[tex]/ams"]
   },
   tex: {
     inlineMath: [["\\(", "\\)"]],
     displayMath: [["\\[", "\\]"]],
     processEscapes: true,
     processEnvironments: true,
-    packages: { "[+]": ["ams", "boldsymbol"] },
+    packages: { "[+]": ["ams"] },
     tags: "ams",
     tagSide: "right",
     tagIndent: "0.8em"
@@ -20,7 +20,7 @@ window.MathJax = {
   },
   options: {
     ignoreHtmlClass: ".*|",
-    processHtmlClass: "arithmatex"
+    processHtmlClass: "arithmatex|equation-context"
   }
 };
 
