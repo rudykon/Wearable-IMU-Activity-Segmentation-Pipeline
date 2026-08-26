@@ -88,7 +88,7 @@ The figures below were exported from the **current public checkpoints** with the
 
 ### 1. Raw signals / 原始信号 {#raw-signals}
 
-Open the first result tab to inspect the six channels before classification. The upper panel contains the three accelerometer axes; the lower panel contains the three gyroscope axes.
+Open the first result tab to inspect the six channels before classification. The upper panel contains the acceleration channels \(a_x,a_y,a_z\); the lower panel contains the angular-velocity channels \(\omega_x,\omega_y,\omega_z\).
 
 <figure class="demo-result-figure">
   <a href="../../assets/demo/synthetic-raw-signals.png" target="_blank" rel="noopener" aria-label="Open the full-resolution raw-signal result">
@@ -177,6 +177,11 @@ Required columns:
 ~~~text
 ACC_TIME  ACC_X  ACC_Y  ACC_Z  GYRO_X  GYRO_Y  GYRO_Z
 ~~~
+
+The plots use paper notation: file columns `ACC_X`, `ACC_Y`, and `ACC_Z` are
+shown as \(a_x,a_y,a_z\), while `GYRO_X`, `GYRO_Y`, and `GYRO_Z` are shown as
+\(\omega_x,\omega_y,\omega_z\). The literal names above remain the required
+TSV headers.
 
 `ACC_TIME` must contain strictly increasing millisecond timestamps. The median interval must be 8–12 ms, corresponding to approximately 100 Hz. The public interface accepts **800–60,000 valid samples**, or about 8 seconds to 10 minutes at 100 Hz. Extra columns are ignored.
 

@@ -65,6 +65,23 @@ CSS = """
 }
 .primary-action { background: linear-gradient(135deg, var(--imu-indigo), var(--imu-violet)) !important; }
 .privacy-note { font-size: .9rem; color: #64748b; }
+.sensor-schema {
+  margin: .1rem 0 .55rem;
+  color: #475569;
+  font-size: .94rem;
+  line-height: 1.55;
+}
+.sensor-schema p { margin: .18rem 0; }
+.sensor-symbol {
+  display: inline-block;
+  min-width: 1.35em;
+  color: var(--imu-ink);
+  font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif;
+  font-size: 1.08em;
+  white-space: nowrap;
+}
+.sensor-symbol var { font-family: inherit; }
+.sensor-symbol sub { font-size: .68em; }
 """
 THEME = gr.themes.Soft(primary_hue="indigo", secondary_hue="violet")
 
@@ -135,11 +152,24 @@ def build_app() -> gr.Blocks:
                     type="filepath",
                     interactive=True,
                 )
-                gr.Markdown(
-                    "The bundled sample is ready. Replace it only when using your own file. / "
-                    "内置样例已经就绪；只有在测试自己的数据时才需要替换文件。\n\n"
-                    "File columns / 文件列名：`ACC_TIME`, `ACC_X`, `ACC_Y`, `ACC_Z`, "
-                    "`GYRO_X`, `GYRO_Y`, `GYRO_Z`。`ACC_TIME` uses milliseconds / 单位为毫秒。"
+                gr.HTML(
+                    """
+                    <div class="sensor-schema">
+                      <p><strong>Paper notation / 论文记号：</strong>
+                        <span class="sensor-symbol"><var>a</var><sub>x</sub></span>,
+                        <span class="sensor-symbol"><var>a</var><sub>y</sub></span>,
+                        <span class="sensor-symbol"><var>a</var><sub>z</sub></span>;
+                        <span class="sensor-symbol"><var>&omega;</var><sub>x</sub></span>,
+                        <span class="sensor-symbol"><var>&omega;</var><sub>y</sub></span>,
+                        <span class="sensor-symbol"><var>&omega;</var><sub>z</sub></span>。
+                      </p>
+                      <p><strong>Required TSV headers / 必需文件列名：</strong>
+                        <code>ACC_TIME</code>, <code>ACC_X</code>, <code>ACC_Y</code>,
+                        <code>ACC_Z</code>, <code>GYRO_X</code>, <code>GYRO_Y</code>,
+                        <code>GYRO_Z</code>。<code>ACC_TIME</code> uses milliseconds / 单位为毫秒。
+                      </p>
+                    </div>
+                    """
                 )
                 run_button = gr.Button(
                     "Run the loaded sample / 运行当前样例",

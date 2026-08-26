@@ -22,10 +22,14 @@ class DocumentationMathTests(unittest.TestCase):
         source_paths = [
             ROOT / "docs" / "guide" / "pipeline.md",
             ROOT / "docs" / "guide" / "pipeline.zh.md",
+            ROOT / "docs" / "guide" / "data.md",
+            ROOT / "docs" / "guide" / "data.zh.md",
             ROOT / "docs" / "guide" / "training.md",
             ROOT / "docs" / "guide" / "training.zh.md",
             ROOT / "docs" / "guide" / "evaluation.md",
             ROOT / "docs" / "guide" / "evaluation.zh.md",
+            ROOT / "docs" / "deployment" / "hugging-face.md",
+            ROOT / "docs" / "deployment" / "hugging-face.zh.md",
         ]
         combined = "\n".join(path.read_text(encoding="utf-8") for path in source_paths)
         self.assertNotIn("<sub>", combined)
@@ -34,15 +38,34 @@ class DocumentationMathTests(unittest.TestCase):
         self.assertIn("\\operatorname{IoU}", combined)
         self.assertIn("\\mathcal{L}", combined)
         self.assertIn("\\widetilde{\\mathbf{p}}", combined)
+        self.assertIn("\\(a_x,a_y,a_z\\)", combined)
+        self.assertIn("\\(\\omega_x,\\omega_y,\\omega_z\\)", combined)
+
+    def test_scientific_pages_use_paper_channel_notation(self) -> None:
+        source_paths = [
+            ROOT / "docs" / "guide" / "pipeline.md",
+            ROOT / "docs" / "guide" / "pipeline.zh.md",
+            ROOT / "docs" / "guide" / "data.md",
+            ROOT / "docs" / "guide" / "data.zh.md",
+        ]
+        combined = "\n".join(path.read_text(encoding="utf-8") for path in source_paths)
+        self.assertNotIn("ACC_X", combined)
+        self.assertNotIn("GYRO_X", combined)
+        self.assertIn("a_x", combined)
+        self.assertIn("\\omega_x", combined)
 
     def test_built_pages_contain_arithmatex_and_mathjax(self) -> None:
         pages = [
             SITE / "guide" / "pipeline" / "index.html",
+            SITE / "guide" / "data" / "index.html",
             SITE / "guide" / "training" / "index.html",
             SITE / "guide" / "evaluation" / "index.html",
+            SITE / "deployment" / "hugging-face" / "index.html",
             SITE / "zh" / "guide" / "pipeline" / "index.html",
+            SITE / "zh" / "guide" / "data" / "index.html",
             SITE / "zh" / "guide" / "training" / "index.html",
             SITE / "zh" / "guide" / "evaluation" / "index.html",
+            SITE / "zh" / "deployment" / "hugging-face" / "index.html",
         ]
         for page in pages:
             with self.subTest(page=page):

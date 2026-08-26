@@ -51,8 +51,8 @@ The reported system uses six 100 Hz channels:
 
 | Signal | Meaning |
 | --- | --- |
-| `ACC_X`, `ACC_Y`, `ACC_Z` | tri-axial wrist acceleration |
-| `GYRO_X`, `GYRO_Y`, `GYRO_Z` | tri-axial wrist angular velocity |
+| \(a_x, a_y, a_z\) | tri-axial wrist acceleration |
+| \(\omega_x, \omega_y, \omega_z\) | tri-axial wrist angular velocity |
 | timestamp | millisecond reference for segment boundaries |
 
 Three overlapping views are constructed with a one-second step:

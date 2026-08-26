@@ -29,11 +29,10 @@
 
 ## 任务
 
-输入是 100 Hz 六路信号：
-
-~~~text
-ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
-~~~
+输入是 100 Hz 六路信号，其单个时刻的观测向量写为
+\(\mathbf{x}_t=[a_x(t),a_y(t),a_z(t),\omega_x(t),\omega_y(t),\omega_z(t)]^{\mathsf T}\)。
+其中，\(a_x,a_y,a_z\) 表示腕部三轴加速度，
+\(\omega_x,\omega_y,\omega_z\) 表示腕部三轴角速度。
 
 输出是数量不固定的记录集合
 \(\mathcal{R}=\{(c_i,t_i^{\mathrm{start}},t_i^{\mathrm{end}})\}_{i=1}^{N}\)。
