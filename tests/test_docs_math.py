@@ -68,6 +68,14 @@ class DocumentationMathTests(unittest.TestCase):
         self.assertGreater(download_sample.stat().st_size, 500_000)
         self.assertEqual(download_sample.read_bytes(), canonical_sample.read_bytes())
 
+        extra_css = (ROOT / "docs" / "stylesheets" / "extra.css").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            ":not(.md-button):not(.hero-button):not(.route-card):not(.demo-action)",
+            extra_css,
+        )
+
     def test_math_configuration_is_enabled(self) -> None:
         config = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
         self.assertIn("pymdownx.arithmatex", config)
