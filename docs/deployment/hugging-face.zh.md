@@ -2,7 +2,7 @@
   <div>
     <p class="hero-kicker">交互式浏览器演示</p>
     <h1>从腕部 IMU 信号到活动记录</h1>
-    <p>使用内置合成记录或兼容的 100 Hz 腕部 IMU 文件，运行公开的 3、5、8 秒模型。</p>
+    <p>页面默认载入 <code>synthetic_activity_imu.tsv</code>，可以直接运行，也可以替换为兼容的 100 Hz 腕部 IMU 文件。</p>
     <div class="demo-facts" aria-label="演示能力">
       <span>真实公开模型</span>
       <span>六路传感器信号</span>
@@ -33,7 +33,7 @@
 
 ## 运行内置合成样例 {#run-the-bundled-example}
 
-理解界面最快的方法，是直接运行确定性生成的 [`synthetic_activity_imu.tsv`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/demo/examples/synthetic_activity_imu.tsv)。该文件包含 **12,000 个样本**，对应 **100 Hz 下的 120 秒记录**，不含任何参与者数据。
+理解界面最快的方法，是直接运行确定性生成的 [`synthetic_activity_imu.tsv`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/demo/examples/synthetic_activity_imu.tsv)。该文件包含 **12,000 个样本**，对应 **100 Hz 下的 120 秒记录**，不含任何参与者数据。在线 Space 打开后，该文件已经默认选中。
 
 <div class="demo-steps">
   <article class="demo-step">
@@ -44,8 +44,8 @@
   </article>
   <article class="demo-step">
     <span class="demo-step__number">2</span>
-    <h3>选择内置样例</h3>
-    <p>在 <strong>无需上传：使用合成示例</strong> 区域，点击包含 <code>synthetic_activity_imu.tsv</code> 的那一行。</p>
+    <h3>确认默认样例</h3>
+    <p>文件输入框已经载入 <code>synthetic_activity_imu.tsv</code>，不需要上传文件，也不需要再点击示例行。</p>
   </article>
   <article class="demo-step">
     <span class="demo-step__number">3</span>
@@ -54,8 +54,8 @@
   </article>
   <article class="demo-step">
     <span class="demo-step__number">4</span>
-    <h3>开始识别</h3>
-    <p>点击 <strong>Find activity periods / 识别活动区间</strong>，然后依次查看三个结果标签页。</p>
+    <h3>运行当前样例</h3>
+    <p>点击 <strong>Run the loaded sample / 运行当前样例</strong>，然后依次查看三个结果标签页。</p>
   </article>
 </div>
 
@@ -69,7 +69,7 @@
 
 !!! tip "点击运行后，系统会做什么"
 
-    Space 会先检查文件格式，再载入公开模型权重，分别运行 3、5、8 秒模型，融合三条后验概率轨迹，经过时间记录层处理，最后在一次请求中返回信号图、活动时间线、记录表和 CSV。
+    Space 会先检查默认载入的文件，再载入公开模型权重，分别运行 3、5、8 秒模型，融合三条后验概率轨迹，经过时间记录层处理，最后在一次请求中返回信号图、活动时间线、记录表和 CSV。
 
 ## 可复现的示例输出 {#reproducible-example-output}
 
@@ -168,7 +168,7 @@
 ## 上传自己的记录 {#use-your-own-recording}
 
 1. 准备 UTF-8 制表符分隔的 `.txt` 或 `.tsv` 文件。
-2. 在文件上传控件中选择它，不再点击内置样例。
+2. 在文件输入控件中，用自己的记录替换默认载入的合成样例。
 3. 第一次运行时先保留默认参数，并优先检查 **Raw signals / 原始信号**，再解释模型结果。
 4. 后续每次只调整一个参数，便于看清该参数带来的变化。
 
