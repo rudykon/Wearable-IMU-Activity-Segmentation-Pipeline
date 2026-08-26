@@ -33,6 +33,22 @@ PROJECT_WEBSITE_URL = (
     "https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"
 )
 GITHUB_URL = "https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline"
+SYNTHETIC_READY_STATUS = (
+    "### Synthetic sample ready / 合成样例已就绪\n"
+    "`synthetic_activity_imu.tsv` is selected. Click **Run current recording / 运行当前记录** "
+    "to generate the three outputs. / `synthetic_activity_imu.tsv` 已选中，点击 "
+    "**运行当前记录** 即可生成三类结果。"
+)
+CUSTOM_RECORDING_STATUS = (
+    "### Custom recording selected / 已选择自定义记录\n"
+    "Review the settings, then click **Run current recording / 运行当前记录**. / "
+    "请确认参数设置，然后点击 **运行当前记录**。"
+)
+NO_RECORDING_STATUS = (
+    "### Select a recording / 请选择记录\n"
+    "Upload a compatible TXT/TSV file, or restore the synthetic sample. / "
+    "请上传兼容的 TXT/TSV 文件，或恢复合成样例。"
+)
 
 CSS = """
 :root {
@@ -219,6 +235,31 @@ def segment_recording(upload, fusion_mode, min_duration_sec, confidence_min, top
         ) from exc
 
 
+def recording_selection_status(upload) -> str:
+    """Describe the selected file without running a model or exposing its name."""
+
+    if upload is None:
+        return NO_RECORDING_STATUS
+
+    candidate = upload if isinstance(upload, (str, Path)) else None
+    if candidate is None:
+        candidate = getattr(upload, "path", None) or getattr(upload, "name", None)
+
+    if candidate:
+        try:
+            if Path(candidate).resolve() == EXAMPLE_PATH.resolve():
+                return SYNTHETIC_READY_STATUS
+        except (OSError, TypeError, ValueError):
+            pass
+    return CUSTOM_RECORDING_STATUS
+
+
+def reset_demo():
+    """Restore the bundled recording and the documented demo defaults."""
+
+    return str(EXAMPLE_PATH), "local_boundary", 5, 0.30, 5, SYNTHETIC_READY_STATUS
+
+
 def build_app() -> gr.Blocks:
     """Build the bilingual, ZeroGPU-compatible Gradio application."""
 
@@ -255,7 +296,7 @@ def build_app() -> gr.Blocks:
                 <ol class="imu-steps">
                   <li>Keep the loaded sample, or upload a compatible TXT/TSV file. / 使用默认样例，或上传兼容文件。</li>
                   <li>Keep the defaults or adjust fusion and filtering. / 保持默认参数，或调整融合与过滤设置。</li>
-                  <li>Click <strong>Run</strong>, inspect the three result tabs, and download CSV. / 点击运行，查看三类结果并下载 CSV。</li>
+                  <li>Click <strong>Run current recording</strong>, inspect the three result tabs, and download CSV. / 点击<strong>运行当前记录</strong>，查看三类结果并下载 CSV。</li>
                 </ol>
               </article>
             </section>
@@ -290,11 +331,16 @@ def build_app() -> gr.Blocks:
                     </div>
                     """
                 )
-                run_button = gr.Button(
-                    "Run the loaded sample / 运行当前样例",
-                    variant="primary",
-                    elem_classes=["primary-action"],
-                )
+                with gr.Row():
+                    run_button = gr.Button(
+                        "Run current recording / 运行当前记录",
+                        variant="primary",
+                        elem_classes=["primary-action"],
+                    )
+                    reset_button = gr.Button(
+                        "Reset to synthetic sample / 恢复合成样例",
+                        variant="secondary",
+                    )
 
             with gr.Column(scale=4):
                 fusion_mode = gr.Dropdown(
@@ -324,13 +370,6 @@ def build_app() -> gr.Blocks:
                     label="Maximum records to show (0 = all) / 最多显示记录数（0 = 全部）",
                 )
 
-        gr.Examples(
-            examples=[[str(EXAMPLE_PATH), "local_boundary", 5, 0.30, 5]],
-            inputs=[upload, fusion_mode, min_duration, confidence, top_k],
-            label="Restore the bundled sample and defaults / 恢复内置样例与默认参数",
-            cache_examples=False,
-        )
-
         gr.Markdown(
             "The sample is computer-generated and contains no participant data. "
             "Its short activity periods are for demonstration only, not a paper result. / "
@@ -338,11 +377,7 @@ def build_app() -> gr.Blocks:
             elem_classes=["privacy-note"],
         )
 
-        status = gr.Markdown(
-            "### Synthetic sample ready / 合成样例已就绪\n"
-            "`synthetic_activity_imu.tsv` is already selected. Click **Run the loaded sample / 运行当前样例** to generate the three outputs. / "
-            "`synthetic_activity_imu.tsv` 已默认选中，点击 **运行当前样例** 即可生成三类结果。"
-        )
+        status = gr.Markdown(SYNTHETIC_READY_STATUS)
         with gr.Tabs():
             with gr.Tab("Raw signals / 原始信号"):
                 signal_plot = gr.Plot(label="Six IMU channels / 六路 IMU 信号")
@@ -379,6 +414,20 @@ def build_app() -> gr.Blocks:
             outputs=[status, signal_plot, timeline_plot, segment_table, download],
             api_name="segment",
             concurrency_limit=1,
+        )
+        upload.change(
+            fn=recording_selection_status,
+            inputs=upload,
+            outputs=status,
+            queue=False,
+            api_visibility="private",
+        )
+        reset_button.click(
+            fn=reset_demo,
+            inputs=None,
+            outputs=[upload, fusion_mode, min_duration, confidence, top_k, status],
+            queue=False,
+            api_visibility="private",
         )
 
     return app

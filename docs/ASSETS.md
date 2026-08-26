@@ -1,3 +1,9 @@
+---
+search:
+  exclude: true
+robots: noindex, follow
+---
+
 # Data and model assets
 
 This page preserves the repository's original `docs/ASSETS.md` link. See the

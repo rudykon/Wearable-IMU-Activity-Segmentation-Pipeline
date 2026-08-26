@@ -1,3 +1,9 @@
+---
+search:
+  exclude: true
+robots: noindex, follow
+---
+
 # 应用场景
 
 <p class="research-lead">可穿戴设备记录运动，本项目把它整理成活动日志。</p>

@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the versioned repository."
+type: software
+title: "Wearable IMU Activity Segmentation Pipeline"
+authors:
+  - family-names: "Kong"
+    given-names: "Minghao"
+version: 0.1.0
+license: Apache-2.0
+repository-code: "https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline"
+url: "https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"

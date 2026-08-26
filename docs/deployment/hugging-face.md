@@ -45,7 +45,7 @@ The fastest way to understand the interface is to run the deterministic [`synthe
   <article class="demo-step">
     <span class="demo-step__number">2</span>
     <h3>Confirm the preloaded sample</h3>
-    <p>The file input already contains <code>synthetic_activity_imu.tsv</code>. No upload or example selection is required.</p>
+    <p>The file input already contains <code>synthetic_activity_imu.tsv</code>. Upload another file only if you want to test your own compatible recording.</p>
   </article>
   <article class="demo-step">
     <span class="demo-step__number">3</span>
@@ -54,8 +54,8 @@ The fastest way to understand the interface is to run the deterministic [`synthe
   </article>
   <article class="demo-step">
     <span class="demo-step__number">4</span>
-    <h3>Run the loaded sample</h3>
-    <p>Click <strong>Run the loaded sample / 运行当前样例</strong>, then inspect the three result tabs.</p>
+    <h3>Run the current recording</h3>
+    <p>Click <strong>Run current recording / 运行当前记录</strong>, then inspect the three result tabs.</p>
   </article>
 </div>
 
@@ -66,6 +66,8 @@ The fastest way to understand the interface is to run the deterministic [`synthe
   <div><span>Confidence</span><strong>0.30</strong></div>
   <div><span>Top-K</span><strong>5</strong></div>
 </div>
+
+Use <strong>Reset to synthetic sample / 恢复合成样例</strong> at any time to restore the bundled file and all five defaults.
 
 !!! tip "What happens after you click Run"
 

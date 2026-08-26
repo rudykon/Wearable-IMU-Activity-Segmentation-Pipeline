@@ -6,17 +6,20 @@ which time scale is most reliable, and how window probabilities become stable
 start-to-end records.
 
 \[
+\begin{aligned}
 \mathbf{X}
-\xrightarrow{\text{3 s, 5 s, and 8 s posterior models}}
+&\xrightarrow{\text{multi-scale posterior models}}
 \left\{
 \mathbf{p}_{t}^{(3\,\mathrm{s})},
 \mathbf{p}_{t}^{(5\,\mathrm{s})},
 \mathbf{p}_{t}^{(8\,\mathrm{s})}
 \right\}
-\xrightarrow{\mathrm{LBSA}}
+\\
+&\xrightarrow{\mathrm{LBSA}}
 \widetilde{\mathbf{p}}_{t}
 \xrightarrow{\mathrm{TRL}}
 \mathcal{R}.
+\end{aligned}
 \tag{1}
 \]
 
@@ -96,16 +99,18 @@ At aligned time step \(t\), the fused posterior is a convex combination of the
 three scale-specific posteriors:
 
 \[
+\begin{aligned}
 \widetilde{\mathbf{p}}_{t}
-=
+&=
 \sum_{s\in\mathcal{S}}
 \alpha_{t,s}\,\mathbf{p}_{t}^{(s)},
+\\
+\mathcal{S}
+&=\{3\,\mathrm{s},5\,\mathrm{s},8\,\mathrm{s}\},
+\qquad \alpha_{t,s}\ge 0,
 \qquad
-\mathcal{S}=\{3\,\mathrm{s},5\,\mathrm{s},8\,\mathrm{s}\},
-\qquad
-\alpha_{t,s}\ge 0,
-\quad
 \sum_{s\in\mathcal{S}}\alpha_{t,s}=1.
+\end{aligned}
 \tag{2}
 \]
 

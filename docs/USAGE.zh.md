@@ -1,3 +1,9 @@
+---
+search:
+  exclude: true
+robots: noindex, follow
+---
+
 # 使用指南
 
 此页面保留仓库原有的 `docs/USAGE.md` 链接。扩展后的项目网站已将各工作流拆分为
