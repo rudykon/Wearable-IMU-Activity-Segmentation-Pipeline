@@ -1,0 +1,27 @@
+name: Export demo preview
+
+on:
+  push:
+    branches:
+      - docs/demo-synthetic-walkthrough
+    paths:
+      - ".github/workflows/export-demo-preview.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Upload current demo screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-preview
+          path: docs/assets/demo-results.jpg
+          if-no-files-found: error
+          retention-days: 1
