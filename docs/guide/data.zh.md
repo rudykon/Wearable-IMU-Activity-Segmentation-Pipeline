@@ -10,6 +10,15 @@
   <div class="metric"><strong>5</strong><span>类活动</span></div>
 </div>
 
+!!! info "研究数据申请"
+
+    HLS-HAR 参与者记录不在 GitHub 公开分发。在计划中的 PhysioNet 发布完成前，
+    研究人员可通过[腾讯问卷提交数据申请](https://wj.qq.com/s2/26600660/1b91){ target="_blank" rel="noopener" }，
+    申请由海南大学数据管理组织方审核。
+
+    [提交数据申请](https://wj.qq.com/s2/26600660/1b91){ .md-button .md-button--primary target="_blank" rel="noopener" }
+    [查看申请说明](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README_zh.md){ .md-button target="_blank" rel="noopener" }
+
 ## 活动
 
 五类前景活动为羽毛球、跳绳、哑铃飞鸟、跑步和乒乓球。背景运动参与内部建模，

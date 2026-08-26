@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import unittest
 from pathlib import Path
 
@@ -10,6 +11,63 @@ SITE = ROOT / "site"
 
 
 class DocumentationMathTests(unittest.TestCase):
+    def test_primary_navigation_promotes_both_demos(self) -> None:
+        config = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
+        nav = config.split("\nnav:\n", maxsplit=1)[1]
+        top_level_labels = re.findall(r"^  - ([^:]+):", nav, flags=re.MULTILINE)
+        self.assertEqual(
+            top_level_labels,
+            [
+                "Overview",
+                "Method",
+                "Results",
+                "Reproduce",
+                "Android Demo",
+                "HF Demo",
+                "GitHub",
+            ],
+        )
+        self.assertNotIn("\n      - Android:", nav)
+
+    def test_android_downloads_and_data_request_are_pinned(self) -> None:
+        apk_url = (
+            "https://github.com/rudykon/"
+            "Wearable-IMU-Activity-Segmentation-Pipeline/releases/download/"
+            "android-demo-v1.0-preview/"
+            "hls-har-android-demo-v1.0-arm64-v8a-debug.apk"
+        )
+        release_url = (
+            "https://github.com/rudykon/"
+            "Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/"
+            "android-demo-v1.0-preview"
+        )
+        form_url = "https://wj.qq.com/s2/26600660/1b91"
+
+        for page in [
+            ROOT / "docs" / "deployment" / "android.md",
+            ROOT / "docs" / "deployment" / "android.zh.md",
+        ]:
+            with self.subTest(page=page):
+                source = page.read_text(encoding="utf-8")
+                self.assertIn(apk_url, source)
+                self.assertIn(release_url, source)
+                self.assertIn("assets/android/synthetic_activity_imu.tsv", source)
+
+        for page in [
+            ROOT / "docs" / "guide" / "data.md",
+            ROOT / "docs" / "guide" / "data.zh.md",
+        ]:
+            with self.subTest(page=page):
+                self.assertIn(form_url, page.read_text(encoding="utf-8"))
+
+        canonical_sample = ROOT / "demo" / "examples" / "synthetic_activity_imu.tsv"
+        download_sample = (
+            ROOT / "docs" / "assets" / "android" / "synthetic_activity_imu.tsv"
+        )
+        self.assertTrue(download_sample.is_file())
+        self.assertGreater(download_sample.stat().st_size, 500_000)
+        self.assertEqual(download_sample.read_bytes(), canonical_sample.read_bytes())
+
     def test_math_configuration_is_enabled(self) -> None:
         config = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
         self.assertIn("pymdownx.arithmatex", config)
@@ -90,6 +148,27 @@ class DocumentationMathTests(unittest.TestCase):
                 self.assertIn("javascripts/mathjax.js", html)
                 self.assertIn("mathjax@3.2.2", html)
                 self.assertNotIn('<div class="method-chain">', html)
+
+    def test_built_demo_and_data_pages_keep_their_actions(self) -> None:
+        android_pages = [
+            SITE / "deployment" / "android" / "index.html",
+            SITE / "zh" / "deployment" / "android" / "index.html",
+        ]
+        for page in android_pages:
+            with self.subTest(page=page):
+                self.assertTrue(page.is_file(), f"Missing built page: {page}")
+                html = page.read_text(encoding="utf-8")
+                self.assertIn("android-demo-v1.0-preview", html)
+                self.assertIn("synthetic_activity_imu.tsv", html)
+                self.assertIn('id="download-and-try"', html)
+                self.assertIn('id="capabilities"', html)
+
+        chinese_data = SITE / "zh" / "guide" / "data" / "index.html"
+        self.assertTrue(chinese_data.is_file(), f"Missing built page: {chinese_data}")
+        self.assertIn(
+            "https://wj.qq.com/s2/26600660/1b91",
+            chinese_data.read_text(encoding="utf-8"),
+        )
 
 
 if __name__ == "__main__":

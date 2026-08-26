@@ -12,6 +12,16 @@ coordinated by the Hainan University organizers.
   <div class="metric"><strong>5</strong><span>activities</span></div>
 </div>
 
+!!! info "Request research access"
+
+    HLS-HAR participant recordings are not distributed on GitHub. Before the
+    planned PhysioNet release, researchers can submit the
+    [dataset request form](https://wj.qq.com/s2/26600660/1b91){ target="_blank" rel="noopener" }.
+    The Hainan University data organizer reviews each request.
+
+    [Submit a data request](https://wj.qq.com/s2/26600660/1b91){ .md-button .md-button--primary target="_blank" rel="noopener" }
+    [Read the access instructions](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/data/README.md){ .md-button target="_blank" rel="noopener" }
+
 ## Activities
 
 The foreground vocabulary contains badminton, rope skipping, dumbbell fly,

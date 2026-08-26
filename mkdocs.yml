@@ -92,8 +92,8 @@ plugins:
             Inference: 推理
             Evaluation: 评估
             Results: 结果
-            Demo: 演示
-            Android: Android
+            Android Demo: Android Demo
+            HF Demo: HF Demo
             API: API
             Citation: 引用
             GitHub: GitHub
@@ -156,8 +156,8 @@ nav:
       - Training: guide/training.md
       - Inference: guide/inference.md
       - Evaluation: guide/evaluation.md
-      - Android: deployment/android.md
       - API: reference/api.md
       - Citation: reference/citation.md
-  - Demo: deployment/hugging-face.md
+  - Android Demo: deployment/android.md
+  - HF Demo: deployment/hugging-face.md
   - GitHub: https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline
