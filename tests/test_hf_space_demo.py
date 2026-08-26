@@ -36,6 +36,12 @@ class DemoRuntimeTests(unittest.TestCase):
         self.assertAlmostEqual(recording.duration_sec, 119.99, places=2)
         self.assertEqual(recording.user_id, "synthetic_activity_imu")
 
+    def test_space_defaults_to_bundled_example(self) -> None:
+        app_source = (ROOT / "demo" / "app.py").read_text(encoding="utf-8")
+        self.assertIn("value=str(EXAMPLE_PATH)", app_source)
+        self.assertIn("Synthetic sample ready / 合成样例已就绪", app_source)
+        self.assertIn("Run the loaded sample / 运行当前样例", app_source)
+
     def test_missing_channel_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             path = Path(tmp_dir) / "bad.tsv"
