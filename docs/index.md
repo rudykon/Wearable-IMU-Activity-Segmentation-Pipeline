@@ -152,7 +152,7 @@ The evaluated task covers five sports recorded from a 100 Hz wrist accelerometer
 
 <div class="demo-showcase">
   <a class="demo-showcase__media" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener" aria-label="Open the live Hugging Face demo">
-    <img src="assets/demo-results.jpg" alt="Actual Hugging Face demo output showing synthetic wrist IMU signals and timestamped activity records" loading="lazy" decoding="async">
+    <img src="assets/demo-results-paper-notation.jpg" alt="Actual Hugging Face demo output showing paper-style wrist IMU channel notation and timestamped activity records" loading="lazy" decoding="async">
     <span>Open live demo ↗</span>
   </a>
   <div class="demo-showcase__copy">
