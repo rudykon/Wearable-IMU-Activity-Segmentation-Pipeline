@@ -108,6 +108,8 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.details
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
@@ -124,6 +126,11 @@ extra_css:
   - stylesheets/extra.css
   - stylesheets/showcase.css
   - stylesheets/demo-walkthrough.css
+  - stylesheets/math.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js
 
 extra:
   social:

@@ -1,0 +1,79 @@
+/* Academic equation typography for MathJax-rendered Markdown.
+   Equations remain unboxed, centered, numbered, and readable on narrow screens. */
+
+.md-typeset .arithmatex {
+  color: var(--research-text);
+}
+
+.md-typeset span.arithmatex {
+  margin-inline: 0.04em;
+  white-space: nowrap;
+}
+
+.md-typeset div.arithmatex {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 1.45rem 0 1.65rem;
+  padding: 0.45rem 0.15rem 0.55rem;
+  text-align: center;
+  scrollbar-width: thin;
+  scrollbar-color: var(--research-border) transparent;
+}
+
+.md-typeset div.arithmatex::-webkit-scrollbar {
+  height: 0.38rem;
+}
+
+.md-typeset div.arithmatex::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--research-border);
+}
+
+.md-typeset mjx-container[jax="CHTML"] {
+  color: var(--research-text);
+  line-height: 1.25;
+}
+
+.md-typeset mjx-container[display="true"] {
+  min-width: max-content;
+  margin: 0 auto !important;
+  padding: 0 1rem;
+  text-align: center !important;
+}
+
+.md-typeset mjx-container[display="true"] .mjx-tag {
+  color: var(--research-muted);
+  font-size: 0.88em;
+}
+
+.md-typeset table mjx-container[jax="CHTML"] {
+  font-size: 0.96em !important;
+}
+
+.md-typeset .equation-context {
+  max-width: 52rem;
+  margin: -0.65rem auto 1.55rem;
+  color: var(--research-muted);
+  font-size: 0.72rem;
+  line-height: 1.65;
+  text-align: center;
+}
+
+[data-md-color-scheme="slate"] .md-typeset div.arithmatex {
+  scrollbar-color: var(--research-border) transparent;
+}
+
+@media screen and (max-width: 42rem) {
+  .md-typeset div.arithmatex {
+    margin-block: 1.2rem 1.4rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .md-typeset mjx-container[display="true"] {
+    padding-inline: 0.65rem;
+  }
+
+  .md-typeset .equation-context {
+    text-align: left;
+  }
+}

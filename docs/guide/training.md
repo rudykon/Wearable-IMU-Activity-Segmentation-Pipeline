@@ -21,7 +21,7 @@ only in window length and random seed.
 | Seeds per scale | 42, 123, 456 |
 | Batch size | 256 |
 | Optimizer | AdamW |
-| Learning rate | 1×10⁻³ |
+| Learning rate | \(1\times10^{-3}\) |
 | Schedule | cosine annealing |
 | Label smoothing | 0.1 |
 
@@ -38,9 +38,22 @@ record construction.
 
 ## Objective
 
-The training loss is:
+The training objective combines cross-entropy, focal, and triplet terms:
 
-> **L = L<sub>CE</sub> + 0.2 L<sub>focal</sub> + 0.1 L<sub>triplet</sub>**
+\[
+\mathcal{L}
+=
+\mathcal{L}_{\mathrm{CE}}
++
+\lambda_{\mathrm{focal}}\mathcal{L}_{\mathrm{focal}}
++
+\lambda_{\mathrm{triplet}}\mathcal{L}_{\mathrm{triplet}},
+\qquad
+\lambda_{\mathrm{focal}}=0.2,
+\quad
+\lambda_{\mathrm{triplet}}=0.1.
+\tag{1}
+\]
 
 - cross-entropy learns the six-class decision;
 - focal loss emphasizes harder examples;

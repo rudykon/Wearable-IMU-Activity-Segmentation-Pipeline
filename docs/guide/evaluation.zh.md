@@ -15,10 +15,21 @@
 
 ## 匹配
 
-预测片段与参考片段必须属于同一条记录、活动类别相同，并且 IoU > 0.5，才有资格
-匹配。匹配采用一对一规则。
+预测片段 \(P\) 与参考片段 \(G\) 必须属于同一条记录、活动类别相同，并满足
+\(\operatorname{IoU}(P,G)>0.5\)，才有资格匹配。匹配采用一对一规则。
 
-> **IoU(P, G) = duration(P ∩ G) / duration(P ∪ G)**
+\[
+\operatorname{IoU}(P,G)
+=
+\frac{
+\operatorname{dur}(P\cap G)
+}{
+\operatorname{dur}(P\cup G)
+}.
+\tag{1}
+\]
+
+<p class="equation-context">分子是两个区间的重叠时长，分母是至少被其中一个区间覆盖的总时长。</p>
 
 错误类别、边界偏移、拆分与合并都会在同一记录级框架中受到惩罚。
 
@@ -33,11 +44,31 @@
 | 时长误差 | 以秒为单位的活动时长绝对误差 |
 | FP/hour | 每记录小时的虚假活动数 |
 
-每位用户先根据匹配与未匹配片段计算精确率和召回率，再计算：
+每位用户根据匹配与未匹配片段计算精确率 \(P\)、召回率 \(R\) 和 F1：
 
-> **F1 = 2 × precision × recall / (precision + recall)**
+\[
+\begin{aligned}
+P &= \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}},
+&
+R &= \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}},
+\\[4pt]
+\mathrm{F1} &= \frac{2PR}{P+R}.
+\end{aligned}
+\tag{2}
+\]
 
-平均用户 F1 避免长记录用户自然地主导主要分数；Micro-F1 保留全局事件计数视角。
+若评估包含 \(U\) 位用户，主要报告的平均用户 F1 对每位用户等权：
+
+\[
+\mathrm{F1}_{\mathrm{mean\text{-}user}}
+=
+\frac{1}{U}
+\sum_{u=1}^{U}\mathrm{F1}_{u}.
+\tag{3}
+\]
+
+平均用户 F1 避免长记录用户自然地主导主要分数；Micro-F1 则先汇总所有用户的
+TP、FP、FN，再应用公式（2），从而保留全局事件计数视角。
 
 ## 错误解读
 

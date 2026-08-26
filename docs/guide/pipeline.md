@@ -5,7 +5,22 @@ records. It separates three questions: what the current motion resembles,
 which time scale is most reliable, and how window probabilities become stable
 start-to-end records.
 
-<div class="method-chain"><code>X</code><span>→</span><code>{p<sup>3s</sup><sub>t</sub>, p<sup>5s</sup><sub>t</sub>, p<sup>8s</sup><sub>t</sub>}</code><span>LBSA →</span><code>p̃<sub>t</sub></code><span>TRL →</span><code>R</code></div>
+\[
+\mathbf{X}
+\xrightarrow{\text{3 s, 5 s, and 8 s posterior models}}
+\left\{
+\mathbf{p}_{t}^{(3\,\mathrm{s})},
+\mathbf{p}_{t}^{(5\,\mathrm{s})},
+\mathbf{p}_{t}^{(8\,\mathrm{s})}
+\right\}
+\xrightarrow{\mathrm{LBSA}}
+\widetilde{\mathbf{p}}_{t}
+\xrightarrow{\mathrm{TRL}}
+\mathcal{R}.
+\tag{1}
+\]
+
+<p class="equation-context">The complete signal \(\mathbf{X}\) produces three aligned posterior vectors; LBSA forms one fused trajectory and TRL converts it into the record set \(\mathcal{R}\).</p>
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="Open the full-resolution framework figure">
@@ -22,10 +37,11 @@ The input is a 100 Hz stream with six channels:
 ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 ~~~
 
-The output is a variable-length set of `(activity, start, end)` records. This is
-**temporal activity segmentation**, not independent window classification. A
-useful system must recover the activity class, event count, duration, and
-boundaries of each workout segment.
+The output is the variable-length record set
+\(\mathcal{R}=\{(c_i,t_i^{\mathrm{start}},t_i^{\mathrm{end}})\}_{i=1}^{N}\).
+This is **temporal activity segmentation**, not independent window
+classification. A useful system must recover the activity class, event count,
+duration, and boundaries of each workout segment.
 
 | Item | Definition |
 | --- | --- |
@@ -33,7 +49,7 @@ boundaries of each workout segment.
 | Window scales | 3 s, 5 s, and 8 s |
 | Step | 1 s |
 | Classes | background + five sports |
-| Record match | same class, one-to-one, IoU > 0.5 |
+| Record match | same class, one-to-one, \(\operatorname{IoU}>0.5\) |
 
 ## Dataset
 
@@ -76,13 +92,43 @@ branch becomes dominant.
 | Stable motion | 0.20 | 0.35 | 0.45 |
 | Local boundary | 0.50 | 0.27 | 0.23 |
 
+At aligned time step \(t\), the fused posterior is a convex combination of the
+three scale-specific posteriors:
+
+\[
+\widetilde{\mathbf{p}}_{t}
+=
+\sum_{s\in\mathcal{S}}
+\alpha_{t,s}\,\mathbf{p}_{t}^{(s)},
+\qquad
+\mathcal{S}=\{3\,\mathrm{s},5\,\mathrm{s},8\,\mathrm{s}\},
+\qquad
+\alpha_{t,s}\ge 0,
+\quad
+\sum_{s\in\mathcal{S}}\alpha_{t,s}=1.
+\tag{2}
+\]
+
+<p class="equation-context">The local boundary mask changes \(\alpha_{t,s}\): shorter evidence receives more weight near transitions, while longer context dominates stable motion.</p>
+
 The boundary mask comes only from posterior changes; it does not use segment
 labels. Temporal decoding is applied once, after the three scales are fused.
 
 ## TRL
 
 The **Temporal Record Layer (TRL)** converts the fused posterior trajectory into
-records through explicit, deterministic operations.
+records through explicit, deterministic operations:
+
+\[
+\mathcal{R}
+=
+\operatorname{TRL}\!\left(\widetilde{\mathbf{p}}_{1:T}\right)
+=
+\left\{
+\left(c_i,t_i^{\mathrm{start}},t_i^{\mathrm{end}}\right)
+\right\}_{i=1}^{N}.
+\tag{3}
+\]
 
 | Operation | Purpose | Paper setting |
 | --- | --- | ---: |

@@ -119,10 +119,9 @@ def build_app() -> gr.Blocks:
             <section class="imu-hero">
               <span class="imu-pill">Free ZeroGPU · Repository models · 仓库真实模型</span>
               <h1>Wearable IMU Activity Timeline Demo</h1>
-              <p>Upload a 100 Hz wrist-motion recording—or use the sample—to see
-              what activities the models find, when each one starts and ends,
-              and how confident the result is.</p>
-              <p>上传一段 100 Hz 腕部运动记录，或直接使用内置样例，查看模型识别了哪些活动、每段活动何时开始和结束，以及结果置信度。</p>
+              <p><code>synthetic_activity_imu.tsv</code> is loaded by default. Run it immediately,
+              or replace it with a compatible 100 Hz wrist-motion recording.</p>
+              <p>页面默认载入 <code>synthetic_activity_imu.tsv</code>。可以直接运行，也可以替换为兼容的 100 Hz 腕部运动记录。</p>
             </section>
             """
         )
@@ -130,16 +129,20 @@ def build_app() -> gr.Blocks:
         with gr.Row(equal_height=False):
             with gr.Column(scale=5):
                 upload = gr.File(
-                    label="Upload a 100 Hz IMU file (optional) / 上传 100 Hz IMU 文件（可选）",
+                    value=str(EXAMPLE_PATH),
+                    label="Input recording — synthetic sample loaded by default / 输入记录——默认载入合成样例",
                     file_types=[".txt", ".tsv"],
                     type="filepath",
+                    interactive=True,
                 )
                 gr.Markdown(
+                    "The bundled sample is ready. Replace it only when using your own file. / "
+                    "内置样例已经就绪；只有在测试自己的数据时才需要替换文件。\n\n"
                     "File columns / 文件列名：`ACC_TIME`, `ACC_X`, `ACC_Y`, `ACC_Z`, "
                     "`GYRO_X`, `GYRO_Y`, `GYRO_Z`。`ACC_TIME` uses milliseconds / 单位为毫秒。"
                 )
                 run_button = gr.Button(
-                    "Find activity periods / 识别活动区间",
+                    "Run the loaded sample / 运行当前样例",
                     variant="primary",
                     elem_classes=["primary-action"],
                 )
@@ -175,7 +178,7 @@ def build_app() -> gr.Blocks:
         gr.Examples(
             examples=[[str(EXAMPLE_PATH), "local_boundary", 5, 0.30, 5]],
             inputs=[upload, fusion_mode, min_duration, confidence, top_k],
-            label="Try without uploading: synthetic example / 无需上传：使用合成示例",
+            label="Restore the bundled sample and defaults / 恢复内置样例与默认参数",
             cache_examples=False,
         )
 
@@ -186,7 +189,11 @@ def build_app() -> gr.Blocks:
             elem_classes=["privacy-note"],
         )
 
-        status = gr.Markdown("### Ready / 就绪\nChoose the sample or upload a compatible file, then find the activity periods. / 选择样例或上传兼容文件，然后开始识别活动区间。")
+        status = gr.Markdown(
+            "### Synthetic sample ready / 合成样例已就绪\n"
+            "`synthetic_activity_imu.tsv` is already selected. Click **Run the loaded sample / 运行当前样例** to generate the three outputs. / "
+            "`synthetic_activity_imu.tsv` 已默认选中，点击 **运行当前样例** 即可生成三类结果。"
+        )
         with gr.Tabs():
             with gr.Tab("Raw signals / 原始信号"):
                 signal_plot = gr.Plot(label="Six IMU channels / 六路 IMU 信号")
