@@ -90,8 +90,8 @@ hide:
 ## 方法
 
 <figure class="pipeline-frame">
-  <a class="pipeline-image-link" href="assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的总体框架图">
-    <img src="assets/fig02_overall_framework.png" alt="腕部 IMU 输入经过三个分尺度模型、LBSA 与 TRL 后生成活动记录的总体框架" loading="lazy" decoding="async">
+  <a class="pipeline-image-link" href="../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的总体框架图">
+    <img src="../assets/fig02_overall_framework.png" alt="腕部 IMU 输入经过三个分尺度模型、LBSA 与 TRL 后生成活动记录的总体框架" loading="lazy" decoding="async">
   </a>
   <figcaption class="pipeline-caption">IMU 流 → 3/5/8 秒后验 → LBSA → TRL → 活动记录。</figcaption>
 </figure>
@@ -152,7 +152,7 @@ hide:
 
 <div class="demo-showcase">
   <a class="demo-showcase__media" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener" aria-label="打开 Hugging Face 在线演示">
-    <img src="assets/demo-results-paper-notation.jpg" alt="真实 Hugging Face 演示输出，展示论文式腕部 IMU 通道记号和带时间戳的活动记录" loading="lazy" decoding="async">
+    <img src="../assets/demo-results-paper-notation.jpg" alt="真实 Hugging Face 演示输出，展示论文式腕部 IMU 通道记号和带时间戳的活动记录" loading="lazy" decoding="async">
     <span>打开在线演示 ↗</span>
   </a>
   <div class="demo-showcase__copy">

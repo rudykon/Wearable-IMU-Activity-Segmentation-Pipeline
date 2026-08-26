@@ -1,3 +1,9 @@
+---
+search:
+  exclude: true
+robots: noindex, follow
+---
+
 # Usage guide
 
 This page preserves the repository's original `docs/USAGE.md` link. The

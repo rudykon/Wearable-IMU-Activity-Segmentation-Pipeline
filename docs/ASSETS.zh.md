@@ -1,3 +1,9 @@
+---
+search:
+  exclude: true
+robots: noindex, follow
+---
+
 # 数据与模型资产
 
 此页面保留仓库原有的 `docs/ASSETS.md` 链接。当前资产映射、完整性检查表、环境变量

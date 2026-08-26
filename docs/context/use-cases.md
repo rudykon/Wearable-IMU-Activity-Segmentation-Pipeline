@@ -1,3 +1,9 @@
+---
+search:
+  exclude: true
+robots: noindex, follow
+---
+
 # Scenarios
 
 <p class="research-lead">A wearable records motion. This project turns it into an activity log.</p>

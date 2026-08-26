@@ -45,7 +45,7 @@
   <article class="demo-step">
     <span class="demo-step__number">2</span>
     <h3>确认默认样例</h3>
-    <p>文件输入框已经载入 <code>synthetic_activity_imu.tsv</code>，不需要上传文件，也不需要再点击示例行。</p>
+    <p>文件输入框已经载入 <code>synthetic_activity_imu.tsv</code>；只有测试自己的兼容记录时才需要另行上传。</p>
   </article>
   <article class="demo-step">
     <span class="demo-step__number">3</span>
@@ -54,8 +54,8 @@
   </article>
   <article class="demo-step">
     <span class="demo-step__number">4</span>
-    <h3>运行当前样例</h3>
-    <p>点击 <strong>Run the loaded sample / 运行当前样例</strong>，然后依次查看三个结果标签页。</p>
+    <h3>运行当前记录</h3>
+    <p>点击 <strong>Run current recording / 运行当前记录</strong>，然后依次查看三个结果标签页。</p>
   </article>
 </div>
 
@@ -66,6 +66,8 @@
   <div><span>最低置信度</span><strong>0.30</strong></div>
   <div><span>Top-K</span><strong>5</strong></div>
 </div>
+
+随时点击 <strong>Reset to synthetic sample / 恢复合成样例</strong>，即可恢复内置文件和五项默认设置。
 
 !!! tip "点击运行后，系统会做什么"
 

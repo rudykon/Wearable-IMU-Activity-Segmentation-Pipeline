@@ -306,6 +306,12 @@
   font-size: 0.94rem;
 }
 
+.home-section .pipeline-frame img {
+  width: 100%;
+  min-width: 0;
+  height: auto;
+}
+
 .record-transform.showcase-transform {
   justify-content: center;
   padding: 1.2rem;

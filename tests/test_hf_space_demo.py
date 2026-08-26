@@ -40,7 +40,21 @@ class DemoRuntimeTests(unittest.TestCase):
         app_source = (ROOT / "demo" / "app.py").read_text(encoding="utf-8")
         self.assertIn("value=str(EXAMPLE_PATH)", app_source)
         self.assertIn("Synthetic sample ready / 合成样例已就绪", app_source)
-        self.assertIn("Run the loaded sample / 运行当前样例", app_source)
+        self.assertIn("Run current recording / 运行当前记录", app_source)
+        self.assertNotIn("Run the loaded sample / 运行当前样例", app_source)
+
+    def test_space_updates_selection_status_and_has_a_real_reset(self) -> None:
+        app_source = (ROOT / "demo" / "app.py").read_text(encoding="utf-8")
+        self.assertIn("Custom recording selected / 已选择自定义记录", app_source)
+        self.assertIn("fn=recording_selection_status", app_source)
+        self.assertIn("upload.change(", app_source)
+        self.assertIn("Reset to synthetic sample / 恢复合成样例", app_source)
+        self.assertIn("fn=reset_demo", app_source)
+        self.assertIn(
+            "return str(EXAMPLE_PATH), \"local_boundary\", 5, 0.30, 5",
+            app_source,
+        )
+        self.assertNotIn("gr.Examples(", app_source)
 
     def test_space_explains_the_project_and_links_to_primary_resources(self) -> None:
         app_source = (ROOT / "demo" / "app.py").read_text(encoding="utf-8")

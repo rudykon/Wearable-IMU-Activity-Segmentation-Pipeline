@@ -4,17 +4,20 @@
 哪个时间尺度更可靠，以及怎样把窗口概率整理成稳定的开始—结束记录。
 
 \[
+\begin{aligned}
 \mathbf{X}
-\xrightarrow{\text{3 秒、5 秒与 8 秒后验模型}}
+&\xrightarrow{\text{多尺度后验模型}}
 \left\{
 \mathbf{p}_{t}^{(3\,\mathrm{s})},
 \mathbf{p}_{t}^{(5\,\mathrm{s})},
 \mathbf{p}_{t}^{(8\,\mathrm{s})}
 \right\}
-\xrightarrow{\mathrm{LBSA}}
+\\
+&\xrightarrow{\mathrm{LBSA}}
 \widetilde{\mathbf{p}}_{t}
 \xrightarrow{\mathrm{TRL}}
 \mathcal{R}.
+\end{aligned}
 \tag{1}
 \]
 
@@ -85,16 +88,18 @@
 在对齐后的时间步 \(t\)，融合后验概率是三个尺度后验概率的凸组合：
 
 \[
+\begin{aligned}
 \widetilde{\mathbf{p}}_{t}
-=
+&=
 \sum_{s\in\mathcal{S}}
 \alpha_{t,s}\,\mathbf{p}_{t}^{(s)},
+\\
+\mathcal{S}
+&=\{3\,\mathrm{s},5\,\mathrm{s},8\,\mathrm{s}\},
+\qquad \alpha_{t,s}\ge 0,
 \qquad
-\mathcal{S}=\{3\,\mathrm{s},5\,\mathrm{s},8\,\mathrm{s}\},
-\qquad
-\alpha_{t,s}\ge 0,
-\quad
 \sum_{s\in\mathcal{S}}\alpha_{t,s}=1.
+\end{aligned}
 \tag{2}
 \]
 

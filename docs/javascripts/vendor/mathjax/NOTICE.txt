@@ -1,0 +1,16 @@
+Vendored MathJax runtime
+========================
+
+This directory contains the browser assets required by MathJax 3.2.2:
+
+- tex-mml-chtml.js for TeX/MathML input and CommonHTML output;
+- the AMS TeX extension used by numbered equations; and
+- the CommonHTML WOFF fonts loaded by the renderer.
+
+The files were copied without modification from the official mathjax@3.2.2
+npm package: https://www.npmjs.com/package/mathjax/v/3.2.2
+
+Package integrity:
+sha512-Bt+SSVU8eBG27zChVewOicYs7Xsdt40qm4+UpHyX7k0/O9NliPc+x77k1/FEsPsjKPZGJvtRZM1vO+geW0OhGw==
+
+See LICENSE for the upstream Apache-2.0 license.
