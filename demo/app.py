@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import sys
 from pathlib import Path
@@ -28,6 +29,9 @@ from demo.runtime import (
 
 LOGGER = logging.getLogger(__name__)
 EXAMPLE_PATH = ROOT / "demo" / "examples" / "synthetic_activity_imu.tsv"
+EXAMPLE_SIZE = EXAMPLE_PATH.stat().st_size
+with EXAMPLE_PATH.open("rb") as _example_file:
+    EXAMPLE_SHA256 = hashlib.file_digest(_example_file, "sha256").hexdigest()
 FUSION_CHOICES = [(FUSION_MODE_LABELS[mode], mode) for mode in FUSION_MODES]
 PROJECT_WEBSITE_URL = (
     "https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"
@@ -247,8 +251,19 @@ def recording_selection_status(upload) -> str:
 
     if candidate:
         try:
-            if Path(candidate).resolve() == EXAMPLE_PATH.resolve():
+            candidate_path = Path(candidate)
+            if candidate_path.resolve() == EXAMPLE_PATH.resolve():
                 return SYNTHETIC_READY_STATUS
+            if (
+                candidate_path.name == EXAMPLE_PATH.name
+                and candidate_path.stat().st_size == EXAMPLE_SIZE
+            ):
+                with candidate_path.open("rb") as selected_file:
+                    selected_sha256 = hashlib.file_digest(
+                        selected_file, "sha256"
+                    ).hexdigest()
+                if selected_sha256 == EXAMPLE_SHA256:
+                    return SYNTHETIC_READY_STATUS
         except (OSError, TypeError, ValueError):
             pass
     return CUSTOM_RECORDING_STATUS

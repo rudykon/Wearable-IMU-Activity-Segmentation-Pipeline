@@ -48,6 +48,8 @@ class DemoRuntimeTests(unittest.TestCase):
         self.assertIn("Custom recording selected / 已选择自定义记录", app_source)
         self.assertIn("fn=recording_selection_status", app_source)
         self.assertIn("upload.change(", app_source)
+        self.assertIn("hashlib.file_digest", app_source)
+        self.assertIn("selected_sha256 == EXAMPLE_SHA256", app_source)
         self.assertIn("Reset to synthetic sample / 恢复合成样例", app_source)
         self.assertIn("fn=reset_demo", app_source)
         self.assertIn(
