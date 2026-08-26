@@ -5,7 +5,9 @@ title: "Wearable IMU Activity Segmentation Pipeline"
 authors:
   - family-names: "Kong"
     given-names: "Minghao"
-version: 0.1.0
+version: 0.1.0-research-preview
+date-released: 2026-08-26
 license: Apache-2.0
 repository-code: "https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline"
+repository-artifact: "https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview"
 url: "https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"

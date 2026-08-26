@@ -16,6 +16,7 @@
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/">Website</a> ·
   <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">Demo</a> ·
   <a href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">Models</a> ·
+  <a href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview">Research release</a> ·
   <a href="README_zh.md">中文</a>
 </p>
 
@@ -81,4 +82,4 @@ Missing public weights are downloaded into the expected local paths and checked 
 
 ## Citation and License
 
-Until an archival paper citation is available, cite the versioned repository as described on the [citation page](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/reference/citation/). Repository-authored source and public model assets are licensed under [Apache-2.0](LICENSE); datasets and third-party dependencies retain their own terms.
+Until an archival paper citation is available, cite the [v0.1.0 research preview](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview) as described on the [citation page](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/reference/citation/). Repository-authored source and public model assets are licensed under [Apache-2.0](LICENSE); datasets and third-party dependencies retain their own terms.

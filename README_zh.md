@@ -16,6 +16,7 @@
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/">网站</a> ·
   <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">演示</a> ·
   <a href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">模型</a> ·
+  <a href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview">研究版本</a> ·
   <a href="README.md">English</a>
 </p>
 
@@ -81,4 +82,4 @@ python tests/smoke_test.py
 
 ## 引用与许可
 
-正式归档论文引用发布前，请按[引用页](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/reference/citation/)引用具体仓库版本。仓库原创代码与公开模型资产采用 [Apache-2.0](LICENSE)；数据集和第三方依赖保留各自条款。
+正式归档论文引用发布前，请按[引用页](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/reference/citation/)引用 [v0.1.0 研究预览版](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview)。仓库原创代码与公开模型资产采用 [Apache-2.0](LICENSE)；数据集和第三方依赖保留各自条款。

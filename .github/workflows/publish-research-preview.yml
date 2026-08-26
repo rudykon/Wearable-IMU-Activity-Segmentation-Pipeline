@@ -1,0 +1,44 @@
+name: Publish research preview
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/release-notes/v0.1.0-research-preview.md"
+      - ".github/workflows/publish-research-preview.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-v0.1.0-research-preview
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository == 'rudykon/Wearable-IMU-Activity-Segmentation-Pipeline'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the release commit
+        uses: actions/checkout@v4
+
+      - name: Create the research prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: v0.1.0-research-preview
+        run: |
+          if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
+            echo "${RELEASE_TAG} already exists; nothing to publish."
+            exit 0
+          fi
+
+          RELEASE_NOTES="${RUNNER_TEMP}/${RELEASE_TAG}.md"
+          sed "s/{{GIT_COMMIT}}/${GITHUB_SHA}/g" \
+            ".github/release-notes/${RELEASE_TAG}.md" > "${RELEASE_NOTES}"
+
+          gh release create "${RELEASE_TAG}" \
+            --target "${GITHUB_SHA}" \
+            --title "v0.1.0 Research Preview" \
+            --notes-file "${RELEASE_NOTES}" \
+            --prerelease

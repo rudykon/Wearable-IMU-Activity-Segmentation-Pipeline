@@ -35,6 +35,9 @@
 
 理解界面最快的方法，是直接运行确定性生成的 [`synthetic_activity_imu.tsv`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/demo/examples/synthetic_activity_imu.tsv)。该文件包含 **12,000 个样本**，对应 **100 Hz 下的 120 秒记录**，不含任何参与者数据。在线 Space 打开后，该文件已经默认选中。
 
+请先在 Space 顶部的语言切换器中选择**简体中文**。之后，控件、状态提示、
+校验错误、结果表列名和 CSV 导出都会保持中文，不再与英文混排。
+
 <div class="demo-steps">
   <article class="demo-step">
     <span class="demo-step__number">1</span>
@@ -55,7 +58,7 @@
   <article class="demo-step">
     <span class="demo-step__number">4</span>
     <h3>运行当前记录</h3>
-    <p>点击 <strong>Run current recording / 运行当前记录</strong>，然后依次查看三个结果标签页。</p>
+    <p>点击<strong>运行当前记录</strong>，然后依次查看三个结果标签页。</p>
   </article>
 </div>
 
@@ -67,7 +70,7 @@
   <div><span>Top-K</span><strong>5</strong></div>
 </div>
 
-随时点击 <strong>Reset to synthetic sample / 恢复合成样例</strong>，即可恢复内置文件和五项默认设置。
+随时点击<strong>恢复合成样例</strong>，即可恢复内置文件和五项默认设置。
 
 !!! tip "点击运行后，系统会做什么"
 
@@ -88,7 +91,7 @@
 
     该样例是合成信号，用于展示从输入到输出的完整路径。识别类别与边界是模型输出，不是带有真实标签的准确率证据。修改融合方式、时长、置信度或 Top-K 后，结果可能发生变化。
 
-### 1. Raw signals / 原始信号 {#raw-signals}
+### 1. 原始信号 {#raw-signals}
 
 打开第一个结果标签页，可以在分类前检查六路信号。上图为加速度通道
 \(a_x,a_y,a_z\)，下图为角速度通道 \(\omega_x,\omega_y,\omega_z\)。
@@ -97,7 +100,7 @@
   <a href="../../../assets/demo/synthetic-raw-signals.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的原始信号结果图">
     <img src="../../../assets/demo/synthetic-raw-signals.png" alt="由 synthetic_activity_imu.tsv 生成的三轴加速度和三轴角速度原始信号图" loading="lazy" decoding="async">
   </a>
-  <figcaption><strong>Raw signals / 原始信号。</strong>内置 120 秒合成样例的真实 Demo 输出。</figcaption>
+  <figcaption><strong>原始信号。</strong>内置 120 秒合成样例的真实 Demo 输出。</figcaption>
 </figure>
 
 <div class="demo-reading-grid">
@@ -111,7 +114,7 @@
   </div>
 </div>
 
-### 2. Activity likelihood and timeline / 活动概率与时间线 {#activity-likelihood-and-timeline}
+### 2. 活动概率与时间线 {#activity-likelihood-and-timeline}
 
 第二个标签页包含两类相关结果。上半部分是各活动类别随时间变化的平滑概率；下半部分是多尺度融合和时间后处理后的最终解码状态。
 
@@ -119,13 +122,13 @@
   <a href="../../../assets/demo/synthetic-activity-likelihood-timeline.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的活动概率与时间线结果图">
     <img src="../../../assets/demo/synthetic-activity-likelihood-timeline.png" alt="由 synthetic_activity_imu.tsv 生成的类别概率曲线和最终活动时间线" loading="lazy" decoding="async">
   </a>
-  <figcaption><strong>Activity likelihood and timeline / 活动概率与时间线。</strong>上方为类别后验轨迹，下方为最终解码活动。</figcaption>
+  <figcaption><strong>活动概率与时间线。</strong>上方为类别后验轨迹，下方为最终解码活动。</figcaption>
 </figure>
 
 <div class="demo-reading-grid">
   <div class="demo-reading">
     <strong>上半部分</strong>
-    <p>在较平静区间，Background 概率最高；第一段运动使 Fly（飞鸟）概率升高，第二段运动中 Running（跑步）成为最高的前景活动概率。</p>
+    <p>在较平静区间，背景类别概率最高；第一段运动使飞鸟类别概率升高，第二段运动中跑步类别成为最高的前景活动概率。</p>
   </div>
   <div class="demo-reading">
     <strong>下半部分</strong>
@@ -133,7 +136,7 @@
   </div>
 </div>
 
-### 3. Activity records / 活动记录 {#activity-records}
+### 3. 活动记录 {#activity-records}
 
 第三个标签页把解码时间线转换为真正可使用的输出：每个活动区间占一行，并给出活动类别、开始时间、结束时间、持续时间和置信度。
 
@@ -141,18 +144,18 @@
   <a href="../../../assets/demo/synthetic-activity-records.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的活动记录结果图">
     <img src="../../../assets/demo/synthetic-activity-records.png" alt="由 synthetic_activity_imu.tsv 生成的活动记录表" loading="lazy" decoding="async">
   </a>
-  <figcaption><strong>Activity records / 活动记录。</strong>默认 Demo 参数返回的两条记录。</figcaption>
+  <figcaption><strong>活动记录。</strong>默认 Demo 参数返回的两条记录。</figcaption>
 </figure>
 
 | 活动 | 开始（秒） | 结束（秒） | 持续时间（秒） | 置信度 |
 | --- | ---: | ---: | ---: | ---: |
-| Fly / 飞鸟 | 29.84 | 73.15 | 43.31 | 0.4038 |
-| Running / 跑步 | 76.06 | 98.24 | 22.18 | 0.3186 |
+| 飞鸟 | 29.84 | 73.15 | 43.31 | 0.4038 |
+| 跑步 | 76.06 | 98.24 | 22.18 | 0.3186 |
 
 这些边界不是从合成样例生成脚本中直接复制的，而是由模型概率、Viterbi 解码、间隔处理、边界修正、时长过滤和置信度过滤共同产生。
 
 <div class="demo-download-row">
-  <a class="demo-action primary" href="../../../assets/demo/synthetic-activity-records.csv" download>下载本次结果 CSV</a>
+  <a class="demo-action primary" href="../../../assets/demo/synthetic-activity-records-zh.csv" download>下载本次结果 CSV</a>
   <a class="demo-action" href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/demo/examples/synthetic_activity_imu.tsv" target="_blank" rel="noopener">查看样例文件</a>
   <a class="demo-action github" href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/tree/main/demo" target="_blank" rel="noopener">浏览 Demo 源码</a>
 </div>
@@ -172,7 +175,7 @@
 
 1. 准备 UTF-8 制表符分隔的 `.txt` 或 `.tsv` 文件。
 2. 在文件输入控件中，用自己的记录替换默认载入的合成样例。
-3. 第一次运行时先保留默认参数，并优先检查 **Raw signals / 原始信号**，再解释模型结果。
+3. 第一次运行时先保留默认参数，并优先检查**原始信号**，再解释模型结果。
 4. 后续每次只调整一个参数，便于看清该参数带来的变化。
 
 必需列名：
