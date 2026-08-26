@@ -17,7 +17,7 @@
 | 每个尺度的种子 | 42、123、456 |
 | 批量大小 | 256 |
 | 优化器 | AdamW |
-| 学习率 | 1×10⁻³ |
+| 学习率 | \(1\times10^{-3}\) |
 | 调度 | 余弦退火 |
 | 标签平滑 | 0.1 |
 
@@ -31,9 +31,22 @@
 
 ## 目标函数
 
-训练损失为：
+训练目标由交叉熵、Focal Loss 和 Triplet Loss 共同组成：
 
-> **L = L<sub>CE</sub> + 0.2 L<sub>focal</sub> + 0.1 L<sub>triplet</sub>**
+\[
+\mathcal{L}
+=
+\mathcal{L}_{\mathrm{CE}}
++
+\lambda_{\mathrm{focal}}\mathcal{L}_{\mathrm{focal}}
++
+\lambda_{\mathrm{triplet}}\mathcal{L}_{\mathrm{triplet}},
+\qquad
+\lambda_{\mathrm{focal}}=0.2,
+\quad
+\lambda_{\mathrm{triplet}}=0.1.
+\tag{1}
+\]
 
 - 交叉熵学习六分类决策；
 - Focal Loss 侧重较难样本；
