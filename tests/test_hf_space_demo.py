@@ -42,6 +42,22 @@ class DemoRuntimeTests(unittest.TestCase):
         self.assertIn("Synthetic sample ready / 合成样例已就绪", app_source)
         self.assertIn("Run the loaded sample / 运行当前样例", app_source)
 
+    def test_space_explains_the_project_and_links_to_primary_resources(self) -> None:
+        app_source = (ROOT / "demo" / "app.py").read_text(encoding="utf-8")
+        self.assertIn(
+            "https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/",
+            app_source,
+        )
+        self.assertIn(
+            "https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline",
+            app_source,
+        )
+        self.assertIn("Background / 项目背景", app_source)
+        self.assertIn("Method / 方法", app_source)
+        self.assertIn("Run in 3 steps / 三步运行", app_source)
+        self.assertIn("3 / 5 / 8 s CNN–BiLSTM → LBSA → TRL", app_source)
+        self.assertIn('target="_blank" rel="noopener noreferrer"', app_source)
+
     def test_missing_channel_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             path = Path(tmp_dir) / "bad.tsv"

@@ -29,12 +29,18 @@ from demo.runtime import (
 LOGGER = logging.getLogger(__name__)
 EXAMPLE_PATH = ROOT / "demo" / "examples" / "synthetic_activity_imu.tsv"
 FUSION_CHOICES = [(FUSION_MODE_LABELS[mode], mode) for mode in FUSION_MODES]
+PROJECT_WEBSITE_URL = (
+    "https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/"
+)
+GITHUB_URL = "https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline"
 
 CSS = """
 :root {
   --imu-indigo: #4f46e5;
   --imu-violet: #7c3aed;
   --imu-ink: #172033;
+  --imu-muted: #5b6573;
+  --imu-border: #d9e1e8;
 }
 .gradio-container { max-width: 1240px !important; }
 .imu-hero {
@@ -51,6 +57,87 @@ CSS = """
   font-size: clamp(1.7rem, 4vw, 2.6rem);
 }
 .imu-hero p { margin: .2rem 0; color: #475569; max-width: 900px; }
+.imu-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-top: 1rem;
+}
+.imu-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.55rem;
+  padding: .62rem .92rem;
+  border: 1px solid var(--imu-border);
+  border-radius: 10px;
+  color: var(--imu-ink) !important;
+  background: #fff;
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+.imu-link.primary {
+  border-color: transparent;
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--imu-indigo), var(--imu-violet));
+}
+.imu-link.github {
+  border-color: #24292f;
+  color: #fff !important;
+  background: #24292f;
+}
+.imu-link:hover { transform: translateY(-1px); }
+.imu-link:focus-visible { outline: 3px solid rgba(79, 70, 229, .28); outline-offset: 2px; }
+.imu-overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 0 0 1rem;
+}
+.imu-card {
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--imu-border);
+  border-radius: 16px;
+  background: #fff;
+}
+.imu-card-kicker {
+  color: #4f46e5;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.imu-card h2 {
+  margin: .35rem 0 .45rem;
+  color: var(--imu-ink);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+.imu-card p,
+.imu-card li {
+  color: var(--imu-muted);
+  font-size: .87rem;
+  line-height: 1.55;
+}
+.imu-card p { margin: .25rem 0; }
+.imu-card .zh { color: #475569; }
+.imu-flow {
+  margin: .55rem 0;
+  padding: .52rem .62rem;
+  border-radius: 9px;
+  color: var(--imu-ink);
+  background: #f3f5f9;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .78rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.imu-steps {
+  margin: .45rem 0 0;
+  padding-left: 1.15rem;
+}
+.imu-steps li + li { margin-top: .28rem; }
 .imu-pill {
   display: inline-block;
   margin-bottom: .65rem;
@@ -82,6 +169,11 @@ CSS = """
 }
 .sensor-symbol var { font-family: inherit; }
 .sensor-symbol sub { font-size: .68em; }
+@media (max-width: 850px) {
+  .imu-overview { grid-template-columns: 1fr; }
+  .imu-links { align-items: stretch; flex-direction: column; }
+  .imu-link { width: 100%; }
+}
 """
 THEME = gr.themes.Soft(primary_hue="indigo", secondary_hue="violet")
 
@@ -132,13 +224,40 @@ def build_app() -> gr.Blocks:
 
     with gr.Blocks(title="Wearable IMU Activity Timeline Demo") as app:
         gr.HTML(
-            """
+            f"""
             <section class="imu-hero">
               <span class="imu-pill">Free ZeroGPU · Repository models · 仓库真实模型</span>
               <h1>Wearable IMU Activity Timeline Demo</h1>
-              <p><code>synthetic_activity_imu.tsv</code> is loaded by default. Run it immediately,
-              or replace it with a compatible 100 Hz wrist-motion recording.</p>
-              <p>页面默认载入 <code>synthetic_activity_imu.tsv</code>。可以直接运行，也可以替换为兼容的 100 Hz 腕部运动记录。</p>
+              <p>Turn continuous 100 Hz wrist-IMU signals into timestamped activity records with the project's public multi-scale models.</p>
+              <p>使用项目公开的多尺度模型，将连续 100 Hz 腕部 IMU 信号转换为带起止时间的活动记录。</p>
+              <div class="imu-links" aria-label="Project links">
+                <a class="imu-link primary" href="{PROJECT_WEBSITE_URL}" target="_blank" rel="noopener noreferrer">Project website / 项目主页 ↗</a>
+                <a class="imu-link github" href="{GITHUB_URL}" target="_blank" rel="noopener noreferrer">GitHub / 源码 ↗</a>
+              </div>
+            </section>
+
+            <section class="imu-overview" aria-label="Project background, method, and demo guide">
+              <article class="imu-card">
+                <span class="imu-card-kicker">Background / 项目背景</span>
+                <h2>From window labels to complete activity records</h2>
+                <p>Long recordings need more than a class label: the system must recover each activity's start, end, count, and duration.</p>
+                <p class="zh">长时记录不能只做窗口分类；系统还要恢复每段活动的类别、起止时间、次数与持续时长。</p>
+              </article>
+              <article class="imu-card">
+                <span class="imu-card-kicker">Method / 方法</span>
+                <h2>Multi-scale recognition with temporal decoding</h2>
+                <div class="imu-flow">3 / 5 / 8 s CNN–BiLSTM → LBSA → TRL → &#123;activity, start, end&#125;</div>
+                <p class="zh">三种时间尺度提取互补证据，LBSA 自适应融合，TRL 负责平滑、解码与边界修正。</p>
+              </article>
+              <article class="imu-card">
+                <span class="imu-card-kicker">Run in 3 steps / 三步运行</span>
+                <h2>Sample → infer → export</h2>
+                <ol class="imu-steps">
+                  <li>Keep the loaded sample, or upload a compatible TXT/TSV file. / 使用默认样例，或上传兼容文件。</li>
+                  <li>Keep the defaults or adjust fusion and filtering. / 保持默认参数，或调整融合与过滤设置。</li>
+                  <li>Click <strong>Run</strong>, inspect the three result tabs, and download CSV. / 点击运行，查看三类结果并下载 CSV。</li>
+                </ol>
+              </article>
             </section>
             """
         )
