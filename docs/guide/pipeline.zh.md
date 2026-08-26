@@ -3,7 +3,22 @@
 本方法把长时腕部 IMU 信号转换成少量活动记录。它分别解决三个问题：当前运动像什么、
 哪个时间尺度更可靠，以及怎样把窗口概率整理成稳定的开始—结束记录。
 
-<div class="method-chain"><code>X</code><span>→</span><code>{p<sup>3s</sup><sub>t</sub>, p<sup>5s</sup><sub>t</sub>, p<sup>8s</sup><sub>t</sub>}</code><span>LBSA →</span><code>p̃<sub>t</sub></code><span>TRL →</span><code>R</code></div>
+\[
+\mathbf{X}
+\xrightarrow{\text{3 秒、5 秒与 8 秒后验模型}}
+\left\{
+\mathbf{p}_{t}^{(3\,\mathrm{s})},
+\mathbf{p}_{t}^{(5\,\mathrm{s})},
+\mathbf{p}_{t}^{(8\,\mathrm{s})}
+\right\}
+\xrightarrow{\mathrm{LBSA}}
+\widetilde{\mathbf{p}}_{t}
+\xrightarrow{\mathrm{TRL}}
+\mathcal{R}.
+\tag{1}
+\]
+
+<p class="equation-context">完整信号 \(\mathbf{X}\) 先产生三条对齐的后验向量，LBSA 形成一条融合轨迹，再由 TRL 转换为活动记录集合 \(\mathcal{R}\)。</p>
 
 <figure class="pipeline-frame">
   <a class="pipeline-image-link" href="../../../assets/fig02_overall_framework.png" target="_blank" rel="noopener" aria-label="打开完整分辨率的总体框架图">
@@ -20,8 +35,10 @@
 ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 ~~~
 
-输出是数量不固定的 `(活动, 开始, 结束)` 记录。这是**时序活动分割**，不是把每个
-窗口单独分类。系统需要同时恢复活动类别、事件次数、持续时间和活动边界。
+输出是数量不固定的记录集合
+\(\mathcal{R}=\{(c_i,t_i^{\mathrm{start}},t_i^{\mathrm{end}})\}_{i=1}^{N}\)。
+这是**时序活动分割**，不是把每个窗口单独分类。系统需要同时恢复活动类别、事件次数、
+持续时间和活动边界。
 
 | 项目 | 定义 |
 | --- | --- |
@@ -29,7 +46,7 @@ ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 | 窗口尺度 | 3 秒、5 秒、8 秒 |
 | 步长 | 1 秒 |
 | 类别 | 背景 + 五类运动 |
-| 记录匹配 | 同类别一对一匹配，IoU > 0.5 |
+| 记录匹配 | 同类别一对一匹配，\(\operatorname{IoU}>0.5\) |
 
 ## 数据
 
@@ -66,11 +83,40 @@ ACC_X, ACC_Y, ACC_Z, GYRO_X, GYRO_Y, GYRO_Z
 | 稳定动作 | 0.20 | 0.35 | 0.45 |
 | 局部边界 | 0.50 | 0.27 | 0.23 |
 
+在对齐后的时间步 \(t\)，融合后验概率是三个尺度后验概率的凸组合：
+
+\[
+\widetilde{\mathbf{p}}_{t}
+=
+\sum_{s\in\mathcal{S}}
+\alpha_{t,s}\,\mathbf{p}_{t}^{(s)},
+\qquad
+\mathcal{S}=\{3\,\mathrm{s},5\,\mathrm{s},8\,\mathrm{s}\},
+\qquad
+\alpha_{t,s}\ge 0,
+\quad
+\sum_{s\in\mathcal{S}}\alpha_{t,s}=1.
+\tag{2}
+\]
+
+<p class="equation-context">局部边界掩码控制 \(\alpha_{t,s}\)：切换附近提高短窗口权重，稳定动作区域则让长窗口上下文占主导。</p>
+
 边界掩码只来自后验概率变化，不使用片段标签。三个尺度融合后只进行一次时序解码。
 
 ## TRL
 
-**时间记录层（TRL）**通过明确、确定性的步骤把融合后验概率转换成活动记录。
+**时间记录层（TRL）**通过明确、确定性的步骤把融合后验概率转换成活动记录：
+
+\[
+\mathcal{R}
+=
+\operatorname{TRL}\!\left(\widetilde{\mathbf{p}}_{1:T}\right)
+=
+\left\{
+\left(c_i,t_i^{\mathrm{start}},t_i^{\mathrm{end}}\right)
+\right\}_{i=1}^{N}.
+\tag{3}
+\]
 
 | 操作 | 作用 | 论文设置 |
 | --- | --- | ---: |
