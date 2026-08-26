@@ -17,11 +17,22 @@ Development analyses and external results must therefore be reported separately.
 
 ## Matching
 
-A predicted segment can match a reference segment only when both belong to the
-same recording, have the same activity class, and overlap at IoU > 0.5.
-Matching is one-to-one.
+A predicted segment \(P\) can match a reference segment \(G\) only when both
+belong to the same recording, have the same activity class, and satisfy
+\(\operatorname{IoU}(P,G)>0.5\). Matching is one-to-one.
 
-> **IoU(P, G) = duration(P ∩ G) / duration(P ∪ G)**
+\[
+\operatorname{IoU}(P,G)
+=
+\frac{
+\operatorname{dur}(P\cap G)
+}{
+\operatorname{dur}(P\cup G)
+}.
+\tag{1}
+\]
+
+<p class="equation-context">The numerator is the overlapping duration; the denominator is the total duration covered by either interval.</p>
 
 This rule penalizes wrong classes, shifted boundaries, splits, and merges in the
 same record-level framework.
@@ -37,13 +48,34 @@ same record-level framework.
 | Duration error | absolute activity-time error in seconds |
 | FP/hour | false records per recording hour |
 
-For each user, precision and recall are computed from matched and unmatched
-segments, then combined as:
+For each user, precision \(P\), recall \(R\), and F1 are computed from matched
+and unmatched segments:
 
-> **F1 = 2 × precision × recall / (precision + recall)**
+\[
+\begin{aligned}
+P &= \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}},
+&
+R &= \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}},
+\\[4pt]
+\mathrm{F1} &= \frac{2PR}{P+R}.
+\end{aligned}
+\tag{2}
+\]
+
+If the evaluation contains \(U\) users, the headline mean-user score gives each
+user equal weight:
+
+\[
+\mathrm{F1}_{\mathrm{mean\text{-}user}}
+=
+\frac{1}{U}
+\sum_{u=1}^{U}\mathrm{F1}_{u}.
+\tag{3}
+\]
 
 Mean-user F1 prevents users with longer recordings from automatically
-dominating the headline score. Micro-F1 preserves the global event-count view.
+dominating the headline score. Micro-F1 instead pools TP, FP, and FN over all
+users before applying Equation (2), preserving the global event-count view.
 
 ## Error reading
 
