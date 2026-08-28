@@ -62,7 +62,6 @@ jobs:
       - name: Prepare and test the local browser Demo
         run: |
           npm ci
-          npm run prepare:browser-demo
           npm run test:browser-demo
 
       - name: Build documentation
