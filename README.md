@@ -24,7 +24,7 @@
 
 <p align="center">
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/">Website</a> ·
-  <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">Demo</a> ·
+  <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/demo/">Browser Demo</a> ·
   <a href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">Models</a> ·
   <a href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview">Research release</a> ·
   <a href="README_zh.md">中文</a>
@@ -88,7 +88,7 @@ Missing public weights are downloaded into the expected local paths and checked 
 | [Results](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/research/paper/) | Independent external-test evidence and failure cases |
 | [Supplementary analyses](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/research/supplementary/) | Development diagnostics, portability, and Android evidence |
 | [Reproduce](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/reproduce/) | Installation, data, models, training, inference, and evaluation |
-| [Demo](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline) | Run a synthetic example in the browser |
+| [Browser Demo](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/demo/) | Run the real ONNX pipeline with visitor-local WebGPU/WASM compute |
 
 ## Citation and License
 

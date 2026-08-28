@@ -14,7 +14,7 @@ hide:
         Android Demo
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a class="hero-button" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">HF Demo</a>
+      <a class="hero-button" href="demo/">Browser Demo</a>
       <a class="hero-button" href="guide/pipeline/">Method</a>
       <a class="hero-button github-button" href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.56v-2.22c-3.23.7-3.91-1.37-3.91-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.39.97.1-.75.4-1.27.74-1.56-2.58-.29-5.29-1.29-5.29-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.48.11-3.05 0 0 .97-.31 3.16 1.18a10.9 10.9 0 0 1 5.76 0c2.19-1.49 3.16-1.18 3.16-1.18.63 1.57.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.4-2.72 5.38-5.31 5.67.42.36.79 1.07.79 2.16v3.2c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .7Z"/></svg>
@@ -151,26 +151,26 @@ The evaluated task covers five sports recorded from a 100 Hz wrist accelerometer
 ## See the pipeline run
 
 <div class="demo-showcase">
-  <a class="demo-showcase__media" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener" aria-label="Open the live Hugging Face demo">
+  <a class="demo-showcase__media" href="demo/" aria-label="Open the local-compute browser demo">
     <img src="assets/demo-results-paper-notation.jpg" alt="Actual Hugging Face demo output showing paper-style wrist IMU channel notation and timestamped activity records" loading="lazy" decoding="async">
-    <span>Open live demo ↗</span>
+    <span>Run locally in this browser →</span>
   </a>
   <div class="demo-showcase__copy">
     <p class="hero-kicker">Browser demo</p>
     <h3>Signals, probabilities, timeline, and records in one view</h3>
-    <p>Run the public 3-, 5-, and 8-second models with the bundled synthetic recording or a compatible wrist-IMU file.</p>
+    <p>Run the public 3-, 5-, and 8-second ONNX models with the bundled synthetic recording or a compatible wrist-IMU file. Samples stay on the visitor's device.</p>
     <ul>
       <li>Six-channel signal plots</li>
       <li>Decoded activity timeline</li>
       <li>Record table and CSV export</li>
     </ul>
     <div class="demo-actions">
-      <a class="demo-action primary" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">Run live demo</a>
+      <a class="demo-action primary" href="demo/">Run browser Demo</a>
       <a class="demo-action github" href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/tree/main/demo" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.56v-2.22c-3.23.7-3.91-1.37-3.91-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.39.97.1-.75.4-1.27.74-1.56-2.58-.29-5.29-1.29-5.29-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.48.11-3.05 0 0 .97-.31 3.16 1.18a10.9 10.9 0 0 1 5.76 0c2.19-1.49 3.16-1.18 3.16-1.18.63 1.57.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.4-2.72 5.38-5.31 5.67.42.36.79 1.07.79 2.16v3.2c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .7Z"/></svg>
         Demo source
       </a>
-      <a class="demo-action" href="deployment/hugging-face/">Input and privacy notes</a>
+      <a class="demo-action" href="deployment/hugging-face/">Compare the HF server Demo</a>
     </div>
   </div>
 </div>
