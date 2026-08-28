@@ -24,7 +24,7 @@
 
 <p align="center">
   <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/">网站</a> ·
-  <a href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">演示</a> ·
+  <a href="https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/demo/">浏览器 Demo</a> ·
   <a href="https://huggingface.co/config-h/Wearable-IMU-Activity-Segmentation-Pipeline">模型</a> ·
   <a href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/releases/tag/v0.1.0-research-preview">研究版本</a> ·
   <a href="README.md">English</a>
@@ -88,7 +88,7 @@ python tests/smoke_test.py
 | [结果](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/research/paper/) | 独立外部测试证据与失败案例 |
 | [补充分析](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/research/supplementary/) | 开发集诊断、可移植性与 Android 证据 |
 | [复现](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/reproduce/) | 安装、数据、模型、训练、推理与评估 |
-| [演示](https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline) | 在浏览器运行合成示例 |
+| [浏览器 Demo](https://rudykon.github.io/Wearable-IMU-Activity-Segmentation-Pipeline/zh/demo/) | 使用访问者本机的 WebGPU/WASM 运行真实 ONNX 流水线 |
 
 ## 引用与许可
 

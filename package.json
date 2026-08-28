@@ -1,0 +1,12 @@
+{
+  "name": "wearable-imu-browser-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:browser-demo": "node scripts/prepare_browser_demo.mjs",
+    "test:browser-demo": "node --test tests/browser_demo_core.test.mjs tests/browser_demo_inference.test.mjs"
+  },
+  "dependencies": {
+    "onnxruntime-web": "1.29.0"
+  }
+}

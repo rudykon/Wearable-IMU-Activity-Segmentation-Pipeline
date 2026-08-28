@@ -32,7 +32,7 @@ class ReferenceParser(HTMLParser):
 
 
 class DocumentationMathTests(unittest.TestCase):
-    def test_primary_navigation_promotes_both_demos(self) -> None:
+    def test_primary_navigation_promotes_local_and_device_demos(self) -> None:
         config = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
         nav = config.split("\nnav:\n", maxsplit=1)[1]
         top_level_labels = re.findall(r"^  - ([^:]+):", nav, flags=re.MULTILINE)
@@ -43,6 +43,7 @@ class DocumentationMathTests(unittest.TestCase):
                 "Method",
                 "Results",
                 "Reproduce",
+                "Demo",
                 "Android Demo",
                 "HF Demo",
                 "GitHub",

@@ -8,6 +8,11 @@ on:
       - "docs/**"
       - "mkdocs.yml"
       - "requirements-docs.txt"
+      - "package.json"
+      - "package-lock.json"
+      - "scripts/prepare_browser_demo.mjs"
+      - "demo/examples/synthetic_activity_imu.tsv"
+      - "tests/browser_demo_*.test.mjs"
       - "tests/test_docs_math.py"
       - ".github/workflows/deploy-docs.yml"
   pull_request:
@@ -15,6 +20,11 @@ on:
       - "docs/**"
       - "mkdocs.yml"
       - "requirements-docs.txt"
+      - "package.json"
+      - "package-lock.json"
+      - "scripts/prepare_browser_demo.mjs"
+      - "demo/examples/synthetic_activity_imu.tsv"
+      - "tests/browser_demo_*.test.mjs"
       - "tests/test_docs_math.py"
       - ".github/workflows/deploy-docs.yml"
   workflow_dispatch:
@@ -40,8 +50,20 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-docs.txt
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
       - name: Install documentation dependencies
         run: python -m pip install -r requirements-docs.txt
+
+      - name: Prepare and test the local browser Demo
+        run: |
+          npm ci
+          npm run prepare:browser-demo
+          npm run test:browser-demo
 
       - name: Build documentation
         run: mkdocs build --strict

@@ -78,6 +78,9 @@ paper/
 build/
 dist/
 *.spec.bak
+node_modules/
+/docs/assets/data/synthetic_activity_imu.tsv
+/docs/assets/vendor/onnxruntime/
 
 # Android / Gradle local outputs
 .gradle/

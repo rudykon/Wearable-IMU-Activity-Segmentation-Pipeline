@@ -14,7 +14,7 @@ hide:
         Android Demo
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a class="hero-button" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">HF Demo</a>
+      <a class="hero-button" href="demo/">浏览器 Demo</a>
       <a class="hero-button" href="guide/pipeline/">方法</a>
       <a class="hero-button github-button" href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.56v-2.22c-3.23.7-3.91-1.37-3.91-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.39.97.1-.75.4-1.27.74-1.56-2.58-.29-5.29-1.29-5.29-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.48.11-3.05 0 0 .97-.31 3.16 1.18a10.9 10.9 0 0 1 5.76 0c2.19-1.49 3.16-1.18 3.16-1.18.63 1.57.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.4-2.72 5.38-5.31 5.67.42.36.79 1.07.79 2.16v3.2c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .7Z"/></svg>
@@ -151,26 +151,26 @@ hide:
 ## 查看完整演示流程
 
 <div class="demo-showcase">
-  <a class="demo-showcase__media" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener" aria-label="打开 Hugging Face 在线演示">
+  <a class="demo-showcase__media" href="demo/" aria-label="打开使用本地算力的浏览器 Demo">
     <img src="../assets/demo-results-paper-notation.jpg" alt="真实 Hugging Face 演示输出，展示论文式腕部 IMU 通道记号和带时间戳的活动记录" loading="lazy" decoding="async">
-    <span>打开在线演示 ↗</span>
+    <span>在当前浏览器本地运行 →</span>
   </a>
   <div class="demo-showcase__copy">
     <p class="hero-kicker">浏览器演示</p>
     <h3>在一个页面查看信号、概率、时间线和活动记录</h3>
-    <p>使用内置合成记录或兼容的腕部 IMU 文件，运行公开的 3、5、8 秒模型。</p>
+    <p>使用内置合成记录或兼容的腕部 IMU 文件，运行公开的 3、5、8 秒 ONNX 模型；样本始终留在访问者设备上。</p>
     <ul>
       <li>六通道信号曲线</li>
       <li>解码后的活动时间线</li>
       <li>活动记录表与 CSV 导出</li>
     </ul>
     <div class="demo-actions">
-      <a class="demo-action primary" href="https://huggingface.co/spaces/config-h/Wearable-IMU-Activity-Segmentation-Pipeline" target="_blank" rel="noopener">运行在线演示</a>
+      <a class="demo-action primary" href="demo/">运行浏览器 Demo</a>
       <a class="demo-action github" href="https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/tree/main/demo" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.56v-2.22c-3.23.7-3.91-1.37-3.91-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.72 1.27 3.39.97.1-.75.4-1.27.74-1.56-2.58-.29-5.29-1.29-5.29-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.48.11-3.05 0 0 .97-.31 3.16 1.18a10.9 10.9 0 0 1 5.76 0c2.19-1.49 3.16-1.18 3.16-1.18.63 1.57.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.4-2.72 5.38-5.31 5.67.42.36.79 1.07.79 2.16v3.2c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .7Z"/></svg>
         Demo 源码
       </a>
-      <a class="demo-action" href="deployment/hugging-face/">输入格式与隐私说明</a>
+      <a class="demo-action" href="deployment/hugging-face/">对照 HF 服务端 Demo</a>
     </div>
   </div>
 </div>

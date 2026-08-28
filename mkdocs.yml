@@ -94,7 +94,8 @@ plugins:
             Evaluation: 评估
             Results: 结果
             Android Demo: Android Demo
-            HF Demo: HF Demo
+            Demo: 浏览器 Demo
+            HF Demo: HF 服务端 Demo
             API: API
             Citation: 引用
             GitHub: GitHub
@@ -127,11 +128,13 @@ extra_css:
   - stylesheets/extra.css
   - stylesheets/showcase.css
   - stylesheets/demo-walkthrough.css
+  - stylesheets/browser-demo.css
   - stylesheets/math.css
 
 extra_javascript:
   - javascripts/mathjax.js
   - javascripts/vendor/mathjax/tex-mml-chtml.js
+  - assets/javascripts/imu-demo.js
 
 hooks:
   - docs/hooks/site.py
@@ -162,6 +165,7 @@ nav:
       - Evaluation: guide/evaluation.md
       - API: reference/api.md
       - Citation: reference/citation.md
+  - Demo: demo.md
   - Android Demo: deployment/android.md
   - HF Demo: deployment/hugging-face.md
   - GitHub: https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline
