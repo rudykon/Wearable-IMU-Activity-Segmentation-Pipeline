@@ -337,6 +337,25 @@ class DocumentationMathTests(unittest.TestCase):
         self.assertIn("license: Apache-2.0", citation)
 
     def test_built_demo_and_data_pages_keep_their_actions(self) -> None:
+        browser_pages = [
+            (SITE / "demo" / "index.html", 'data-locale="en"', "Run current recording"),
+            (SITE / "zh" / "demo" / "index.html", 'data-locale="zh"', "运行当前记录"),
+        ]
+        for page, locale_marker, run_label in browser_pages:
+            with self.subTest(page=page):
+                self.assertTrue(page.is_file(), f"Missing built page: {page}")
+                html = page.read_text(encoding="utf-8")
+                self.assertIn(locale_marker, html)
+                self.assertIn(run_label, html)
+                self.assertIn('data-demo-id="results"', html)
+                self.assertIn('id="run-browser-demo"', html)
+                self.assertIn('id="quick-start"', html)
+                self.assertIn('id="expected-output"', html)
+                self.assertIn('id="understand-results"', html)
+                self.assertIn('id="parameters"', html)
+                self.assertIn('id="use-your-own-recording"', html)
+                self.assertIn("synthetic-activity-likelihood-timeline.png", html)
+
         android_pages = [
             SITE / "deployment" / "android" / "index.html",
             SITE / "zh" / "deployment" / "android" / "index.html",
