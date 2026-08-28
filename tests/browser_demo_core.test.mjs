@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -17,6 +17,21 @@ import {
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const samplePath = join(root, "demo", "examples", "synthetic_activity_imu.tsv");
+const runtimePath = join(root, "docs", "assets", "vendor", "onnxruntime");
+
+test("the prepared ONNX Runtime bundle includes its asyncify dependencies", async () => {
+  const entrypoint = await readFile(join(runtimePath, "ort.webgpu.min.mjs"), "utf8");
+  assert.match(entrypoint, /ort-wasm-simd-threaded\.asyncify\.mjs/);
+
+  const runtimeAssets = new Map([
+    ["ort-wasm-simd-threaded.asyncify.mjs", 10_000],
+    ["ort-wasm-simd-threaded.asyncify.wasm", 10_000_000],
+  ]);
+  for (const [filename, minimumSize] of runtimeAssets) {
+    const metadata = await stat(join(runtimePath, filename));
+    assert.ok(metadata.size > minimumSize, `${filename} contains the published runtime`);
+  }
+});
 
 test("browser Demo model contract is pinned to the published manifest", async () => {
   const manifest = JSON.parse(await readFile(join(root, "model-assets.json"), "utf8"));

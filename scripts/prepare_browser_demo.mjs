@@ -1,4 +1,4 @@
-import { copyFile, mkdir } from "node:fs/promises";
+import { copyFile, mkdir, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,12 +9,11 @@ const data = join(root, "docs", "assets", "data");
 
 const runtimeFiles = [
   "ort.webgpu.min.mjs",
-  "ort-wasm-simd-threaded.mjs",
-  "ort-wasm-simd-threaded.wasm",
-  "ort-wasm-simd-threaded.jsep.mjs",
-  "ort-wasm-simd-threaded.jsep.wasm",
+  "ort-wasm-simd-threaded.asyncify.mjs",
+  "ort-wasm-simd-threaded.asyncify.wasm",
 ];
 
+await rm(vendor, { recursive: true, force: true });
 await mkdir(vendor, { recursive: true });
 await mkdir(data, { recursive: true });
 await Promise.all(
