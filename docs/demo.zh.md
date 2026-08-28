@@ -125,7 +125,7 @@ hide:
       </div>
       <div class="imu-demo-panel" role="tabpanel" data-demo-panel="timeline" hidden>
         <canvas data-demo-id="timelineCanvas" role="img" aria-label="平滑活动概率和最终解码时间线"></canvas>
-        <p class="imu-demo-chart-note">上图是融合并平滑后的后验概率，下方色带是 Viterbi 解码状态。</p>
+        <p class="imu-demo-chart-note">上图是融合并平滑后的后验概率，下方阶梯线是 Viterbi 解码类别编号，与 HF 服务端图一致。</p>
       </div>
       <div class="imu-demo-panel" role="tabpanel" data-demo-panel="records" hidden>
         <div class="imu-demo-table-wrap">
@@ -202,7 +202,7 @@ hide:
 
 <div class="imu-demo-details-grid">
   <article class="imu-demo-detail"><strong>原始信号</strong><p>先检查三轴加速度与三轴角速度，确认通道完整、采样稳定，并观察记录中是否存在明显运动。</p></article>
-  <article class="imu-demo-detail"><strong>概率 + 时间线</strong><p>上图显示六类活动的平滑概率；下方色带显示多尺度融合和 Viterbi 解码后的最终状态。</p></article>
+  <article class="imu-demo-detail"><strong>概率 + 时间线</strong><p>上图显示六类活动的平滑概率；下方阶梯线显示多尺度融合和 Viterbi 解码后的最终类别编号。</p></article>
   <article class="imu-demo-detail"><strong>活动记录</strong><p>每行给出活动类别、开始时间、结束时间、持续时间和置信度，可直接下载为 CSV。</p></article>
 </div>
 

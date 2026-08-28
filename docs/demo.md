@@ -125,7 +125,7 @@ The bundled example is ready. Keep the defaults and choose **Run current recordi
       </div>
       <div class="imu-demo-panel" role="tabpanel" data-demo-panel="timeline" hidden>
         <canvas data-demo-id="timelineCanvas" role="img" aria-label="Smoothed activity likelihood and decoded timeline chart"></canvas>
-        <p class="imu-demo-chart-note">The upper plot is the fused, smoothed posterior; the lower band is the Viterbi-decoded state.</p>
+        <p class="imu-demo-chart-note">The upper plot is the fused, smoothed posterior; the lower stepped trace is the Viterbi-decoded class index, matching the HF server figure.</p>
       </div>
       <div class="imu-demo-panel" role="tabpanel" data-demo-panel="records" hidden>
         <div class="imu-demo-table-wrap">
@@ -202,7 +202,7 @@ With the defaults above, the public models produce 118 timeline points and two a
 
 <div class="imu-demo-details-grid">
   <article class="imu-demo-detail"><strong>Raw signals</strong><p>Start with the three accelerometer and three gyroscope channels to check completeness, sampling stability, and visible movement.</p></article>
-  <article class="imu-demo-detail"><strong>Likelihood + timeline</strong><p>The upper chart shows six smoothed class probabilities; the lower band shows the final state after multi-scale fusion and Viterbi decoding.</p></article>
+  <article class="imu-demo-detail"><strong>Likelihood + timeline</strong><p>The upper chart shows six smoothed class probabilities; the lower stepped trace shows the final class index after multi-scale fusion and Viterbi decoding.</p></article>
   <article class="imu-demo-detail"><strong>Activity records</strong><p>Each row reports the activity, start, end, duration, and confidence and can be downloaded directly as CSV.</p></article>
 </div>
 

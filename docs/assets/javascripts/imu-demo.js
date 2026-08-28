@@ -143,8 +143,32 @@
     },
   }[locale];
 
-  const COLORS = ["#7b8794", "#8e5cc2", "#de7a22", "#168c7e", "#d34b65", "#3d6fb6"];
-  const CHANNEL_COLORS = ["#3d6fb6", "#d34b65", "#168c7e", "#8e5cc2", "#de7a22", "#32a2a8"];
+  const HF_TIMELINE_COLORS = [
+    "#64748b",
+    "#4f46e5",
+    "#7c3aed",
+    "#0f9f8f",
+    "#f59e0b",
+    "#ef4444",
+  ];
+  const HF_SIGNAL_COLORS = [
+    "#4f46e5",
+    "#7c3aed",
+    "#0f9f8f",
+    "#4f46e5",
+    "#7c3aed",
+    "#0f9f8f",
+  ];
+  const HF_FIGURE_STYLE = {
+    surface: "#ffffff",
+    text: "#111827",
+    muted: "#64748b",
+    grid: "#dbe4f0",
+    axis: "#475569",
+    decoded: "#312e81",
+    decodedFill: "rgba(199, 210, 254, 0.55)",
+  };
+  const CLASS_SYMBOLS = ["c₀", "c₁", "c₂", "c₃", "c₄", "c₅"];
   const CHANNEL_LABELS = ["aₓ", "aᵧ", "a_z", "ωₓ", "ωᵧ", "ω_z"];
 
   const elements = Object.fromEntries(
@@ -385,91 +409,198 @@
     canvas.style.height = `${height}px`;
     const context = canvas.getContext("2d");
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    const styles = getComputedStyle(root);
     return {
       context,
       width,
       height,
-      text: styles.getPropertyValue("--research-text").trim() || "#172b4d",
-      muted: styles.getPropertyValue("--research-muted").trim() || "#5b6573",
-      border: styles.getPropertyValue("--research-border").trim() || "#d9e1e8",
-      surface: styles.getPropertyValue("--research-surface").trim() || "#ffffff",
+      ...HF_FIGURE_STYLE,
     };
   }
 
-  function drawAxes(chart, area, xMaximum, yMinimum, yMaximum, yLabel) {
-    const { context, muted, border, text } = chart;
+  function figureHeight(canvas, heightRatio, minimum) {
+    const width = Math.max(320, canvas.clientWidth || 900);
+    return Math.max(minimum, Math.round(width * heightRatio));
+  }
+
+  function axisNumber(value) {
+    if (Math.abs(value) < 2) return value.toFixed(1);
+    if (Math.abs(value) < 10) return value.toFixed(1).replace(/\.0$/, "");
+    return value.toFixed(0);
+  }
+
+  function drawAxes(
+    chart,
+    area,
+    {
+      xMaximum,
+      yMinimum,
+      yMaximum,
+      yLabel,
+      xLabel = "",
+      showXLabels = true,
+      showYGrid = true,
+      yTickValues = null,
+      yTickLabels = null,
+    },
+  ) {
+    const { context, muted, grid, axis, text } = chart;
+    const compact = chart.width < 520;
+    const fontSize = compact ? 10 : 11;
+    const yValues =
+      yTickValues ||
+      Array.from({ length: 5 }, (_, index) => yMaximum - (index / 4) * (yMaximum - yMinimum));
     context.save();
-    context.strokeStyle = border;
+    context.strokeStyle = grid;
+    context.lineWidth = 0.8;
+    for (let tick = 0; tick <= 4; tick += 1) {
+      const x = area.x + area.width * (tick / 4);
+      context.beginPath();
+      context.moveTo(x, area.y);
+      context.lineTo(x, area.y + area.height);
+      context.stroke();
+    }
+    if (showYGrid) {
+      for (const value of yValues) {
+        const y = area.y + ((yMaximum - value) / (yMaximum - yMinimum)) * area.height;
+        context.beginPath();
+        context.moveTo(area.x, y);
+        context.lineTo(area.x + area.width, y);
+        context.stroke();
+      }
+    }
+
+    context.strokeStyle = axis;
+    context.lineWidth = 0.9;
+    context.beginPath();
+    context.moveTo(area.x, area.y);
+    context.lineTo(area.x, area.y + area.height);
+    context.lineTo(area.x + area.width, area.y + area.height);
+    context.stroke();
+
     context.fillStyle = muted;
-    context.lineWidth = 1;
-    context.font = "12px Inter, Segoe UI, sans-serif";
+    context.font = `${fontSize}px Inter, Segoe UI, Arial, sans-serif`;
     context.textAlign = "right";
     context.textBaseline = "middle";
-    for (let tick = 0; tick <= 4; tick += 1) {
-      const ratio = tick / 4;
-      const y = area.y + area.height * ratio;
-      context.beginPath();
-      context.moveTo(area.x, y);
-      context.lineTo(area.x + area.width, y);
-      context.stroke();
-      const value = yMaximum - ratio * (yMaximum - yMinimum);
-      context.fillText(value.toFixed(Math.abs(value) < 2 ? 1 : 0), area.x - 7, y);
+    yValues.forEach((value, index) => {
+      const y = area.y + ((yMaximum - value) / (yMaximum - yMinimum)) * area.height;
+      context.fillText(yTickLabels?.[index] || axisNumber(value), area.x - 8, y);
+    });
+    if (showXLabels) {
+      context.textAlign = "center";
+      context.textBaseline = "top";
+      for (let tick = 0; tick <= 4; tick += 1) {
+        const ratio = tick / 4;
+        const x = area.x + area.width * ratio;
+        context.fillText((xMaximum * ratio).toFixed(0), x, area.y + area.height + 7);
+      }
     }
-    context.textAlign = "center";
-    context.textBaseline = "top";
-    for (let tick = 0; tick <= 4; tick += 1) {
-      const ratio = tick / 4;
-      const x = area.x + area.width * ratio;
-      context.fillText((xMaximum * ratio).toFixed(0), x, area.y + area.height + 6);
-    }
+
     context.fillStyle = text;
-    context.font = "600 12px Inter, Segoe UI, sans-serif";
-    context.textAlign = "left";
-    context.textBaseline = "bottom";
-    context.fillText(yLabel, area.x, area.y - 8);
+    context.font = `italic ${compact ? 12 : 13}px Georgia, "Times New Roman", serif`;
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.translate(compact ? 11 : 12, area.y + area.height / 2);
+    context.rotate(-Math.PI / 2);
+    context.fillText(yLabel, 0, 0);
+    context.restore();
+
+    if (xLabel) {
+      context.save();
+      context.fillStyle = text;
+      context.font = `italic ${compact ? 12 : 13}px Georgia, "Times New Roman", serif`;
+      context.textAlign = "center";
+      context.textBaseline = "top";
+      context.fillText(xLabel, area.x + area.width / 2, area.y + area.height + 25);
+      context.restore();
+    }
+  }
+
+  function drawFigureTitle(chart, title) {
+    const { context, width, text } = chart;
+    context.save();
+    context.fillStyle = text;
+    context.font = `600 ${width < 520 ? 12 : 14}px Georgia, "Times New Roman", serif`;
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText(title, width / 2, 21);
     context.restore();
   }
 
-  function drawLegend(chart, labels, colors, y) {
-    const { context, width, muted } = chart;
+  function drawLegend(chart, labels, colors, { x, y, width, columns }) {
+    const { context, muted } = chart;
+    const compact = chart.width < 520;
+    const cellWidth = width / columns;
+    const rowHeight = compact ? 16 : 18;
     context.save();
-    context.font = "11px Inter, Segoe UI, sans-serif";
+    context.font = `${compact ? 10 : 11}px Inter, Segoe UI, Arial, sans-serif`;
     context.textBaseline = "middle";
-    let x = 62;
     for (let index = 0; index < labels.length; index += 1) {
       const label = labels[index];
-      const itemWidth = context.measureText(label).width + 29;
-      if (x + itemWidth > width - 20) {
-        x = 62;
-        y += 17;
-      }
+      const column = index % columns;
+      const row = Math.floor(index / columns);
+      const itemX = x + column * cellWidth + Math.max(3, cellWidth * 0.12);
+      const itemY = y + row * rowHeight;
       context.strokeStyle = colors[index];
-      context.lineWidth = 2.5;
+      context.lineWidth = 2;
       context.beginPath();
-      context.moveTo(x, y);
-      context.lineTo(x + 13, y);
+      context.moveTo(itemX, itemY);
+      context.lineTo(itemX + 13, itemY);
       context.stroke();
       context.fillStyle = muted;
-      context.fillText(label, x + 18, y);
-      x += itemWidth;
+      context.fillText(label, itemX + 18, itemY);
     }
+    context.restore();
+  }
+
+  function drawSeries(chart, area, times, values, xMaximum, color, lineWidth, alpha = 1) {
+    const { context } = chart;
+    context.save();
+    context.beginPath();
+    context.rect(area.x, area.y, area.width, area.height);
+    context.clip();
+    context.strokeStyle = color;
+    context.globalAlpha = alpha;
+    context.lineWidth = lineWidth;
+    context.lineJoin = "round";
+    context.beginPath();
+    for (let index = 0; index < times.length; index += 1) {
+      const x = area.x + (times[index] / xMaximum) * area.width;
+      const y = area.y + ((values.maximum - values.data[index]) / values.range) * area.height;
+      if (index === 0) context.moveTo(x, y);
+      else context.lineTo(x, y);
+    }
+    context.stroke();
     context.restore();
   }
 
   function drawRawSignals(result) {
-    const chart = canvasContext(elements.signalCanvas, 500);
+    const chart = canvasContext(
+      elements.signalCanvas,
+      figureHeight(elements.signalCanvas, 5.8 / 10.8, 470),
+    );
     const { context, width, height, surface } = chart;
     context.fillStyle = surface;
     context.fillRect(0, 0, width, height);
+    drawFigureTitle(chart, "X = [aₓ, aᵧ, a_z, ωₓ, ωᵧ, ω_z]");
     const times = result.rawPreview.times;
     const xMaximum = times[times.length - 1] || 1;
+    const left = width < 520 ? 68 : 76;
+    const right = 18;
+    const top = 58;
+    const bottom = 50;
+    const gap = 46;
+    const plotHeight = (height - top - bottom - gap) / 2;
     const groups = [
-      { channels: [0, 1, 2], title: COPY.acceleration, y: 42 },
-      { channels: [3, 4, 5], title: COPY.gyroscope, y: 282 },
+      { channels: [0, 1, 2], yLabel: "a", y: top, showXLabels: false },
+      {
+        channels: [3, 4, 5],
+        yLabel: "ω",
+        y: top + plotHeight + gap,
+        showXLabels: true,
+      },
     ];
     for (const group of groups) {
-      const area = { x: 58, y: group.y, width: width - 78, height: 168 };
+      const area = { x: left, y: group.y, width: width - left - right, height: plotHeight };
       let minimum = Number.POSITIVE_INFINITY;
       let maximum = Number.NEGATIVE_INFINITY;
       for (const channel of group.channels) {
@@ -481,88 +612,156 @@
       const padding = Math.max(1, (maximum - minimum) * 0.08);
       minimum -= padding;
       maximum += padding;
-      drawAxes(chart, area, xMaximum, minimum, maximum, group.title);
+      drawAxes(chart, area, {
+        xMaximum,
+        yMinimum: minimum,
+        yMaximum: maximum,
+        yLabel: group.yLabel,
+        xLabel: group.showXLabels ? "t (s)" : "",
+        showXLabels: group.showXLabels,
+      });
       for (const channel of group.channels) {
-        const values = result.rawPreview.channels[channel];
-        context.strokeStyle = CHANNEL_COLORS[channel];
-        context.lineWidth = 1.2;
-        context.beginPath();
-        for (let index = 0; index < times.length; index += 1) {
-          const x = area.x + (times[index] / xMaximum) * area.width;
-          const y = area.y + ((maximum - values[index]) / (maximum - minimum)) * area.height;
-          if (index === 0) context.moveTo(x, y);
-          else context.lineTo(x, y);
-        }
-        context.stroke();
+        drawSeries(
+          chart,
+          area,
+          times,
+          {
+            data: result.rawPreview.channels[channel],
+            maximum,
+            range: maximum - minimum,
+          },
+          xMaximum,
+          HF_SIGNAL_COLORS[channel],
+          1,
+        );
       }
       drawLegend(
         chart,
         group.channels.map((channel) => CHANNEL_LABELS[channel]),
-        group.channels.map((channel) => CHANNEL_COLORS[channel]),
-        group.y + 192,
+        group.channels.map((channel) => HF_SIGNAL_COLORS[channel]),
+        {
+          x: area.x + area.width * 0.55,
+          y: area.y + 12,
+          width: area.width * 0.43,
+          columns: 3,
+        },
       );
     }
-    context.fillStyle = chart.muted;
-    context.font = "12px Inter, Segoe UI, sans-serif";
-    context.textAlign = "center";
-    context.fillText(COPY.time, width / 2, height - 5);
   }
 
   function drawTimeline(result) {
-    const chart = canvasContext(elements.timelineCanvas, 455);
+    const chart = canvasContext(
+      elements.timelineCanvas,
+      figureHeight(elements.timelineCanvas, 6.4 / 10.8, 520),
+    );
     const { context, width, height, surface } = chart;
     context.fillStyle = surface;
     context.fillRect(0, 0, width, height);
+    drawFigureTitle(
+      chart,
+      width < 520
+        ? "pₜ⁽³ˢ⁾, pₜ⁽⁵ˢ⁾, pₜ⁽⁸ˢ⁾ → p̃ₜ → ŷₜ"
+        : "{pₜ⁽³ˢ⁾, pₜ⁽⁵ˢ⁾, pₜ⁽⁸ˢ⁾} → p̃ₜ → ŷₜ",
+    );
     const times = result.timeline.times;
     const xMaximum = times[times.length - 1] || 1;
-    const area = { x: 58, y: 42, width: width - 78, height: 235 };
-    drawAxes(chart, area, xMaximum, 0, 1, COPY.likelihood);
+    const left = width < 520 ? 68 : 76;
+    const right = 18;
+    const top = 88;
+    const bottom = 50;
+    const gap = 58;
+    const available = height - top - bottom - gap;
+    const probabilityHeight = available * (3.2 / 4.45);
+    const decodedHeight = available - probabilityHeight;
+    const probabilityArea = {
+      x: left,
+      y: top,
+      width: width - left - right,
+      height: probabilityHeight,
+    };
+    const decodedArea = {
+      x: left,
+      y: top + probabilityHeight + gap,
+      width: width - left - right,
+      height: decodedHeight,
+    };
+    drawLegend(chart, CLASS_SYMBOLS, HF_TIMELINE_COLORS, {
+      x: probabilityArea.x,
+      y: 48,
+      width: probabilityArea.width,
+      columns: 3,
+    });
+    drawAxes(chart, probabilityArea, {
+      xMaximum,
+      yMinimum: 0,
+      yMaximum: 1.02,
+      yLabel: "p(cₜ | X)",
+      showXLabels: false,
+      yTickValues: [1, 0.8, 0.6, 0.4, 0.2, 0],
+    });
     for (let classIndex = 0; classIndex < 6; classIndex += 1) {
-      context.strokeStyle = COLORS[classIndex];
-      context.lineWidth = classIndex === 0 ? 1.2 : 1.7;
-      context.beginPath();
+      const values = new Float32Array(result.timeline.rows);
       for (let row = 0; row < result.timeline.rows; row += 1) {
-        const x = area.x + (times[row] / xMaximum) * area.width;
-        const probability = result.timeline.probabilities[row * 6 + classIndex];
-        const y = area.y + (1 - probability) * area.height;
-        if (row === 0) context.moveTo(x, y);
-        else context.lineTo(x, y);
+        values[row] = result.timeline.probabilities[row * 6 + classIndex];
       }
-      context.stroke();
+      drawSeries(
+        chart,
+        probabilityArea,
+        times,
+        { data: values, maximum: 1.02, range: 1.02 },
+        xMaximum,
+        HF_TIMELINE_COLORS[classIndex],
+        classIndex === 0 ? 1 : 1.5,
+        classIndex === 0 ? 0.75 : 0.95,
+      );
     }
-    drawLegend(
-      chart,
-      ["background", "badminton", "jump_rope", "fly", "running", "table_tennis"].map(
-        (key) => COPY.activities[key],
-      ),
-      COLORS,
-      300,
-    );
 
-    const band = { x: area.x, y: 355, width: area.width, height: 34 };
-    context.fillStyle = chart.text;
-    context.font = "600 12px Inter, Segoe UI, sans-serif";
-    context.textAlign = "left";
-    context.fillText(COPY.decoded, band.x, band.y - 10);
+    drawAxes(chart, decodedArea, {
+      xMaximum,
+      yMinimum: -0.35,
+      yMaximum: 5.35,
+      yLabel: "ŷₜ",
+      xLabel: "t (s)",
+      showYGrid: false,
+      yTickValues: [5, 4, 3, 2, 1, 0],
+      yTickLabels: [...CLASS_SYMBOLS].reverse(),
+    });
+    const stateY = (state) =>
+      decodedArea.y + ((5.35 - state) / 5.7) * decodedArea.height;
+    const timeX = (time) => decodedArea.x + (time / xMaximum) * decodedArea.width;
+    const baseline = stateY(0);
+    context.save();
+    context.beginPath();
+    context.rect(decodedArea.x, decodedArea.y, decodedArea.width, decodedArea.height);
+    context.clip();
+    context.fillStyle = chart.decodedFill;
     for (let row = 0; row < result.timeline.rows; row += 1) {
-      const left = row === 0 ? 0 : (times[row - 1] + times[row]) / 2;
+      const leftTime = row === 0 ? times[0] : (times[row - 1] + times[row]) / 2;
       const right =
-        row === result.timeline.rows - 1 ? xMaximum : (times[row] + times[row + 1]) / 2;
-      const x = band.x + (left / xMaximum) * band.width;
-      const itemWidth = Math.max(1, ((right - left) / xMaximum) * band.width + 0.5);
-      context.fillStyle = COLORS[result.timeline.decodedPath[row]];
-      context.fillRect(x, band.y, itemWidth, band.height);
+        row === result.timeline.rows - 1 ? times[row] : (times[row] + times[row + 1]) / 2;
+      const y = stateY(result.timeline.decodedPath[row]);
+      context.fillRect(
+        timeX(leftTime),
+        Math.min(y, baseline),
+        timeX(right) - timeX(leftTime),
+        Math.abs(baseline - y),
+      );
     }
-    context.strokeStyle = chart.border;
-    context.strokeRect(band.x, band.y, band.width, band.height);
-    context.fillStyle = chart.muted;
-    context.font = "12px Inter, Segoe UI, sans-serif";
-    context.textAlign = "center";
-    for (let tick = 0; tick <= 4; tick += 1) {
-      const ratio = tick / 4;
-      context.fillText((xMaximum * ratio).toFixed(0), band.x + band.width * ratio, band.y + 51);
+    context.strokeStyle = chart.decoded;
+    context.lineWidth = 1.8;
+    context.lineJoin = "miter";
+    context.beginPath();
+    for (let row = 0; row < result.timeline.rows; row += 1) {
+      const leftTime = row === 0 ? times[0] : (times[row - 1] + times[row]) / 2;
+      const rightTime =
+        row === result.timeline.rows - 1 ? times[row] : (times[row] + times[row + 1]) / 2;
+      const y = stateY(result.timeline.decodedPath[row]);
+      if (row === 0) context.moveTo(timeX(leftTime), y);
+      else context.lineTo(timeX(leftTime), y);
+      context.lineTo(timeX(rightTime), y);
     }
-    context.fillText(COPY.time, width / 2, height - 7);
+    context.stroke();
+    context.restore();
   }
 
   function activateTab(tabName) {

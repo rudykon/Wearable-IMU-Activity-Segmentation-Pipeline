@@ -376,6 +376,33 @@ class DocumentationMathTests(unittest.TestCase):
             chinese_data.read_text(encoding="utf-8"),
         )
 
+    def test_browser_demo_uses_the_hf_figure_visual_contract(self) -> None:
+        source = (
+            ROOT / "docs" / "assets" / "javascripts" / "imu-demo.js"
+        ).read_text(encoding="utf-8")
+        for color in [
+            "#64748b",
+            "#4f46e5",
+            "#7c3aed",
+            "#0f9f8f",
+            "#f59e0b",
+            "#ef4444",
+        ]:
+            with self.subTest(color=color):
+                self.assertIn(color, source)
+        self.assertIn('const CLASS_SYMBOLS = ["c₀", "c₁", "c₂", "c₃", "c₄", "c₅"]', source)
+        self.assertIn('decoded: "#312e81"', source)
+        self.assertIn('decodedFill: "rgba(199, 210, 254, 0.55)"', source)
+        self.assertIn('yTickLabels: [...CLASS_SYMBOLS].reverse()', source)
+        self.assertNotIn("const band =", source)
+
+        english = (ROOT / "docs" / "demo.md").read_text(encoding="utf-8")
+        chinese = (ROOT / "docs" / "demo.zh.md").read_text(encoding="utf-8")
+        self.assertIn("lower stepped trace", english)
+        self.assertNotIn("lower band", english)
+        self.assertIn("下方阶梯线", chinese)
+        self.assertNotIn("下方色带", chinese)
+
 
 if __name__ == "__main__":
     unittest.main()
