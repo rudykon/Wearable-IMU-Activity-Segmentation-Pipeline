@@ -5,9 +5,13 @@
   "scripts": {
     "prepare:browser-demo": "node scripts/prepare_browser_demo.mjs",
     "pretest:browser-demo": "npm run prepare:browser-demo",
-    "test:browser-demo": "node --test tests/browser_demo_core.test.mjs tests/browser_demo_inference.test.mjs"
+    "test:browser-demo": "node --test tests/browser_demo_core.test.mjs tests/browser_demo_runtime.test.mjs tests/browser_demo_inference.test.mjs",
+    "test:browser-webgpu": "node tests/browser_demo_webgpu.mjs"
   },
   "dependencies": {
     "onnxruntime-web": "1.29.0"
+  },
+  "devDependencies": {
+    "webgpu": "0.5.0"
   }
 }

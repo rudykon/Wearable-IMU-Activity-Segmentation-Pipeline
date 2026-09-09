@@ -23,7 +23,7 @@
       filtering: "Applying the zero-phase Butterworth filter",
       models: "Downloading and verifying public ONNX models",
       runtime: "Starting the browser inference runtime",
-      fallback: "WebGPU is unavailable for this model; switching to WASM",
+      fallback: "GPU checks did not pass; continuing with CPU inference",
       inference: (suffix, completed, total) =>
         `Running the ${suffix || "multi-scale"} model${total ? ` · ${completed}/${total} windows` : ""}`,
       postprocessing: "Fusing scales and applying the Temporal Record Layer",
@@ -87,7 +87,7 @@
       filtering: "正在执行零相位 Butterworth 滤波",
       models: "正在下载并校验公开 ONNX 模型",
       runtime: "正在启动浏览器推理运行时",
-      fallback: "该模型无法使用 WebGPU，正在切换到 WASM",
+      fallback: "GPU 检查未通过，正在使用 CPU 继续推理",
       inference: (suffix, completed, total) =>
         `正在运行 ${suffix || "多尺度"} 模型${total ? ` · ${completed}/${total} 个窗口` : ""}`,
       postprocessing: "正在融合三尺度结果并执行时间记录层",

@@ -238,7 +238,7 @@ ACC_TIME  ACC_X  ACC_Y  ACC_Z  GYRO_X  GYRO_Y  GYRO_Z
   <div class="demo-reading"><strong>Where the data goes</strong><p>Parsing, filtering, inference, plotting, and CSV export all run in a Web Worker on this device; the IMU recording is never uploaded.</p></div>
 </div>
 
-Models are pinned to Hugging Face revision `e0f89bb6…`, with checksums published in [`model-assets.json`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/model-assets.json). WebGPU is preferred when available; otherwise the Demo falls back to WASM CPU, so runtime varies across computers and phones.
+Models are pinned to Hugging Face revision `e0f89bb6…`, with checksums published in [`model-assets.json`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/model-assets.json). Before using WebGPU, the Demo checks all three models against CPU reference outputs. If GPU initialization or this numerical check fails, it automatically continues with WASM CPU. These checks run once per page session; runtime varies across computers and phones.
 
 !!! warning "Research output"
 
