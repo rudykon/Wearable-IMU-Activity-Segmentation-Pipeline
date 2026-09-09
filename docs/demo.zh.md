@@ -238,7 +238,7 @@ ACC_TIME  ACC_X  ACC_Y  ACC_Z  GYRO_X  GYRO_Y  GYRO_Z
   <div class="demo-reading"><strong>数据去了哪里</strong><p>解析、滤波、模型推理、绘图和 CSV 导出都在当前设备的 Web Worker 中完成；IMU 记录不会上传。</p></div>
 </div>
 
-模型固定到 Hugging Face 修订 `e0f89bb6…`，校验值发布在 [`model-assets.json`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/model-assets.json)。支持 WebGPU 时优先使用 GPU；否则自动切换到 WASM CPU，因此不同电脑和手机的耗时会不同。
+模型固定到 Hugging Face 修订 `e0f89bb6…`，校验值发布在 [`model-assets.json`](https://github.com/rudykon/Wearable-IMU-Activity-Segmentation-Pipeline/blob/main/model-assets.json)。使用 WebGPU 前，Demo 会将三个模型的 GPU 输出与 CPU 参考结果比较；如果 GPU 初始化或数值检查失败，会自动使用 WASM CPU 继续运行。检查在每次打开页面后只执行一次，不同电脑和手机的耗时会不同。
 
 !!! warning "研究用途输出"
 

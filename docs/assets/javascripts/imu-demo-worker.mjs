@@ -4,6 +4,7 @@ import {
   parseTsv,
   runBrowserPipeline,
 } from "./imu-demo-core.mjs";
+import { createValidatedSessions } from "./imu-demo-runtime.mjs";
 
 const RUNTIME_BASE = new URL("../vendor/onnxruntime/", import.meta.url).href;
 const RUNTIME_MODULE = new URL(
@@ -138,37 +139,6 @@ async function loadModelBytes(spec, onChunk) {
   return { bytes, cached: false };
 }
 
-async function createSessions(ort, models, provider) {
-  const sessions = new Map();
-  try {
-    for (const spec of MODEL_SPECS) {
-      const session = await ort.InferenceSession.create(models.get(spec.suffix), {
-        executionProviders: [provider],
-        graphOptimizationLevel: "all",
-      });
-      sessions.set(spec.suffix, session);
-    }
-    return sessions;
-  } catch (error) {
-    for (const session of sessions.values()) await session.release?.();
-    throw error;
-  }
-}
-
-async function warmupSessions(ort, sessions) {
-  for (const spec of MODEL_SPECS) {
-    const session = sessions.get(spec.suffix);
-    const input = new ort.Tensor(
-      "float32",
-      new Float32Array(spec.windowSize * 6),
-      [1, spec.windowSize, 6],
-    );
-    const outputs = await session.run({ [session.inputNames[0]]: input });
-    for (const output of Object.values(outputs)) output.dispose?.();
-    input.dispose?.();
-  }
-}
-
 async function prepareSessions(jobId) {
   if (sessionPromise) return sessionPromise;
   sessionPromise = (async () => {
@@ -193,22 +163,11 @@ async function prepareSessions(jobId) {
     postProgress(jobId, "runtime", 0.37, { cachedModels });
     const ort = await getRuntime();
 
-    if (self.navigator?.gpu) {
-      let gpuSessions;
-      try {
-        gpuSessions = await createSessions(ort, models, "webgpu");
-        await warmupSessions(ort, gpuSessions);
-        return { ort, sessions: gpuSessions, backend: "WebGPU", cachedModels };
-      } catch (error) {
-        if (gpuSessions) {
-          for (const session of gpuSessions.values()) await session.release?.();
-        }
-        postProgress(jobId, "fallback", 0.42, { reason: String(error) });
-      }
-    }
-    const sessions = await createSessions(ort, models, "wasm");
-    await warmupSessions(ort, sessions);
-    return { ort, sessions, backend: "WASM", cachedModels };
+    const runtime = await createValidatedSessions(ort, models, {
+      preferWebGpu: Boolean(self.navigator?.gpu),
+      onFallback: (error) => postProgress(jobId, "fallback", 0.42, { reason: String(error) }),
+    });
+    return { ort, ...runtime, cachedModels };
   })().catch((error) => {
     sessionPromise = null;
     throw error;
